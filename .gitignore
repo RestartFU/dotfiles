@@ -1,0 +1,6 @@
+.config/xstatus/lib
+.config/xstatus/shard.lock
+
+*.o
+*
+!*.*
