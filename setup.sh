@@ -19,7 +19,7 @@ symlink_file .xinitrc $XINITRC_PATH
 # XSTATUS
 cd .config/xstatus
 shards install
-sudo make install
+install
 cd ../
 
 # SUCKLESS
