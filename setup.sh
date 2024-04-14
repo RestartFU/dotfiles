@@ -8,13 +8,14 @@ install () {
 	sudo make install
 }
 
-sudo pacman -S libxinemara libx11 crystal shards sdl2
+sudo pacman -S libxinerama libx11 crystal shards sdl2
 
 BASHRC_PATH=~/.bashrc
 XINITRC_PATH=~/.xinitrc
+REAL_PATH=$( realpath . )
 
-symlink_file .bashrc $BASHRC_PATH
-symlink_file .xinitrc $XINITRC_PATH
+symlink_file $REAL_PATH/.bashrc $BASHRC_PATH
+symlink_file $REAL_PATH/.xinitrc $XINITRC_PATH
 
 # XSTATUS
 cd .config/xstatus
