@@ -10,6 +10,7 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias pacman='sudo pacman'
 alias shutdown='shutdown now'
+alias goland='goland . & disown && exit'
 
 # Exports
 export PATH=$PATH:/usr/local/go/bin

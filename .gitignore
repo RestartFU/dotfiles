@@ -2,3 +2,5 @@
 .config/xstatus/shard.lock
 
 *.o
+*.o
+.config/suckless/dwm/dwm
