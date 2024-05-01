@@ -8,6 +8,7 @@ install () {
 	sudo make install
 }
 
+xdg-settings set default-web-browser librewolf.desktop
 sudo pacman -S libxinerama libx11 crystal shards sdl2
 
 BASHRC_PATH=~/.bashrc
