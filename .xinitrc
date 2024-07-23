@@ -2,5 +2,5 @@ MOUSE_ID=$(xinput --list | grep -i -m 1 'logitech usb receiver' | grep -o 'id=[0
 xrandr --output HDMI-0 --mode 1920x1080 --rate 240
 xstatus &
 nohup flameshot &
-paperview ~/.config/paperview/background 25 &
+paperview ~/dotfiles/.config/paperview/background 25 &
 dwm

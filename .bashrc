@@ -4,6 +4,7 @@
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
+export QT_QPA_PLATFORMTHEME=xfce
 
 # Aliases
 alias ls='ls --color=auto'
