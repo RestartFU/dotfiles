@@ -10,6 +10,7 @@ export QT_QPA_PLATFORMTHEME=xfce
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias pacman='sudo pacman'
+alias aur='pamac build'
 alias shutdown='shutdown now'
 alias goland='goland . & disown && exit'
 
@@ -26,19 +27,18 @@ function goto(){
 
 	case $1 in
 	    dwm)
-		cd "$HOME/.config/suckless/dwm"
+		cd "$HOME/dotfiles/.config/suckless/dwm"
 		;;
 	    dmenu)
-		cd "$HOME/.config/suckless/dmenu"
+		cd "$HOME/dotfiles/.config/suckless/dmenu"
 		;;
 	    st)
-		cd "$HOME/.config/suckless/st"
+		cd "$HOME/dotfiles/.config/suckless/st"
 		;;
 	    slstatus)
-		cd "$HOME/.config/suckless/slstatus"
+		cd "$HOME/dotfiles/.config/suckless/slstatus"
 		;;
 	esac
 }
 
 PS1='[\u@\h \W]\$ '
-. "$HOME/.cargo/env"

@@ -14,6 +14,7 @@ XINITRC_PATH=~/.xinitrc
 REAL_PATH=$( realpath . )
 
 symlink_file $REAL_PATH/.bashrc $BASHRC_PATH
+sudo chmod +x $REAL_PATH/.xinitrc
 symlink_file $REAL_PATH/.xinitrc $XINITRC_PATH
 
 # XSTATUS
