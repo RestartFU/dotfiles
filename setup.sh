@@ -7,12 +7,14 @@ symlink_file() {
 install () {
 	sudo make install
 }
-sudo pacman -S base-dlevel libxinerama libx11 crystal shards sdl2
+sudo pacman -S xorg-xrandr base-dlevel libxinerama libx11 crystal shards sdl2
 
 BASHRC_PATH=~/.bashrc
 XINITRC_PATH=~/.xinitrc
+XSESSION_PATH=/usr/share/xsession/dwm.desktop
 REAL_PATH=$( realpath . )
 
+symlink_file $REAL_PATH/dwm.desktop $XSESSION_PATH
 symlink_file $REAL_PATH/.bashrc $BASHRC_PATH
 sudo chmod +x $REAL_PATH/.xinitrc
 symlink_file $REAL_PATH/.xinitrc $XINITRC_PATH
