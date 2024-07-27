@@ -42,3 +42,5 @@ function goto(){
 }
 
 PS1='[\u@\h \W]\$ '
+
+bash clear_manjaro_folders
