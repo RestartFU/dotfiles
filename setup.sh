@@ -28,6 +28,11 @@ sudo chmod +x $REAL_PATH/.xinitrc
 symlink_file $REAL_PATH/.xinitrc $XINITRC_PATH
 symlink_file $REAL_PATH/x.sh /usr/bin/x
 
+# SURF
+cd .config/suckless/surf
+install
+cd ../..
+
 # XSTATUS
 cd .config/xstatus
 shards install
