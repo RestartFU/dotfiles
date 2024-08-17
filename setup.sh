@@ -15,13 +15,15 @@ XINITRC_PATH=~/.xinitrc
 XSESSION_PATH=/usr/share/xsession/dwm.desktop
 REAL_PATH=$( realpath . )
 
+pacman -Sy
 bash $REAL_PATH/dependencies/other.sh
 
 symlink_file $REAL_PATH/tools/clear_manjaro_home_folders.sh $MANJARO_TOOL_PATH
-symlink_file $REAL_PATH/dwm.desktop $XSESSION_PATH
+sudo cp $REAL_PATH/dwm.desktop $XSESSION_PATH
 symlink_file $REAL_PATH/.bashrc $BASHRC_PATH
 sudo chmod +x $REAL_PATH/.xinitrc
 symlink_file $REAL_PATH/.xinitrc $XINITRC_PATH
+symlink_file $REAL_PATH/x.sh /usr/bin/x
 
 # XSTATUS
 cd .config/xstatus

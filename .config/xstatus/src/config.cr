@@ -27,7 +27,7 @@ module Config
 
     CONFIG = [
 #                           FUNCTION                                 FORMAT                       ARGUMENTS        
-        Field.new(->text(String, Array(String)),                     "Pr4gu3",                      [""]),
+        Field.new(->text(String, Array(String)),                     "Restart",                      [""]),
         Field.new(->date(String, Array(String)),                     "%s",                          ["+%r"]),
     ]
 end
