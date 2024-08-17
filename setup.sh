@@ -12,12 +12,15 @@ install () {
 MANJARO_TOOL_PATH=/usr/bin/clear_manjaro_folders
 BASHRC_PATH=~/.bashrc
 XINITRC_PATH=~/.xinitrc
+AUTO_UPDATE_PATH=/usr/bin/auto_update
 XSESSION_PATH=/usr/share/xsession/dwm.desktop
 REAL_PATH=$( realpath . )
 
 pacman -Sy
 bash $REAL_PATH/dependencies/other.sh
 
+
+symlink_file $REAL_PATH/tools/auto_update.sh $AUTO_UPDATE_PATH
 symlink_file $REAL_PATH/tools/clear_manjaro_home_folders.sh $MANJARO_TOOL_PATH
 sudo cp $REAL_PATH/dwm.desktop $XSESSION_PATH
 symlink_file $REAL_PATH/.bashrc $BASHRC_PATH
