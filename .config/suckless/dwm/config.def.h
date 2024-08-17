@@ -68,7 +68,7 @@ static const char *shutdowncmd[]   = { "shutdown", "now", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_Esc     spawn           {.v = shutdowncmd } },
+	{ MODKEY,                       XK_Escape, spawn,          {.v = shutdowncmd } },
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,	                XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_w,      spawn,          {.v = browscmd } },
