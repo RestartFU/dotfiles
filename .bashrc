@@ -41,6 +41,6 @@ function goto(){
 	esac
 }
 
-PS1="\[$(tput setaf 216)\]\u\[$(tput setaf 220)\]@\[$(tput setaf 222)\]space \[$(tput setaf 229)\]\w \[$(tput setaf 214)\]|-> "
+PS1="\[$(tput setaf 216)\]\u\[$(tput setaf 220)\]@\[$(tput setaf 222)\]space \[$(tput setaf 229)\]\w \[$(tput setaf 214)\]|-> \[$(tput setaf 255)\]"
 
 bash clear_manjaro_folders
