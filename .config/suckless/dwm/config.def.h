@@ -70,9 +70,6 @@ static const char *dmenucmd[] = {
 static const char *termcmd[] = {"alacritty", NULL};
 static const char *browscmd[] = {"librewolf", NULL};
 static const char *scrshotcmd[] = {"flameshot", "gui", NULL};
-static const char *freetubecmd[] = {"freetube", NULL};
-static const char *vscodecmd[] = {"code", NULL};
-static const char *golandcmd[] = {"goland", NULL};
 static const char *shutdowncmd[] = {"shutdown", "now", NULL};
 
 static const Key keys[] = {
@@ -82,9 +79,6 @@ static const Key keys[] = {
     {MODKEY, XK_Return, spawn, {.v = termcmd}},
     {MODKEY, XK_w, spawn, {.v = browscmd}},
     {MODKEY, XK_s, spawn, {.v = scrshotcmd}},
-    {MODKEY, XK_y, spawn, {.v = freetubecmd}},
-    {MODKEY, XK_e, spawn, {.v = vscodecmd}},
-    {MODKEY, XK_g, spawn, {.v = golandcmd}},
     {MODKEY, XK_b, togglebar, {0}},
     {MODKEY, XK_j, focusstack, {.i = +1}},
     {MODKEY, XK_k, focusstack, {.i = -1}},
