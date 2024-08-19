@@ -12,7 +12,7 @@ alias grep='grep --color=auto'
 alias pacman='sudo pacman'
 alias aur='pamac build'
 alias shutdown='shutdown now'
-alias goland='goland . & disown && exit'
+alias nvim='clipboard=xclip nvim'
 
 # Exports
 export PATH=$PATH:/usr/local/go/bin
@@ -43,4 +43,3 @@ function goto(){
 
 PS1="\[$(tput setaf 216)\]\u\[$(tput setaf 220)\]@\[$(tput setaf 222)\]space \[$(tput setaf 229)\]\w \[$(tput setaf 214)\]|-> \[$(tput setaf 255)\]"
 
-bash clear_manjaro_folders
