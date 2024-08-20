@@ -18,6 +18,16 @@ alias nvim='clipboard=xclip nvim'
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:/usr/local/v
 
+function link() {
+  	if [ $# -ne 2 ]; then
+	    echo "not enough arguments were provided"
+	    return
+	fi
+
+  echo "ln -s $(realpath $1) $2"
+  ln -s $(realpath $1) $2
+}
+
 # goto is a function used to 'cd' into specific directories quicker
 function goto(){
 	if [ $# -ne 1 ]; then
