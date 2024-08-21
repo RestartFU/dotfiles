@@ -5,6 +5,7 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 export QT_QPA_PLATFORMTHEME=xfce
+export WEBKIT_DISABLE_DMABUF_RENDERER=1
 
 # Aliases
 alias ls='ls --color=auto'
@@ -13,6 +14,7 @@ alias pacman='sudo pacman'
 alias aur='pamac build'
 alias shutdown='shutdown now'
 alias nvim='clipboard=xclip nvim'
+alias zed='zeditor . && exit'
 
 # Exports
 export PATH=$PATH:/usr/local/go/bin
