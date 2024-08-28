@@ -8,6 +8,7 @@ export QT_QPA_PLATFORMTHEME=xfce
 export WEBKIT_DISABLE_DMABUF_RENDERER=1
 
 # Aliases
+alias search='BROWSER=w3m ddgr'
 alias ssh='TERM=xterm-256color ssh'
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
