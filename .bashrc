@@ -8,12 +8,13 @@ export QT_QPA_PLATFORMTHEME=xfce
 export WEBKIT_DISABLE_DMABUF_RENDERER=1
 
 # Aliases
+alias portmypack='portmypack -o /home/dan/.local/share/mcpelauncher/games/com.mojang/resource_packs/'
 alias search='BROWSER=w3m ddgr'
 alias ssh='TERM=xterm-256color ssh'
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
-alias pacman='yes | sudo pacman'
-alias aur='yes | pamac build'
+alias pacman='sudo pacman --noconfirm'
+alias aur='pamac build'
 alias shutdown='shutdown now'
 alias nvim='clipboard=xclip nvim'
 alias zed='zeditor . && exit'
