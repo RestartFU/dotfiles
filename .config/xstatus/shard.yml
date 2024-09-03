@@ -8,6 +8,6 @@ dependencies:
   x11:
     github: TamasSzekeres/x11-cr
   logger:
-    github: Pr4gu3/logger.cr
+    github: RestartFU/logger.cr
 
 license: MIT

@@ -17,6 +17,13 @@ module Config
         s.gsub("%s", outp).rstrip
     end
 
+    def echo(s : String, a : Array(String)) : String
+    	outp = run(["echo", a.join(" ")])
+	#puts a.join(" ")
+	#puts outp
+	s.gsub("%s", outp).rstrip
+    end
+
     struct Field
         getter function : String, Array(String) -> String
         getter format : String
@@ -28,6 +35,7 @@ module Config
     CONFIG = [
 #                           FUNCTION                                 FORMAT                       ARGUMENTS        
         Field.new(->text(String, Array(String)),                     "Restart",                      [""]),
-        Field.new(->date(String, Array(String)),                     "%s",                          ["+%r"]),
+        #Field.new(->date(String, Array(String)),                     "%s",                          ["+%r"]),
+	Field.new(->echo(String, Array(String)),                     "%s",                           ["\"$(date +%a) $(date +%b) $(date +%d) | $(date +%r)\""]),
     ]
 end
