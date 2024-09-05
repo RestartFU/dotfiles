@@ -27,6 +27,7 @@ symlink_file $REAL_PATH/.bashrc $BASHRC_PATH
 sudo chmod +x $REAL_PATH/.xinitrc
 symlink_file $REAL_PATH/.xinitrc $XINITRC_PATH
 symlink_file $REAL_PATH/x.sh /usr/bin/x
+symlink_file $REAL_PATH/get.sh /usr/bin/get
 
 # SURF
 cd .config/suckless/surf
