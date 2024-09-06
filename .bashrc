@@ -23,6 +23,12 @@ alias zed='zeditor . && exit'
 export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:/usr/local/v
 
+function cdir() {
+	mkdir $1
+	cd $1
+	$2
+}
+
 function link() {
   	if [ $# -ne 2 ]; then
 	    echo "not enough arguments were provided"
