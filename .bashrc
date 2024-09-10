@@ -8,6 +8,7 @@ export QT_QPA_PLATFORMTHEME=xfce
 export WEBKIT_DISABLE_DMABUF_RENDERER=1
 
 # Aliases
+alias spotify='LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify'
 alias portmypack='portmypack -o /home/dan/.local/share/mcpelauncher/games/com.mojang/resource_packs/'
 alias search='BROWSER=w3m ddgr'
 alias ssh='TERM=xterm-256color ssh'
