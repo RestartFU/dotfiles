@@ -7,7 +7,8 @@ static const unsigned int snap = 32;    /* snap pixel */
 static const int showbar = 1;           /* 0 means no bar */
 static const int topbar = 1;            /* 0 means bottom bar */
 static const char *fonts[] = {"JetBrainsMono Nerd Font:size=11",
-                              "fontawesome:size=12"};
+                              "fontawesome:size=12",
+							  "noto-fonts-emoji:size=12"};
 static const char dmenufont[] = "JetBrainsMono Nerd Font:size=10";
 static const char col_gray1[] = "#222222";
 static const char col_gray2[] = "#444444";
@@ -67,10 +68,11 @@ static char dmenumon[2] =
 static const char *dmenucmd[] = {
     "dmenu_run", "-m",      dmenumon, "-fn",    dmenufont, "-nb",     col_gray1,
     "-nf",       col_gray3, "-sb",    col_cyan, "-sf",     col_gray4, NULL};
-static const char *termcmd[] = {"alacritty", NULL};
+static const char *termcmd[] = {"alacritty", "-e", "zellij", NULL};
 static const char *browscmd[] = {"librewolf", NULL};
 static const char *scrshotcmd[] = {"flameshot", "gui", NULL};
 static const char *shutdowncmd[] = {"shutdown", "now", NULL};
+static const char *killcmd[] = {"killall", "xinit", NULL};
 
 static const Key keys[] = {
     /* modifier                     key        function        argument */
@@ -100,7 +102,7 @@ static const Key keys[] = {
     {MODKEY | ShiftMask, XK_equal, setgaps, {.i = 0}},
     TAGKEYS(XK_1, 0) TAGKEYS(XK_2, 1) TAGKEYS(XK_3, 2) TAGKEYS(XK_4, 3)
     TAGKEYS(XK_5, 4) TAGKEYS(XK_6, 5) TAGKEYS(XK_x, 6) TAGKEYS(XK_c, 7)
-    TAGKEYS(XK_v, 8){MODKEY | ShiftMask, XK_q, quit, {0}},
+    TAGKEYS(XK_v, 8){MODKEY | ShiftMask, XK_q, spawn, {.v = killcmd}},
 };
 
 /* button definitions */

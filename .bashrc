@@ -6,6 +6,9 @@
 [[ $- != *i* ]] && return
 export QT_QPA_PLATFORMTHEME=xfce
 export WEBKIT_DISABLE_DMABUF_RENDERER=1
+export BROWSER=librewolf
+export EDITOR=nvim
+export VOID='2>/dev/null 1>&2'
 
 # Aliases
 alias spotify='LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify'
@@ -20,10 +23,6 @@ alias aur='pamac build'
 alias shutdown='shutdown now'
 alias nvim='clipboard=xclip nvim'
 alias zed='zeditor . && exit'
-
-# Exports
-export PATH=$PATH:/usr/local/go/bin
-export PATH=$PATH:/usr/local/v
 
 function cdir() {
 	mkdir $1
@@ -64,5 +63,6 @@ function goto(){
 	esac
 }
 
-PS1="\[$(tput setaf 216)\]\u\[$(tput setaf 220)\]@\[$(tput setaf 222)\]space \[$(tput setaf 229)\]\w \[$(tput setaf 214)\]|-> \[$(tput setaf 255)\]"
+PS1="\[$(tput setaf 216)\]restart\[$(tput setaf 220)\]@\[$(tput setaf 222)\]space \[$(tput setaf 229)\]\w \[$(tput setaf 214)\]|-> \[$(tput setaf 255)\]"
 
+. "$HOME/.cargo/env"
