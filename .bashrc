@@ -11,6 +11,7 @@ export EDITOR=nvim
 export VOID='2>/dev/null 1>&2'
 
 # Aliases
+alias otp='OTP_DATA_DIR=~/dotfiles/dat/otp otp'
 alias spotify='LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify'
 alias portmypack='portmypack -o /home/dan/.local/share/mcpelauncher/games/com.mojang/resource_packs/'
 alias search='BROWSER=w3m ddgr'
