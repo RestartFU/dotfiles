@@ -6,14 +6,14 @@
 [[ $- != *i* ]] && return
 export QT_QPA_PLATFORMTHEME=xfce
 export WEBKIT_DISABLE_DMABUF_RENDERER=1
-export BROWSER=librewolf
-export EDITOR=nvim
+#export BROWSER=librewolf
+export EDITOR=micro
 export VOID='2>/dev/null 1>&2'
 
 # Aliases
 alias otp='OTP_DATA_DIR=~/dotfiles/dat/otp otp'
 alias spotify='LD_PRELOAD=/usr/local/lib/spotify-adblock.so spotify'
-alias portmypack='portmypack -o /home/dan/.local/share/mcpelauncher/games/com.mojang/resource_packs/'
+alias portmypack='portmypack -o /home/slave/.local/share/mcpelauncher/games/com.mojang/resource_packs/'
 alias search='BROWSER=w3m ddgr'
 alias ssh='TERM=xterm-256color ssh'
 alias ls='ls --color=auto'
@@ -24,6 +24,15 @@ alias aur='pamac build'
 alias shutdown='shutdown now'
 alias nvim='clipboard=xclip nvim'
 alias zed='zeditor . && exit'
+
+function panel() {
+	alacritty & disown
+	sleep 0.01
+	alacritty & disown
+	sleep 0.01
+	alacritty -e ~/pulsemixer & disown
+	exit
+}
 
 function cdir() {
 	mkdir $1
@@ -66,4 +75,5 @@ function goto(){
 
 PS1="\[$(tput setaf 216)\]restart\[$(tput setaf 220)\]@\[$(tput setaf 222)\]space \[$(tput setaf 229)\]\w \[$(tput setaf 214)\]|-> \[$(tput setaf 255)\]"
 
-. "$HOME/.cargo/env"
+#. "$HOME/.cargo/env"
+export PATH=$PATH:/home/slave/.local/bin
