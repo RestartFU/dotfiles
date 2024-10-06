@@ -24,7 +24,7 @@ static const char *colors[][3] = {
 };
 
 /* tagging */
-static const char *tags[] = {"𝓘", "𝓘𝓘", "𝓘𝓘𝓘", "𝓘𝓥", "𝓥", "𝓥𝓘", "𝓥𝓘𝓘", "𝓥𝓘𝓘𝓘", "𝓘𝓧"};
+static const char *tags[] = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
 
 static const Rule rules[] = {
     /* xprop(1):
@@ -53,7 +53,7 @@ static const Layout layouts[] = {
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY, TAG)                                                      \
-  {MODKEY, KEY, view, {.ui = 1 << TAG}},                                       \
+  	  {MODKEY, KEY, view, {.ui = 1 << TAG}},                                   \
       {MODKEY | ControlMask, KEY, toggleview, {.ui = 1 << TAG}},               \
       {MODKEY | ShiftMask, KEY, tag, {.ui = 1 << TAG}},                        \
       {MODKEY | ControlMask | ShiftMask, KEY, toggletag, {.ui = 1 << TAG}},
@@ -63,6 +63,7 @@ static const Layout layouts[] = {
   {                                                                            \
     .v = (const char *[]) { "/bin/sh", "-c", cmd, NULL }                       \
   }
+
 
 /* commands */
 static char dmenumon[2] =
@@ -104,6 +105,8 @@ static const Key keys[] = {
     {MODKEY, XK_minus, setgaps, {.i = -1}},
     {MODKEY, XK_equal, setgaps, {.i = +1}},
     {MODKEY | ShiftMask, XK_equal, setgaps, {.i = 0}},
+    //{MODKEY, XK_Right, view_arr, {.ui = +1}}
+    //{MODKEY, XK_Left, view_arr, {.ui = -1}}
     TAGKEYS(XK_1, 0) TAGKEYS(XK_2, 1) TAGKEYS(XK_3, 2) TAGKEYS(XK_4, 3)
     TAGKEYS(XK_5, 4) TAGKEYS(XK_6, 5) TAGKEYS(XK_x, 6) TAGKEYS(XK_c, 7)
     TAGKEYS(XK_v, 8){MODKEY | ShiftMask, XK_q, spawn, {.v = killcmd}},
