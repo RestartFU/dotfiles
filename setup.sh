@@ -29,17 +29,12 @@ symlink_file $REAL_PATH/.xinitrc $XINITRC_PATH
 symlink_file $REAL_PATH/x.sh /usr/bin/x
 symlink_file $REAL_PATH/get.sh /usr/bin/get
 
-# SURF
-#cd .config/suckless/surf
-#install
-#cd ../..
+git clone https://github.com/restartfu/xstatus .tmp/xstatus
+cd xstatus
+sudo make install
+cd ..
 
-# XSTATUS
-cd .config/xstatus
-shards install
-install
-cd ../
-
+cd .config/
 # SUCKLESS
 cd suckless/dwm
 install
