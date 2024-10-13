@@ -2,7 +2,7 @@
 .profile
 .bashrc
 .xinitrc
-.tools/*
+.tools/
 .config/dwm/
 .config/dmenu/
 .config/st/
