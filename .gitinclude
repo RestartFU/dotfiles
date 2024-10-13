@@ -1,0 +1,10 @@
+.gitinclude
+.profile
+.bashrc
+.xinitrc
+.tools/*
+.config/dwm/
+.config/dmenu/
+.config/st/
+.config/zed/
+.config/vis/
