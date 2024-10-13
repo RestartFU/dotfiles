@@ -1,10 +1,5 @@
-#auto_update &
-xrandr --output HDMI-0 --mode 1920x1080 --rate 240
-xstatus &
+xrandr --output DP-2 --mode 2560x1440 --rate 240
+xrandr --output DP-0 --mode 1920x1080 --rate 240 --right-of DP-2 --rotate left
 nohup flameshot 2>/dev/null 1>&2 &
-paperview ~/dotfiles/.config/paperview/background_snow_house 10 &
-dwm &
-pulseaudio &
-arti proxy &
-
-sleep infinity
+xstatus &
+dwm

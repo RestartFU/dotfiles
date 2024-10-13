@@ -1,6 +1,10 @@
-.config/xstatus/lib
-.config/xstatus/shard.lock
+*
+!.profile
+!.bashrc
+!.xinitrc
 
-*.o
-*.o
-.config/suckless/dwm/dwm
+!.config/dwm/*
+!.config/dmenu/*
+!.config/st/*
+!.config/zed/*
+!.config/vis/*
