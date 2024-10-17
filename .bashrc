@@ -1,3 +1,7 @@
+alias pacman='sudo pacman --noconfirm'
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+
 # Enable the subsequent settings only in interactive sessions
 case $- in
   *i*) ;;
