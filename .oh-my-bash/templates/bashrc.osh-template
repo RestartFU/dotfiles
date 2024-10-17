@@ -4,12 +4,8 @@ case $- in
     *) return;;
 esac
 
-alias pacman='sudo pacman --noconfirm'
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-
 # Path to your oh-my-bash installation.
-export OSH='~/.oh-my-bash'
+export OSH=~/.oh-my-bash
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-bash is loaded.
