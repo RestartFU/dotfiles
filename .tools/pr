@@ -2,6 +2,7 @@ uuid=$(uuidgen)
 git checkout -b $uuid
 ~/.tools/gitinclude
 git commit -m "Automatic update [ $(date) ]"
-gh pr create
-gh checkout $uuid
+git push -u oirigin HEAD
+gh pr create --title "Automatic update [ $(date)] " --body "Automatic update [ $(date) ]" --fill
 gh pr merge $uuid --merge
+git checkout master
