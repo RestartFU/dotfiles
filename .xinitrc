@@ -7,6 +7,6 @@ dwm &
 
 while :
 do
-	~/.tools/auto_dotfiles_update
+	~/.tools/pr
 	sleep 1000
 done
