@@ -1,0 +1,3 @@
+~/.tools/gitinclude
+git commit -m "Automatic update [ $(date) ]"
+git push
