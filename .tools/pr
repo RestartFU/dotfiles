@@ -1,3 +1,5 @@
+#!/bin/bash
+
 uuid=$(uuidgen)
 git checkout -b $uuid
 ~/.tools/gitinclude
