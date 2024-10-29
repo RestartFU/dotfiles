@@ -1,8 +1,5 @@
 seperator: "|"
-commands: [
-	"^c$black^ ^b$darkblue^ 󱑆 "
-	#~/.config/chadwm/scripts/run.sh &
-	#"$(uuidgen)", 
-        #"$(date +%a) $(date +%b) $(date +%d)", 
-        #"$(date +%r)",
+commands: [ 
+        "$(date +%a) $(date +%b) $(date +%d)", 
+        "$(date +%r)",
     ]
