@@ -6,5 +6,6 @@ git push --set-upstream origin $uuid
 gh pr create --title "Automatic update [ $(date)] " --body "Automatic update [ $(date) ]" --fill
 gh pr merge $uuid --merge
 sleep 2
+git push origin --delete $uuid
 git checkout master
 git pull
