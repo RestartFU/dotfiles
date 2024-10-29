@@ -7,6 +7,6 @@ dwm &
 
 while :
 do
-	~/.tools/pr
+	cd ~ && ~/.tools/pr
 	sleep 1000
 done
