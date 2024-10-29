@@ -4,11 +4,6 @@ case $- in
     *) return;;
 esac
 
-term="$(cat /proc/$PPID/comm)"
-if [[ $term = "st" ]]; then
-    transset-df "opacity_value" --id "$WINDOWID"  ⋗/dev/null
-fi
-
 alias pacman='sudo pacman --noconfirm'
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
