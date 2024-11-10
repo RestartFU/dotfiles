@@ -4,6 +4,7 @@ case $- in
     *) return;;
 esac
 
+alias earbuds='bluetoothctl connect A0:A3:09:D4:FB:A7'
 alias pacman='sudo pacman --noconfirm'
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
