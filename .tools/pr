@@ -5,7 +5,7 @@ git checkout -b $uuid
 ~/.tools/gitinclude
 git commit -m "Automatic update [ $(date) ]"
 git push --set-upstream origin $uuid
-gh pr create --title "Automatic update [ $(date)] " --body "Automatic update [ $(date) ]" --fill
+gh pr create --title "Automatic update [ $(date) ] " --body "Automatic update [ $(date) ]" --fill
 gh pr merge $uuid --merge
 sleep 2
 git push origin --delete $uuid
