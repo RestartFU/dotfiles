@@ -1,0 +1,8 @@
+#!/bin/bash
+
+while read p; do
+  echo "gitinclude: $p"
+  rm -rf $p/.git >/dev/null 2>&1
+  git rm -f -r --cached $p >/dev/null 2>&1
+  git add -f $p 
+done < $(realpath ./.gitinclude)
