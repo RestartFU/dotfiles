@@ -1,17 +1,19 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <X11/XF86keysym.h>
+
 /* appearance */
 static const unsigned int borderpx = 2; /* border pixel of windows */
 static const unsigned int gappx = 5;    /* gaps between windows */
 static const unsigned int snap = 32;    /* snap pixel */
 static const int showbar = 1;           /* 0 means no bar */
 static const int topbar = 1;            /* 0 means bottom bar */
-static const char *fonts[] = {"JetBrainsMono Nerd Font:size=11",
-                              "fontawesome:size=12",
-							  "noto-fonts-emoji:size=12",
+static const char *fonts[] = {"JetBrainsMono Nerd Font:size=20",
+                              "fontawesome:size=20",
+							  "noto-fonts-emoji:size=20",
 							  //"openmoji:size=12"	
 							  };
-static const char dmenufont[] = "JetBrainsMono Nerd Font:size=10";
+static const char dmenufont[] = "JetBrainsMono Nerd Font:size=18";
 static const char col_gray1[] = "#28282B";
 static const char col_gray2[] = "#444444";
 static const char col_gray3[] = "#bbbbbb";
@@ -74,9 +76,13 @@ static const char *browscmd[] = {"librewolf", NULL};
 static const char *scrshotcmd[] = {"flameshot", "gui", NULL};
 static const char *shutdowncmd[] = {"shutdown", "now", NULL};
 static const char *killcmd[] = {"killall", "xinit", NULL};
+static const char *brightnessupcmd[] = {"brightnessctl", "+1", NULL};
+static const char *brightnessdowncmd[] = {"brightnessctl", "1-", NULL};
 
 static const Key keys[] = {
     /* modifier                     key        function        argument */
+    {MODKEY, XF86XK_MonBrightnessUp, spawn, {.v = brightnessupcmd}},
+    {MODKEY, XF86XK_MonBrightnessDown, spawn, {.v = brightnessdowncmd}},
     {MODKEY, XK_Escape, spawn, {.v = shutdowncmd}},
     {MODKEY, XK_d, spawn, {.v = dmenucmd}},
     {MODKEY, XK_Return, spawn, {.v = termcmd}},
