@@ -8,7 +8,7 @@ alias earbuds='bluetoothctl connect A0:A3:09:D4:FB:A7'
 alias pacman='sudo pacman --noconfirm'
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
-
+alias cargo='CARGO_NET_GIT_FETCH_WITH_CLI=true cargo'
 
 home=$(realpath ~)
 # Path to your oh-my-bash installation.
