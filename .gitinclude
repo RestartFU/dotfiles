@@ -2,6 +2,7 @@
 .gitinclude
 .profile
 .bashrc
+.xbindkeysrc
 .xinitrc
 .tools/
 .config/dwm/
