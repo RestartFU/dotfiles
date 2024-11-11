@@ -76,8 +76,8 @@ static const char *browscmd[] = {"librewolf", NULL};
 static const char *scrshotcmd[] = {"flameshot", "gui", NULL};
 static const char *shutdowncmd[] = {"shutdown", "now", NULL};
 static const char *killcmd[] = {"killall", "xinit", NULL};
-static const char *brightnessupcmd[] = {"brightnessctl", "+1", NULL};
-static const char *brightnessdowncmd[] = {"brightnessctl", "1-", NULL};
+static const char *brightnessupcmd[] = {"brightnessctl", "set", "+1", NULL};
+static const char *brightnessdowncmd[] = {"brightnessctl", "set", "1-", NULL};
 
 static const Key keys[] = {
     /* modifier                     key        function        argument */
