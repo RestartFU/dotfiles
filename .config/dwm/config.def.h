@@ -81,8 +81,8 @@ static const char *brightnessdowncmd[] = {"brightnessctl", "1-", NULL};
 
 static const Key keys[] = {
     /* modifier                     key        function        argument */
-//#    {MODKEY, XF86XK_MonBrightnessUp, spawn, {.v = brightnessupcmd}},
-//#{MODKEY, XF86XK_MonBrightnessDown, spawn, {.v = brightnessdowncmd}},
+    {MODKEY, XF86XK_MonBrightnessUp, spawn, {.v = brightnessupcmd}},
+    {MODKEY, XF86XK_MonBrightnessDown, spawn, {.v = brightnessdowncmd}},
     {MODKEY, XK_Escape, spawn, {.v = shutdowncmd}},
     {MODKEY, XK_d, spawn, {.v = dmenucmd}},
     {MODKEY, XK_Return, spawn, {.v = termcmd}},
