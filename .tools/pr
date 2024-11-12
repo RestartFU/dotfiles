@@ -6,7 +6,7 @@ git checkout -b $uuid
 git commit -m "Automatic update [ $(date) ]"
 git push --set-upstream origin $uuid
 gh pr create --title "Automatic update [ $(date) ] " --body "Automatic update [ $(date) ]" --fill
-gh pr merge $uuid --merge
+gh pr merge -s $uuid --merge
 sleep 2
 git push origin --delete $uuid
 git checkout master
