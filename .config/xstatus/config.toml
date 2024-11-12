@@ -1,6 +1,6 @@
 seperator: "|"
 commands: [ 
-	"$(cat /sys/class/power_supply/BAT1/capacity)",
+	"🔋 $(cat /sys/class/power_supply/BAT1/capacity)",
         "$(date +%a) $(date +%b) $(date +%d)", 
         "$(date +%r)",
     ]
