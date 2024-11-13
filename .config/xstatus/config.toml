@@ -1,6 +1,6 @@
 seperator: "|"
 commands: [ 
-	"🔆$(brightnessctl get)",
+	"🔆$(unixtool brightness_percent)%",
 	"🔋$(cat /sys/class/power_supply/BAT1/capacity)%",
         "$(date +%a) $(date +%b) $(date +%d)", 
         "$(date +%r)",
