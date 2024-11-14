@@ -6,11 +6,11 @@
 .xinitrc
 .tools/
 .config/dwm/
+.config/slstatus
 .config/dmenu/
 .config/st/
 .config/zed/
 .config/vis/
-.config/xstatus/
 .config/paperview/
 .oh-my-bash/
 .tmp/
