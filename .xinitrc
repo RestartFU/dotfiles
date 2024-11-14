@@ -5,7 +5,7 @@ xcompmgr &
 xrandr --output eDP --mode 2880x1920 --rate 120
 #xrandr --output DP-0 --mode 1920x1080 --rate 240 --right-of DP-2 --rotate left
 nohup flameshot 2>/dev/null 1>&2 &
-xstatus &
+slstatus &
 dwm &
 
 while :
