@@ -1,4 +1,4 @@
-refresh_delay: 500
+refresh_delay: 1000
 seperator: "|"
 commands: [ 
 	"🔆$(unixtool brightness_percent)%",
