@@ -16,3 +16,4 @@
 .tmp/
 .requirements/
 .assets/
+.config/surf/
