@@ -64,11 +64,13 @@ static const char unknown_str[] = "n/a";
  * wifi_perc           WiFi signal in percent          interface name (wlan0)
  */
 static const struct arg args[] = {
-	/* function format          argument */
+	/* function format                 argument */
 	{ run_command,       "🔆%s%%",    "unixtool brightness_percent" },
 	{ run_command,       "%s",        "echo ' | '" },
+	{ run_command,       "🔊%s%%",    "pactl" },
+	{ run_command,       "%s",        "echo ' | '" },
 	{ battery_perc,      "🔋%s%%",    "BAT1" },
-	{ battery_remaining, " %s", "BAT1" },
+	{ battery_remaining, " %s",       "BAT1" },
 	{ run_command,       "%s",        "echo '| '" },
 	{ datetime,          "%s",        "%a %b %d" },
 	{ run_command,       "%s",        "echo ' | '" },
