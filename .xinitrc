@@ -1,5 +1,6 @@
 xbindkeys
 feh --bg-scale ~/.assets/wallpaper.jpg
+memos & 
 xcompmgr & 
 #paperview ~/.config/paperview/wallpapers/nord_car/ 10 &
 xrandr --output eDP --mode 2880x1920 --rate 120
