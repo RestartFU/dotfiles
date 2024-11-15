@@ -67,7 +67,7 @@ static const struct arg args[] = {
 	/* function format                 argument */
 	{ run_command,       "🔆%s%%",    "unixtool brightness_percent" },
 	{ run_command,       "%s",        "echo ' | '" },
-	{ run_command,       "🔊%s%%",    "pactl" },
+	{ run_command,       "🔊%s",    "pamixer --get-volume" },
 	{ run_command,       "%s",        "echo ' | '" },
 	{ battery_perc,      "🔋%s%%",    "BAT1" },
 	{ battery_remaining, " %s",       "BAT1" },
