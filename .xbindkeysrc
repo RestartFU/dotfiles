@@ -14,8 +14,8 @@
 "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
    XF86AudioMicMute
 # Increase brightness
-"brightnessctl set +2 && killall herbe 2> /dev/null || echo i&& herbe $(unixtool brightness_percent)"
+"brightnessctl set +2 && killall herbe 2> /dev/null || echo && herbe $(unixtool brightness_percent)"
 	XF86MonBrightnessUp
 # Decrease brightness
-"brightnessctl set 2-"
+"brightnessctl set 2- && killall herbe 2> /dev/null || echo && herbe $(unixtool brightness_percent)"
 	XF86MonBrightnessDown
