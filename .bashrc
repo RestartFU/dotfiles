@@ -10,6 +10,7 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias cargo='CARGO_NET_GIT_FETCH_WITH_CLI=true cargo'
 alias neofetch='neofetch --config ~/.assets/neofetch.conf --ascii ~/.assets/archlinux_ascii.txt'
+#alias notify_brightness='killall herbe 2> /dev/null || echo && herbe $(unixtool brightness_percent)'
 #alias clear='clear && neofetch'
 
 home=$(realpath ~)
