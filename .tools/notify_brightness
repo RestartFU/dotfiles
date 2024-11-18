@@ -1,0 +1,1 @@
+killall herbe 2> /dev/null || echo && herbe 🔆$(unixtool brightness_percent)%
