@@ -1,6 +1,5 @@
 xbindkeys
 feh --bg-scale ~/.assets/wallpaper.jpg
-./gitea/gitea &
 memos & 
 xcompmgr & 
 #paperview ~/.config/paperview/wallpapers/nord_car/ 10 &
