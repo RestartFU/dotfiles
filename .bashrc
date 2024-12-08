@@ -4,6 +4,7 @@ case $- in
     *) return;;
 esac
 
+alias docker='sudo docker'
 alias earbuds='bluetoothctl connect A0:A3:09:D4:FB:A7'
 alias pacman='sudo pacman --noconfirm'
 alias dyn='sudo dyn'
