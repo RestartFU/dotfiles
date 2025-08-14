@@ -12,7 +12,7 @@
   "buffer_font_size": 16,
   "theme": {
     "mode": "system",
-    "light": "Atelier Heath Dark",
+    "light": "Gruvbox Dark Soft",
     "dark": "One Dark"
   }
 }
