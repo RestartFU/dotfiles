@@ -1,6 +1,4 @@
-.gitconfig
 .gitinclude
-.profile
 .bashrc
 .xbindkeysrc
 .xinitrc
@@ -9,12 +7,3 @@
 .config/slstatus
 .config/dmenu/
 .config/st/
-.config/zed/
-.config/vis/
-.config/paperview/
-.oh-my-bash/
-.tmp/
-.requirements/
-.assets/
-.config/surf/
-.config/herbe/
