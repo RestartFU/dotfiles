@@ -12,8 +12,11 @@ cd ~/.config/dwm
 ./make.sh
 cd ~/.config/st
 ./make.sh
+cd ~/.config/slstatus
+./make.sh
 cd ~
 
+~/.config//slstatus/slstatus &
 ~/.config/dwm/dwm &
 ~/.tools/disable_sleep
 xbindkeys
