@@ -16,5 +16,6 @@ cd ~
 
 ~/.config/dwm/dwm &
 ~/.tools/disable_sleep
+xbindkeys
 
 sleep infinity
