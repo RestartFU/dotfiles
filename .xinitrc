@@ -20,5 +20,9 @@ cd ~
 ~/.config/dwm/dwm &
 ~/.tools/disable_sleep
 xbindkeys
+feh --bg-fill ~/.config/wallpapers/wallpaper1.jpg
+
+# Transparent Terminal
+xcompmgr -c &
 
 sleep infinity
