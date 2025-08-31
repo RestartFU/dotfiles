@@ -12,7 +12,6 @@ fi
 
 alias ls='ls --color=auto'
 alias dyn='sudo dyn'
-alias pacman='sudo pacman'
 alias grep='grep --color=auto'
 alias gi='~/.tools/gitinclude'
 alias udf='git commit -m "CHANGES" && git push'
