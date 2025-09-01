@@ -1,7 +1,16 @@
+FIREFOX_ZOOM=1.5
+
 if [[ "$ENV" == "laptop" ]] then
 	xrandr --output eDP-1 --mode 2880x1920 --rate 120
+	if [[ "$MODE" == "monitor" ]] then
+		FIREFOX_ZOOM=1
+		xrandr --output DP-3 --mode 2560x1440 --rate 240 --left-of eDP-1
+		xrandr --output DP-2 --mode 2560x1440 --rate 240 --left-of eDP-1
+		ENV=desktop
+	fi
 elif [[ "$ENV" == "desktop" ]] then
 	#TODO
+	FIREFOX_ZOOM=1
 	echo ""
 else
 	echo "invalid environment"
@@ -24,5 +33,8 @@ feh --bg-fill ~/.config/wallpapers/wallpaper1.jpg
 
 # Transparent Terminal
 xcompmgr -c &
+
+sleep 10
+bluetoothctl connect F8:73:DF:1F:4B:63
 
 sleep infinity

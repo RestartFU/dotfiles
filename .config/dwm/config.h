@@ -1,5 +1,5 @@
-static const char *fonts[]          = { "JetBrainsMono Nerd Font:size=20" };
-static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=20";
+static const char *fonts[]          = { "JetBrainsMono Nerd Font:size=10" };
+static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=10";
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
@@ -64,7 +64,7 @@ static const char *browsercmd[]  = { "firefox", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_w,      spawn,          SHCMD("firefox") },
+	{ MODKEY,                       XK_w,      spawn,          SHCMD("~/.tools/firefox-zoom.sh") },
 	{ MODKEY,                       XK_Return, spawn,          SHCMD("~/.config/st/st") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
@@ -94,7 +94,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_x,                      6)
 	TAGKEYS(                        XK_c,                      7)
 	TAGKEYS(                        XK_v,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("killall dwm && killall Xorg") },
 };
 
 /* button definitions */
