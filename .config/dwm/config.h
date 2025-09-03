@@ -1,5 +1,5 @@
-static const char *fonts[]          = { "JetBrainsMono Nerd Font:size=10" };
-static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=10";
+static const char *fonts[]          = { "JetBrainsMono Nerd Font:size=20" };
+static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=20";
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
