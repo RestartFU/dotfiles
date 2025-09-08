@@ -34,6 +34,9 @@ feh --bg-fill ~/.config/wallpapers/wallpaper1.jpg
 # Transparent Terminal
 xcompmgr -c &
 
+# Enable flameshot to copy to clipboard
+nohup flameshot 2>/dev/null 1>&2 &
+
 sleep 10
 bluetoothctl connect F8:73:DF:1F:4B:63
 
