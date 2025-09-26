@@ -7,7 +7,7 @@
 
 term="$(cat /proc/$PPID/comm)"
 if [[ $term = "st" ]]; then
-    transset-df "0.8" --id "$WINDOWID"  >⋗ /dev/null
+    transset-df "0.8" --id "$WINDOWID"  >> /dev/null
 fi
 
 export ANDROID_HOME=$HOME/Android/Sdk
@@ -29,9 +29,4 @@ alias cargo='CARGO_NET_GIT_FETCH_WITH_CLI=true cargo'
 PS1='[\u@\h \W]\$ '
 export PATH=$HOME/.local/bin:$PATH
 export PATH="$HOME/go/bin:$PATH"
-. "$HOME/.cargo/env"
-export ANDROID_HOME="$HOME/Android/Sdk"
-export PATH=$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools
-export ANDROID_NDK_ROOT=/opt/android-ndk-r25c
-export PATH=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin:$PATH
-export PATH="$HOME/flutter/bin:$PATH"
+

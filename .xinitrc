@@ -1,16 +1,14 @@
-FIREFOX_ZOOM=1.5
-
 if [[ "$ENV" == "laptop" ]] then
-	xrandr --output eDP-1 --mode 2880x1920 --rate 120
+	xrandr --output eDP --mode 2880x1920 --rate 120
 	if [[ "$MODE" == "monitor" ]] then
-		FIREFOX_ZOOM=1
-		xrandr --output DP-3 --mode 2560x1440 --rate 240 --left-of eDP-1
-		xrandr --output DP-2 --mode 2560x1440 --rate 240 --left-of eDP-1
+		xrandr --output DisplayPort-3 --mode 2560x1440 --rate 240 --left-of eDP
+		xrandr --output DisplayPort-2 --mode 2560x1440 --rate 240 --left-of eDP
+		xrandr --output DisplayPort-1 --mode 2560x1440 --rate 240 --left-of eDP
 		ENV=desktop
 	fi
 elif [[ "$ENV" == "desktop" ]] then
 	#TODO
-	FIREFOX_ZOOM=1
+#	FIREFOX_ZOOM=1
 	echo ""
 else
 	echo "invalid environment"
