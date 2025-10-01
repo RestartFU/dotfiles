@@ -7,26 +7,29 @@
 
 term="$(cat /proc/$PPID/comm)"
 if [[ $term = "st" ]]; then
-    transset-df "0.8" --id "$WINDOWID"  > /dev/null
+    transset "0.8" --id "$WINDOWID"  > /dev/null
 fi
 
+export JAVA_HOME=$(java-config -O)
+export PATH=$PATH:$JAVA_HOME/bin
 export ANDROID_HOME=$HOME/Android/Sdk
-export ANDROID_NDK_ROOT=$ANDROID_HOME/ndk/29.0.14033849
+export ANDROID_SDK_ROOT=$HOME/Android/Sdk
+export ANDROID_NDK_HOME=$HOME/Android/Sdk/ndk/21.4.7075529
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+export PATH=$HOME/.local/bin:$PATH
+export PATH="$HOME/go/bin:$PATH"
 
-
-alias androidcli='/opt/android-studio/bin/studio.sh'
 alias frequent_startx='MODE=monitor ENV=laptop startx'
-
-alias tree='tree -I "node_modules|dist|.git" | xclip -selection clipboard'
 alias headset='bluetoothctl connect F8:73:DF:1F:4B:63'
 alias ls='ls --color=auto'
 alias dyn='sudo dyn'
 alias grep='grep --color=auto'
 alias gi='~/.tools/gitinclude'
 alias udf='git commit -m "CHANGES" && git push'
-alias pacman='sudo pacman --noconfirm'
+alias emerge='sudo emerge'
 alias cargo='CARGO_NET_GIT_FETCH_WITH_CLI=true cargo'
+alias reboot='sudo reboot'
+
 PS1='[\u@\h \W]\$ '
-export PATH=$HOME/.local/bin:$PATH
-export PATH="$HOME/go/bin:$PATH"
 

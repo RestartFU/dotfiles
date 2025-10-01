@@ -1,5 +1,3 @@
-static char *font = "JetBrainsMono Nerd Font:pixelsize=12:antialias=true:autohint=true";
-
 /* See LICENSE file for copyright and license details. */
 
 /*

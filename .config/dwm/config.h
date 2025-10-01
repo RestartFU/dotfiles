@@ -1,5 +1,3 @@
-static const char *fonts[]          = { "JetBrainsMono Nerd Font:size=10" };
-static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=10";
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
@@ -64,7 +62,7 @@ static const char *browsercmd[]  = { "firefox", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_w,      spawn,          SHCMD("~/.tools/firefox-zoom.sh") },
+	{ MODKEY,                       XK_w,      spawn,          {.v = browsercmd } },
 	{ MODKEY,                       XK_s,      spawn,          SHCMD("flameshot gui") },
 	{ MODKEY,                       XK_Return, spawn,          SHCMD("~/.config/st/st") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
@@ -72,7 +70,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY|ShiftMask,             XK_Next,   zoom,           {0} },
+	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY          ,             XK_q,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
@@ -95,7 +93,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_x,                      6)
 	TAGKEYS(                        XK_c,                      7)
 	TAGKEYS(                        XK_v,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("killall dwm && killall Xorg") },
+	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("killall xinit") },
 };
 
 /* button definitions */
