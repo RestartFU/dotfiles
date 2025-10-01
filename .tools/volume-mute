@@ -1,0 +1,12 @@
+#!/bin/bash
+
+pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+muted=$(pactl get-sink-mute @DEFAULT_SINK@ | grep -o 'yes')
+
+if [ "$muted" = "yes" ]; then
+    notify-send -h int:value:0 -h string:synchronous:volume "Volume (Muted)"
+else
+    volume=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1 | tr -d '%')
+    notify-send -h int:value:$volume -h string:synchronous:volume "Volume"
+fi

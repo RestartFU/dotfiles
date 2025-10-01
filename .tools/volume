@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Adjust volume
+pactl set-sink-volume @DEFAULT_SINK@ "$1"
+
+# Get current volume percentage
+volume=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1 | tr -d '%')
+
+# Check if muted
+muted=$(pactl get-sink-mute @DEFAULT_SINK@ | grep -o 'yes')
+
+if [ "$muted" = "yes" ]; then
+    notify-send -h int:value:0 -h string:synchronous:volume "Volume (Muted)"
+else
+    notify-send -h int:value:$volume -h string:synchronous:volume "Volume"
+fi
