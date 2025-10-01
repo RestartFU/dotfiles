@@ -8,4 +8,5 @@
 .config/dmenu/
 .config/st/
 .config/wallpapers/
+.config/dunst
 .Xresources

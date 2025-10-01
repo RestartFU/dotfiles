@@ -19,6 +19,8 @@ cd ~
 ~/.config/dwm/dwm &
 ~/.tools/disable_sleep
 xbindkeys
+dunst &
+
 feh --bg-fill ~/.config/wallpapers/wallpaper1.jpg
 
 # Transparent Terminal
