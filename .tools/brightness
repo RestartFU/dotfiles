@@ -3,4 +3,4 @@ brightnessctl set "$1"
 current=$(brightnessctl g)
 max=$(brightnessctl m)
 percent=$((current * 100 / max))
-notify-send -h int:value:$percent -h string:synchronous:brightness "󰃟 Brightness"
+notify-send -h int:value:$percent -h string:synchronous:brightness "Brightness: ${percent}%"
