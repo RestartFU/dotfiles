@@ -1,0 +1,352 @@
+cc -c -std=c99 -pedantic -Wall -Wno-deprecated-declarations -Os -I/usr/X11R6/include -I/usr/include/freetype2 -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_XOPEN_SOURCE=700L -DVERSION=\"6.6\" -DXINERAMA drw.c
+cc -c -std=c99 -pedantic -Wall -Wno-deprecated-declarations -Os -I/usr/X11R6/include -I/usr/include/freetype2 -D_DEFAULT_SOURCE -D_BSD_SOURCE -D_XOPEN_SOURCE=700L -DVERSION=\"6.6\" -DXINERAMA dwm.c
+In file included from dwm.c:271:
+config.h:31:1: error: expected expression before ‘;’ token
+   31 | ;
+      | ^
+dwm.c:144:13: warning: ‘applyrules’ declared ‘static’ but never defined [-Wunused-function]
+  144 | static void applyrules(Client *c);
+      |             ^~~~~~~~~~
+dwm.c:145:12: warning: ‘applysizehints’ declared ‘static’ but never defined [-Wunused-function]
+  145 | static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact);
+      |            ^~~~~~~~~~~~~~
+dwm.c:146:13: warning: ‘arrange’ declared ‘static’ but never defined [-Wunused-function]
+  146 | static void arrange(Monitor *m);
+      |             ^~~~~~~
+dwm.c:147:13: warning: ‘arrangemon’ declared ‘static’ but never defined [-Wunused-function]
+  147 | static void arrangemon(Monitor *m);
+      |             ^~~~~~~~~~
+dwm.c:148:13: warning: ‘attach’ declared ‘static’ but never defined [-Wunused-function]
+  148 | static void attach(Client *c);
+      |             ^~~~~~
+dwm.c:149:13: warning: ‘attachstack’ declared ‘static’ but never defined [-Wunused-function]
+  149 | static void attachstack(Client *c);
+      |             ^~~~~~~~~~~
+dwm.c:150:13: warning: ‘buttonpress’ used but never defined
+  150 | static void buttonpress(XEvent *e);
+      |             ^~~~~~~~~~~
+dwm.c:151:13: warning: ‘checkotherwm’ declared ‘static’ but never defined [-Wunused-function]
+  151 | static void checkotherwm(void);
+      |             ^~~~~~~~~~~~
+dwm.c:152:13: warning: ‘cleanup’ declared ‘static’ but never defined [-Wunused-function]
+  152 | static void cleanup(void);
+      |             ^~~~~~~
+dwm.c:153:13: warning: ‘cleanupmon’ declared ‘static’ but never defined [-Wunused-function]
+  153 | static void cleanupmon(Monitor *mon);
+      |             ^~~~~~~~~~
+dwm.c:154:13: warning: ‘clientmessage’ used but never defined
+  154 | static void clientmessage(XEvent *e);
+      |             ^~~~~~~~~~~~~
+dwm.c:155:13: warning: ‘configure’ declared ‘static’ but never defined [-Wunused-function]
+  155 | static void configure(Client *c);
+      |             ^~~~~~~~~
+dwm.c:156:13: warning: ‘configurenotify’ used but never defined
+  156 | static void configurenotify(XEvent *e);
+      |             ^~~~~~~~~~~~~~~
+dwm.c:157:13: warning: ‘configurerequest’ used but never defined
+  157 | static void configurerequest(XEvent *e);
+      |             ^~~~~~~~~~~~~~~~
+dwm.c:158:17: warning: ‘createmon’ declared ‘static’ but never defined [-Wunused-function]
+  158 | static Monitor *createmon(void);
+      |                 ^~~~~~~~~
+dwm.c:159:13: warning: ‘destroynotify’ used but never defined
+  159 | static void destroynotify(XEvent *e);
+      |             ^~~~~~~~~~~~~
+dwm.c:160:13: warning: ‘detach’ declared ‘static’ but never defined [-Wunused-function]
+  160 | static void detach(Client *c);
+      |             ^~~~~~
+dwm.c:161:13: warning: ‘detachstack’ declared ‘static’ but never defined [-Wunused-function]
+  161 | static void detachstack(Client *c);
+      |             ^~~~~~~~~~~
+dwm.c:162:17: warning: ‘dirtomon’ declared ‘static’ but never defined [-Wunused-function]
+  162 | static Monitor *dirtomon(int dir);
+      |                 ^~~~~~~~
+dwm.c:163:13: warning: ‘drawbar’ declared ‘static’ but never defined [-Wunused-function]
+  163 | static void drawbar(Monitor *m);
+      |             ^~~~~~~
+dwm.c:164:13: warning: ‘drawbars’ declared ‘static’ but never defined [-Wunused-function]
+  164 | static void drawbars(void);
+      |             ^~~~~~~~
+dwm.c:165:13: warning: ‘enternotify’ used but never defined
+  165 | static void enternotify(XEvent *e);
+      |             ^~~~~~~~~~~
+dwm.c:166:13: warning: ‘expose’ used but never defined
+  166 | static void expose(XEvent *e);
+      |             ^~~~~~
+dwm.c:167:13: warning: ‘focus’ declared ‘static’ but never defined [-Wunused-function]
+  167 | static void focus(Client *c);
+      |             ^~~~~
+dwm.c:168:13: warning: ‘focusin’ used but never defined
+  168 | static void focusin(XEvent *e);
+      |             ^~~~~~~
+dwm.c:169:13: warning: ‘focusmon’ declared ‘static’ but never defined [-Wunused-function]
+  169 | static void focusmon(const Arg *arg);
+      |             ^~~~~~~~
+dwm.c:170:13: warning: ‘focusstack’ declared ‘static’ but never defined [-Wunused-function]
+  170 | static void focusstack(const Arg *arg);
+      |             ^~~~~~~~~~
+dwm.c:171:13: warning: ‘getatomprop’ declared ‘static’ but never defined [-Wunused-function]
+  171 | static Atom getatomprop(Client *c, Atom prop);
+      |             ^~~~~~~~~~~
+dwm.c:172:12: warning: ‘getrootptr’ declared ‘static’ but never defined [-Wunused-function]
+  172 | static int getrootptr(int *x, int *y);
+      |            ^~~~~~~~~~
+dwm.c:173:13: warning: ‘getstate’ declared ‘static’ but never defined [-Wunused-function]
+  173 | static long getstate(Window w);
+      |             ^~~~~~~~
+dwm.c:174:12: warning: ‘gettextprop’ declared ‘static’ but never defined [-Wunused-function]
+  174 | static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
+      |            ^~~~~~~~~~~
+dwm.c:175:13: warning: ‘grabbuttons’ declared ‘static’ but never defined [-Wunused-function]
+  175 | static void grabbuttons(Client *c, int focused);
+      |             ^~~~~~~~~~~
+dwm.c:176:13: warning: ‘grabkeys’ declared ‘static’ but never defined [-Wunused-function]
+  176 | static void grabkeys(void);
+      |             ^~~~~~~~
+dwm.c:177:13: warning: ‘incnmaster’ declared ‘static’ but never defined [-Wunused-function]
+  177 | static void incnmaster(const Arg *arg);
+      |             ^~~~~~~~~~
+dwm.c:178:13: warning: ‘keypress’ used but never defined
+  178 | static void keypress(XEvent *e);
+      |             ^~~~~~~~
+dwm.c:179:13: warning: ‘killclient’ declared ‘static’ but never defined [-Wunused-function]
+  179 | static void killclient(const Arg *arg);
+      |             ^~~~~~~~~~
+dwm.c:180:13: warning: ‘manage’ declared ‘static’ but never defined [-Wunused-function]
+  180 | static void manage(Window w, XWindowAttributes *wa);
+      |             ^~~~~~
+dwm.c:181:13: warning: ‘mappingnotify’ used but never defined
+  181 | static void mappingnotify(XEvent *e);
+      |             ^~~~~~~~~~~~~
+dwm.c:182:13: warning: ‘maprequest’ used but never defined
+  182 | static void maprequest(XEvent *e);
+      |             ^~~~~~~~~~
+dwm.c:183:13: warning: ‘monocle’ declared ‘static’ but never defined [-Wunused-function]
+  183 | static void monocle(Monitor *m);
+      |             ^~~~~~~
+dwm.c:184:13: warning: ‘motionnotify’ used but never defined
+  184 | static void motionnotify(XEvent *e);
+      |             ^~~~~~~~~~~~
+dwm.c:185:13: warning: ‘movemouse’ declared ‘static’ but never defined [-Wunused-function]
+  185 | static void movemouse(const Arg *arg);
+      |             ^~~~~~~~~
+dwm.c:186:16: warning: ‘nexttiled’ declared ‘static’ but never defined [-Wunused-function]
+  186 | static Client *nexttiled(Client *c);
+      |                ^~~~~~~~~
+dwm.c:187:13: warning: ‘pop’ declared ‘static’ but never defined [-Wunused-function]
+  187 | static void pop(Client *c);
+      |             ^~~
+dwm.c:188:13: warning: ‘propertynotify’ used but never defined
+  188 | static void propertynotify(XEvent *e);
+      |             ^~~~~~~~~~~~~~
+dwm.c:189:13: warning: ‘quit’ declared ‘static’ but never defined [-Wunused-function]
+  189 | static void quit(const Arg *arg);
+      |             ^~~~
+dwm.c:190:17: warning: ‘recttomon’ declared ‘static’ but never defined [-Wunused-function]
+  190 | static Monitor *recttomon(int x, int y, int w, int h);
+      |                 ^~~~~~~~~
+dwm.c:191:13: warning: ‘resize’ declared ‘static’ but never defined [-Wunused-function]
+  191 | static void resize(Client *c, int x, int y, int w, int h, int interact);
+      |             ^~~~~~
+dwm.c:192:13: warning: ‘resizeclient’ declared ‘static’ but never defined [-Wunused-function]
+  192 | static void resizeclient(Client *c, int x, int y, int w, int h);
+      |             ^~~~~~~~~~~~
+dwm.c:193:13: warning: ‘resizemouse’ declared ‘static’ but never defined [-Wunused-function]
+  193 | static void resizemouse(const Arg *arg);
+      |             ^~~~~~~~~~~
+dwm.c:194:13: warning: ‘restack’ declared ‘static’ but never defined [-Wunused-function]
+  194 | static void restack(Monitor *m);
+      |             ^~~~~~~
+dwm.c:195:13: warning: ‘run’ declared ‘static’ but never defined [-Wunused-function]
+  195 | static void run(void);
+      |             ^~~
+dwm.c:196:13: warning: ‘scan’ declared ‘static’ but never defined [-Wunused-function]
+  196 | static void scan(void);
+      |             ^~~~
+dwm.c:197:12: warning: ‘sendevent’ declared ‘static’ but never defined [-Wunused-function]
+  197 | static int sendevent(Client *c, Atom proto);
+      |            ^~~~~~~~~
+dwm.c:198:13: warning: ‘sendmon’ declared ‘static’ but never defined [-Wunused-function]
+  198 | static void sendmon(Client *c, Monitor *m);
+      |             ^~~~~~~
+dwm.c:199:13: warning: ‘setclientstate’ declared ‘static’ but never defined [-Wunused-function]
+  199 | static void setclientstate(Client *c, long state);
+      |             ^~~~~~~~~~~~~~
+dwm.c:200:13: warning: ‘setfocus’ declared ‘static’ but never defined [-Wunused-function]
+  200 | static void setfocus(Client *c);
+      |             ^~~~~~~~
+dwm.c:201:13: warning: ‘setfullscreen’ declared ‘static’ but never defined [-Wunused-function]
+  201 | static void setfullscreen(Client *c, int fullscreen);
+      |             ^~~~~~~~~~~~~
+dwm.c:202:13: warning: ‘setlayout’ declared ‘static’ but never defined [-Wunused-function]
+  202 | static void setlayout(const Arg *arg);
+      |             ^~~~~~~~~
+dwm.c:203:13: warning: ‘setmfact’ declared ‘static’ but never defined [-Wunused-function]
+  203 | static void setmfact(const Arg *arg);
+      |             ^~~~~~~~
+dwm.c:204:13: warning: ‘setup’ declared ‘static’ but never defined [-Wunused-function]
+  204 | static void setup(void);
+      |             ^~~~~
+dwm.c:205:13: warning: ‘seturgent’ declared ‘static’ but never defined [-Wunused-function]
+  205 | static void seturgent(Client *c, int urg);
+      |             ^~~~~~~~~
+dwm.c:206:13: warning: ‘showhide’ declared ‘static’ but never defined [-Wunused-function]
+  206 | static void showhide(Client *c);
+      |             ^~~~~~~~
+dwm.c:207:13: warning: ‘spawn’ declared ‘static’ but never defined [-Wunused-function]
+  207 | static void spawn(const Arg *arg);
+      |             ^~~~~
+dwm.c:208:13: warning: ‘tag’ declared ‘static’ but never defined [-Wunused-function]
+  208 | static void tag(const Arg *arg);
+      |             ^~~
+dwm.c:209:13: warning: ‘tagmon’ declared ‘static’ but never defined [-Wunused-function]
+  209 | static void tagmon(const Arg *arg);
+      |             ^~~~~~
+dwm.c:210:13: warning: ‘tile’ declared ‘static’ but never defined [-Wunused-function]
+  210 | static void tile(Monitor *m);
+      |             ^~~~
+dwm.c:211:13: warning: ‘togglebar’ declared ‘static’ but never defined [-Wunused-function]
+  211 | static void togglebar(const Arg *arg);
+      |             ^~~~~~~~~
+dwm.c:212:13: warning: ‘togglefloating’ declared ‘static’ but never defined [-Wunused-function]
+  212 | static void togglefloating(const Arg *arg);
+      |             ^~~~~~~~~~~~~~
+dwm.c:213:13: warning: ‘toggletag’ declared ‘static’ but never defined [-Wunused-function]
+  213 | static void toggletag(const Arg *arg);
+      |             ^~~~~~~~~
+dwm.c:214:13: warning: ‘toggleview’ declared ‘static’ but never defined [-Wunused-function]
+  214 | static void toggleview(const Arg *arg);
+      |             ^~~~~~~~~~
+dwm.c:215:13: warning: ‘unfocus’ declared ‘static’ but never defined [-Wunused-function]
+  215 | static void unfocus(Client *c, int setfocus);
+      |             ^~~~~~~
+dwm.c:216:13: warning: ‘unmanage’ declared ‘static’ but never defined [-Wunused-function]
+  216 | static void unmanage(Client *c, int destroyed);
+      |             ^~~~~~~~
+dwm.c:217:13: warning: ‘unmapnotify’ used but never defined
+  217 | static void unmapnotify(XEvent *e);
+      |             ^~~~~~~~~~~
+dwm.c:218:13: warning: ‘updatebarpos’ declared ‘static’ but never defined [-Wunused-function]
+  218 | static void updatebarpos(Monitor *m);
+      |             ^~~~~~~~~~~~
+dwm.c:219:13: warning: ‘updatebars’ declared ‘static’ but never defined [-Wunused-function]
+  219 | static void updatebars(void);
+      |             ^~~~~~~~~~
+dwm.c:220:13: warning: ‘updateclientlist’ declared ‘static’ but never defined [-Wunused-function]
+  220 | static void updateclientlist(void);
+      |             ^~~~~~~~~~~~~~~~
+dwm.c:221:12: warning: ‘updategeom’ declared ‘static’ but never defined [-Wunused-function]
+  221 | static int updategeom(void);
+      |            ^~~~~~~~~~
+dwm.c:222:13: warning: ‘updatenumlockmask’ declared ‘static’ but never defined [-Wunused-function]
+  222 | static void updatenumlockmask(void);
+      |             ^~~~~~~~~~~~~~~~~
+dwm.c:223:13: warning: ‘updatesizehints’ declared ‘static’ but never defined [-Wunused-function]
+  223 | static void updatesizehints(Client *c);
+      |             ^~~~~~~~~~~~~~~
+dwm.c:224:13: warning: ‘updatestatus’ declared ‘static’ but never defined [-Wunused-function]
+  224 | static void updatestatus(void);
+      |             ^~~~~~~~~~~~
+dwm.c:225:13: warning: ‘updatetitle’ declared ‘static’ but never defined [-Wunused-function]
+  225 | static void updatetitle(Client *c);
+      |             ^~~~~~~~~~~
+dwm.c:226:13: warning: ‘updatewindowtype’ declared ‘static’ but never defined [-Wunused-function]
+  226 | static void updatewindowtype(Client *c);
+      |             ^~~~~~~~~~~~~~~~
+dwm.c:227:13: warning: ‘updatewmhints’ declared ‘static’ but never defined [-Wunused-function]
+  227 | static void updatewmhints(Client *c);
+      |             ^~~~~~~~~~~~~
+dwm.c:228:13: warning: ‘view’ declared ‘static’ but never defined [-Wunused-function]
+  228 | static void view(const Arg *arg);
+      |             ^~~~
+dwm.c:229:16: warning: ‘wintoclient’ declared ‘static’ but never defined [-Wunused-function]
+  229 | static Client *wintoclient(Window w);
+      |                ^~~~~~~~~~~
+dwm.c:230:17: warning: ‘wintomon’ declared ‘static’ but never defined [-Wunused-function]
+  230 | static Monitor *wintomon(Window w);
+      |                 ^~~~~~~~
+dwm.c:231:12: warning: ‘xerror’ declared ‘static’ but never defined [-Wunused-function]
+  231 | static int xerror(Display *dpy, XErrorEvent *ee);
+      |            ^~~~~~
+dwm.c:232:12: warning: ‘xerrordummy’ declared ‘static’ but never defined [-Wunused-function]
+  232 | static int xerrordummy(Display *dpy, XErrorEvent *ee);
+      |            ^~~~~~~~~~~
+dwm.c:233:12: warning: ‘xerrorstart’ declared ‘static’ but never defined [-Wunused-function]
+  233 | static int xerrorstart(Display *dpy, XErrorEvent *ee);
+      |            ^~~~~~~~~~~
+dwm.c:234:13: warning: ‘zoom’ declared ‘static’ but never defined [-Wunused-function]
+  234 | static void zoom(const Arg *arg);
+      |             ^~~~
+config.h:22:20: warning: ‘tags’ defined but not used [-Wunused-variable]
+   22 | static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+      |                    ^~~~
+config.h:15:20: warning: ‘colors’ defined but not used [-Wunused-variable]
+   15 | static const char *colors[][3]      = {
+      |                    ^~~~~~
+config.h:1:20: warning: ‘fonts’ defined but not used [-Wunused-variable]
+    1 | static const char *fonts[]          = { "JetBrainsMono:size=20" };
+      |                    ^~~~~
+dwm.c:268:21: warning: ‘wmcheckwin’ defined but not used [-Wunused-variable]
+  268 | static Window root, wmcheckwin;
+      |                     ^~~~~~~~~~
+dwm.c:268:15: warning: ‘root’ defined but not used [-Wunused-variable]
+  268 | static Window root, wmcheckwin;
+      |               ^~~~
+dwm.c:267:24: warning: ‘selmon’ defined but not used [-Wunused-variable]
+  267 | static Monitor *mons, *selmon;
+      |                        ^~~~~~
+dwm.c:267:17: warning: ‘mons’ defined but not used [-Wunused-variable]
+  267 | static Monitor *mons, *selmon;
+      |                 ^~~~
+dwm.c:266:13: warning: ‘drw’ defined but not used [-Wunused-variable]
+  266 | static Drw *drw;
+      |             ^~~
+dwm.c:265:17: warning: ‘dpy’ defined but not used [-Wunused-variable]
+  265 | static Display *dpy;
+      |                 ^~~
+dwm.c:264:14: warning: ‘scheme’ defined but not used [-Wunused-variable]
+  264 | static Clr **scheme;
+      |              ^~~~~~
+dwm.c:263:13: warning: ‘cursor’ defined but not used [-Wunused-variable]
+  263 | static Cur *cursor[CurLast];
+      |             ^~~~~~
+dwm.c:262:12: warning: ‘running’ defined but not used [-Wunused-variable]
+  262 | static int running = 1;
+      |            ^~~~~~~
+dwm.c:261:29: warning: ‘netatom’ defined but not used [-Wunused-variable]
+  261 | static Atom wmatom[WMLast], netatom[NetLast];
+      |                             ^~~~~~~
+dwm.c:261:13: warning: ‘wmatom’ defined but not used [-Wunused-variable]
+  261 | static Atom wmatom[WMLast], netatom[NetLast];
+      |             ^~~~~~
+dwm.c:245:15: warning: ‘handler’ defined but not used [-Wunused-variable]
+  245 | static void (*handler[LASTEvent]) (XEvent *) = {
+      |               ^~~~~~~
+dwm.c:244:21: warning: ‘numlockmask’ defined but not used [-Wunused-variable]
+  244 | static unsigned int numlockmask = 0;
+      |                     ^~~~~~~~~~~
+dwm.c:243:14: warning: ‘xerrorxlib’ defined but not used [-Wunused-variable]
+  243 | static int (*xerrorxlib)(Display *, XErrorEvent *);
+      |              ^~~~~~~~~~
+dwm.c:242:12: warning: ‘lrpad’ defined but not used [-Wunused-variable]
+  242 | static int lrpad;            /* sum of left and right padding for text */
+      |            ^~~~~
+dwm.c:241:12: warning: ‘bh’ defined but not used [-Wunused-variable]
+  241 | static int bh;               /* bar height */
+      |            ^~
+dwm.c:240:16: warning: ‘sh’ defined but not used [-Wunused-variable]
+  240 | static int sw, sh;           /* X display screen geometry width, height */
+      |                ^~
+dwm.c:240:12: warning: ‘sw’ defined but not used [-Wunused-variable]
+  240 | static int sw, sh;           /* X display screen geometry width, height */
+      |            ^~
+dwm.c:239:12: warning: ‘screen’ defined but not used [-Wunused-variable]
+  239 | static int screen;
+      |            ^~~~~~
+dwm.c:238:13: warning: ‘stext’ defined but not used [-Wunused-variable]
+  238 | static char stext[256];
+      |             ^~~~~
+dwm.c:237:19: warning: ‘broken’ defined but not used [-Wunused-const-variable=]
+  237 | static const char broken[] = "broken";
+      |                   ^~~~~~
+make: *** [Makefile:12: dwm.o] Error 1

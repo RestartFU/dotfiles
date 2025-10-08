@@ -1,0 +1,14 @@
+[font]
+size = 18
+
+[font.normal]
+family = "JetBrainsMono"
+
+[colors.primary]
+background = "#000000"
+foreground = "#eeeeee"
+
+[window]
+opacity = 0.5
+padding.x = 0
+padding.y = 0

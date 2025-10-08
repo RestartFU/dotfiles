@@ -6,7 +6,7 @@
 .config/dwm/
 .config/slstatus
 .config/dmenu/
-.config/st/
+.config/alacritty/
 .config/wallpapers/
 .config/dunst
 .Xresources
