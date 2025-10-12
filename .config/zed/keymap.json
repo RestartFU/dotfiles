@@ -1,0 +1,8 @@
+[
+  {
+    "context": "VimControl && !VimWaiting && !menu",
+    "bindings": {
+      "space s": "workspace::Save"
+    }
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "context_servers": {
+    "filesystem": {
+      "command": null, // null because it's already running manually
+      "args": [],
+      "env": {}
+    }
+  },
+  "language_models": {
+    "ollama": {
+      "api_url": "http://192.168.2.71:11434",
+      "available_models": [
+        {
+          "name": "qwen2.5-coder",
+          "display_name": "Qwen 2.5",
+          "max_tokens": 120000,
+          "supports_tools": true,
+          "supports_thinking": true,
+          "supports_images": true
+        },
+        {
+          "name": "llama3:70b",
+          "display_name": "Llama 3 70B (Bridge)",
+          "max_tokens": 0,
+          "supports_tools": true,
+          "supports_thinking": false,
+          "supports_images": true
+        }
+      ]
+    }
+  },
+
+  "agent": {
+    "default_model": {
+      "model": "qwen2.5-coder:latest",
+      "provider": "ollama"
+    },
+    "default_profile": "write",
+    "always_allow_tool_actions": true
+  },
+
+  "vim_mode": true,
+  "base_keymap": "JetBrains",
+  "buffer_font_family": "JetBrains Mono",
+  "buffer_font_size": 6,
+  "ui_font_family": "JetBrains Mono",
+  "ui_font_size": 8,
+  "theme": {
+    "mode": "dark",
+    "dark": "Gruvbox Dark",
+    "light": "Gruvbox Light"
+  }
+}

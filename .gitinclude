@@ -9,4 +9,5 @@
 .config/alacritty/
 .config/wallpapers/
 .config/dunst
+.config/zed/
 .Xresources
