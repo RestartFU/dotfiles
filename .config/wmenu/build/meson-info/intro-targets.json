@@ -1,0 +1,487 @@
+[
+  {
+    "name": "__usr_share_wayland_protocols_stable_xdg_shell_xdg_shell_xml_protocol_c",
+    "id": "8998617@@__usr_share_wayland_protocols_stable_xdg_shell_xdg_shell_xml_protocol_c@cus",
+    "type": "custom",
+    "defined_in": "/home/restart/.config/wmenu/protocols/meson.build",
+    "filename": [
+      "/home/restart/.config/wmenu/build/protocols/xdg-shell-protocol.c"
+    ],
+    "build_by_default": false,
+    "target_sources": [
+      {
+        "language": "unknown",
+        "compiler": [
+          "/usr/bin/wayland-scanner",
+          "private-code",
+          "@INPUT@",
+          "@OUTPUT@"
+        ],
+        "parameters": [],
+        "sources": [
+          "//usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml"
+        ],
+        "generated_sources": []
+      }
+    ],
+    "extra_files": [],
+    "subproject": null,
+    "dependencies": [],
+    "depends": [],
+    "installed": false
+  },
+  {
+    "name": "__usr_share_wayland_protocols_stable_xdg_shell_xdg_shell_xml_client_h",
+    "id": "8998617@@__usr_share_wayland_protocols_stable_xdg_shell_xdg_shell_xml_client_h@cus",
+    "type": "custom",
+    "defined_in": "/home/restart/.config/wmenu/protocols/meson.build",
+    "filename": [
+      "/home/restart/.config/wmenu/build/protocols/xdg-shell-client-protocol.h"
+    ],
+    "build_by_default": false,
+    "target_sources": [
+      {
+        "language": "unknown",
+        "compiler": [
+          "/usr/bin/wayland-scanner",
+          "client-header",
+          "@INPUT@",
+          "@OUTPUT@"
+        ],
+        "parameters": [],
+        "sources": [
+          "//usr/share/wayland-protocols/stable/xdg-shell/xdg-shell.xml"
+        ],
+        "generated_sources": []
+      }
+    ],
+    "extra_files": [],
+    "subproject": null,
+    "dependencies": [],
+    "depends": [],
+    "installed": false
+  },
+  {
+    "name": "__usr_share_wayland_protocols_staging_xdg_activation_xdg_activation_v1_xml_protocol_c",
+    "id": "8998617@@__usr_share_wayland_protocols_staging_xdg_activation_xdg_activation_v1_xml_protocol_c@cus",
+    "type": "custom",
+    "defined_in": "/home/restart/.config/wmenu/protocols/meson.build",
+    "filename": [
+      "/home/restart/.config/wmenu/build/protocols/xdg-activation-v1-protocol.c"
+    ],
+    "build_by_default": false,
+    "target_sources": [
+      {
+        "language": "unknown",
+        "compiler": [
+          "/usr/bin/wayland-scanner",
+          "private-code",
+          "@INPUT@",
+          "@OUTPUT@"
+        ],
+        "parameters": [],
+        "sources": [
+          "//usr/share/wayland-protocols/staging/xdg-activation/xdg-activation-v1.xml"
+        ],
+        "generated_sources": []
+      }
+    ],
+    "extra_files": [],
+    "subproject": null,
+    "dependencies": [],
+    "depends": [],
+    "installed": false
+  },
+  {
+    "name": "__usr_share_wayland_protocols_staging_xdg_activation_xdg_activation_v1_xml_client_h",
+    "id": "8998617@@__usr_share_wayland_protocols_staging_xdg_activation_xdg_activation_v1_xml_client_h@cus",
+    "type": "custom",
+    "defined_in": "/home/restart/.config/wmenu/protocols/meson.build",
+    "filename": [
+      "/home/restart/.config/wmenu/build/protocols/xdg-activation-v1-client-protocol.h"
+    ],
+    "build_by_default": false,
+    "target_sources": [
+      {
+        "language": "unknown",
+        "compiler": [
+          "/usr/bin/wayland-scanner",
+          "client-header",
+          "@INPUT@",
+          "@OUTPUT@"
+        ],
+        "parameters": [],
+        "sources": [
+          "//usr/share/wayland-protocols/staging/xdg-activation/xdg-activation-v1.xml"
+        ],
+        "generated_sources": []
+      }
+    ],
+    "extra_files": [],
+    "subproject": null,
+    "dependencies": [],
+    "depends": [],
+    "installed": false
+  },
+  {
+    "name": "wlr_layer_shell_unstable_v1_xml_protocol_c",
+    "id": "8998617@@wlr_layer_shell_unstable_v1_xml_protocol_c@cus",
+    "type": "custom",
+    "defined_in": "/home/restart/.config/wmenu/protocols/meson.build",
+    "filename": [
+      "/home/restart/.config/wmenu/build/protocols/wlr-layer-shell-unstable-v1-protocol.c"
+    ],
+    "build_by_default": false,
+    "target_sources": [
+      {
+        "language": "unknown",
+        "compiler": [
+          "/usr/bin/wayland-scanner",
+          "private-code",
+          "@INPUT@",
+          "@OUTPUT@"
+        ],
+        "parameters": [],
+        "sources": [
+          "/home/restart/.config/wmenu/protocols/wlr-layer-shell-unstable-v1.xml"
+        ],
+        "generated_sources": []
+      }
+    ],
+    "extra_files": [],
+    "subproject": null,
+    "dependencies": [],
+    "depends": [],
+    "installed": false
+  },
+  {
+    "name": "wlr_layer_shell_unstable_v1_xml_client_h",
+    "id": "8998617@@wlr_layer_shell_unstable_v1_xml_client_h@cus",
+    "type": "custom",
+    "defined_in": "/home/restart/.config/wmenu/protocols/meson.build",
+    "filename": [
+      "/home/restart/.config/wmenu/build/protocols/wlr-layer-shell-unstable-v1-client-protocol.h"
+    ],
+    "build_by_default": false,
+    "target_sources": [
+      {
+        "language": "unknown",
+        "compiler": [
+          "/usr/bin/wayland-scanner",
+          "client-header",
+          "@INPUT@",
+          "@OUTPUT@"
+        ],
+        "parameters": [],
+        "sources": [
+          "/home/restart/.config/wmenu/protocols/wlr-layer-shell-unstable-v1.xml"
+        ],
+        "generated_sources": []
+      }
+    ],
+    "extra_files": [],
+    "subproject": null,
+    "dependencies": [],
+    "depends": [],
+    "installed": false
+  },
+  {
+    "name": "client_protos",
+    "id": "8998617@@client_protos@sta",
+    "type": "static library",
+    "defined_in": "/home/restart/.config/wmenu/protocols/meson.build",
+    "filename": [
+      "/home/restart/.config/wmenu/build/protocols/libclient_protos.a"
+    ],
+    "build_by_default": true,
+    "target_sources": [
+      {
+        "language": "c",
+        "machine": "host",
+        "compiler": [
+          "cc"
+        ],
+        "parameters": [
+          "-I/home/restart/.config/wmenu/build/protocols/libclient_protos.a.p",
+          "-I/home/restart/.config/wmenu/build/protocols",
+          "-I/home/restart/.config/wmenu/protocols",
+          "-I/usr/lib64/libffi/include",
+          "-fdiagnostics-color=always",
+          "-D_FILE_OFFSET_BITS=64",
+          "-Wall",
+          "-Winvalid-pch",
+          "-Wextra",
+          "-Werror",
+          "-std=c11",
+          "-O0",
+          "-g",
+          "-DVERSION=\"0.2.0\"",
+          "-Wno-missing-field-initializers",
+          "-Wno-unused-parameter",
+          "-Wundef",
+          "-Wvla",
+          "-fPIC"
+        ],
+        "sources": [],
+        "generated_sources": [
+          "/home/restart/.config/wmenu/build/protocols/xdg-shell-protocol.c",
+          "/home/restart/.config/wmenu/build/protocols/xdg-activation-v1-protocol.c",
+          "/home/restart/.config/wmenu/build/protocols/wlr-layer-shell-unstable-v1-protocol.c"
+        ],
+        "unity_sources": []
+      },
+      {
+        "linker": [
+          "gcc-ar"
+        ],
+        "parameters": [
+          "csrDT"
+        ]
+      }
+    ],
+    "extra_files": [],
+    "subproject": null,
+    "dependencies": [
+      "wayland-client"
+    ],
+    "depends": [],
+    "installed": false
+  },
+  {
+    "name": "wmenu.1",
+    "id": "46b42b4@@wmenu.1@cus",
+    "type": "custom",
+    "defined_in": "/home/restart/.config/wmenu/docs/meson.build",
+    "filename": [
+      "/home/restart/.config/wmenu/build/docs/wmenu.1"
+    ],
+    "build_by_default": true,
+    "target_sources": [
+      {
+        "language": "unknown",
+        "compiler": [
+          "/usr/bin/scdoc"
+        ],
+        "parameters": [],
+        "sources": [
+          "/home/restart/.config/wmenu/docs/wmenu.1.scd"
+        ],
+        "generated_sources": []
+      }
+    ],
+    "extra_files": [],
+    "subproject": null,
+    "dependencies": [],
+    "depends": [],
+    "installed": true,
+    "install_filename": [
+      "/usr/local/share/man/man1/wmenu.1"
+    ]
+  },
+  {
+    "name": "wmenu",
+    "id": "wmenu@exe",
+    "type": "executable",
+    "defined_in": "/home/restart/.config/wmenu/meson.build",
+    "filename": [
+      "/home/restart/.config/wmenu/build/wmenu"
+    ],
+    "build_by_default": true,
+    "target_sources": [
+      {
+        "language": "c",
+        "machine": "host",
+        "compiler": [
+          "cc"
+        ],
+        "parameters": [
+          "-I/home/restart/.config/wmenu/build/wmenu.p",
+          "-I/home/restart/.config/wmenu/build",
+          "-I/home/restart/.config/wmenu",
+          "-I/home/restart/.config/wmenu/build/protocols",
+          "-I/usr/include/cairo",
+          "-I/usr/include/libpng16",
+          "-I/usr/include/freetype2",
+          "-I/usr/include/pixman-1",
+          "-I/usr/include/pango-1.0",
+          "-I/usr/include/harfbuzz",
+          "-I/usr/lib64/libffi/include",
+          "-I/usr/include/glib-2.0",
+          "-I/usr/lib64/glib-2.0/include",
+          "-I/usr/include/libmount",
+          "-I/usr/include/blkid",
+          "-I/usr/include/fribidi",
+          "-fdiagnostics-color=always",
+          "-D_FILE_OFFSET_BITS=64",
+          "-Wall",
+          "-Winvalid-pch",
+          "-Wextra",
+          "-Werror",
+          "-std=c11",
+          "-O0",
+          "-g",
+          "-DVERSION=\"0.2.0\"",
+          "-Wno-missing-field-initializers",
+          "-Wno-unused-parameter",
+          "-Wundef",
+          "-Wvla",
+          "-pthread"
+        ],
+        "sources": [
+          "/home/restart/.config/wmenu/menu.c",
+          "/home/restart/.config/wmenu/pango.c",
+          "/home/restart/.config/wmenu/pool-buffer.c",
+          "/home/restart/.config/wmenu/render.c",
+          "/home/restart/.config/wmenu/wayland.c",
+          "/home/restart/.config/wmenu/wmenu.c"
+        ],
+        "generated_sources": [],
+        "unity_sources": []
+      },
+      {
+        "linker": [
+          "cc"
+        ],
+        "parameters": [
+          "-Wl,--as-needed",
+          "-Wl,--no-undefined",
+          "-Wl,--start-group",
+          "-Wl,--start-group",
+          "protocols/libclient_protos.a",
+          "/usr/lib64/libcairo.so",
+          "/usr/lib64/libpango-1.0.so",
+          "/usr/lib64/libharfbuzz.so",
+          "/usr/lib64/libgobject-2.0.so",
+          "/usr/lib64/libglib-2.0.so",
+          "/usr/lib64/libpangocairo-1.0.so",
+          "-lrt",
+          "/usr/lib64/libwayland-client.so",
+          "-lm",
+          "/usr/lib64/libxkbcommon.so",
+          "-Wl,--end-group",
+          "-Wl,--end-group"
+        ]
+      }
+    ],
+    "extra_files": [],
+    "subproject": null,
+    "dependencies": [
+      "cairo",
+      "pango",
+      "pangocairo",
+      "rt",
+      "wayland-client",
+      "wayland-protocols",
+      "xkbcommon"
+    ],
+    "depends": [],
+    "win_subsystem": "console",
+    "installed": true,
+    "install_filename": [
+      "/usr/local/bin/wmenu"
+    ]
+  },
+  {
+    "name": "wmenu-run",
+    "id": "wmenu-run@exe",
+    "type": "executable",
+    "defined_in": "/home/restart/.config/wmenu/meson.build",
+    "filename": [
+      "/home/restart/.config/wmenu/build/wmenu-run"
+    ],
+    "build_by_default": true,
+    "target_sources": [
+      {
+        "language": "c",
+        "machine": "host",
+        "compiler": [
+          "cc"
+        ],
+        "parameters": [
+          "-I/home/restart/.config/wmenu/build/wmenu-run.p",
+          "-I/home/restart/.config/wmenu/build",
+          "-I/home/restart/.config/wmenu",
+          "-I/home/restart/.config/wmenu/build/protocols",
+          "-I/usr/include/cairo",
+          "-I/usr/include/libpng16",
+          "-I/usr/include/freetype2",
+          "-I/usr/include/pixman-1",
+          "-I/usr/include/pango-1.0",
+          "-I/usr/include/harfbuzz",
+          "-I/usr/lib64/libffi/include",
+          "-I/usr/include/glib-2.0",
+          "-I/usr/lib64/glib-2.0/include",
+          "-I/usr/include/libmount",
+          "-I/usr/include/blkid",
+          "-I/usr/include/fribidi",
+          "-fdiagnostics-color=always",
+          "-D_FILE_OFFSET_BITS=64",
+          "-Wall",
+          "-Winvalid-pch",
+          "-Wextra",
+          "-Werror",
+          "-std=c11",
+          "-O0",
+          "-g",
+          "-DVERSION=\"0.2.0\"",
+          "-Wno-missing-field-initializers",
+          "-Wno-unused-parameter",
+          "-Wundef",
+          "-Wvla",
+          "-pthread"
+        ],
+        "sources": [
+          "/home/restart/.config/wmenu/menu.c",
+          "/home/restart/.config/wmenu/pango.c",
+          "/home/restart/.config/wmenu/pool-buffer.c",
+          "/home/restart/.config/wmenu/render.c",
+          "/home/restart/.config/wmenu/wayland.c",
+          "/home/restart/.config/wmenu/wmenu-run.c"
+        ],
+        "generated_sources": [],
+        "unity_sources": []
+      },
+      {
+        "linker": [
+          "cc"
+        ],
+        "parameters": [
+          "-Wl,--as-needed",
+          "-Wl,--no-undefined",
+          "-Wl,--start-group",
+          "-Wl,--start-group",
+          "protocols/libclient_protos.a",
+          "/usr/lib64/libcairo.so",
+          "/usr/lib64/libpango-1.0.so",
+          "/usr/lib64/libharfbuzz.so",
+          "/usr/lib64/libgobject-2.0.so",
+          "/usr/lib64/libglib-2.0.so",
+          "/usr/lib64/libpangocairo-1.0.so",
+          "-lrt",
+          "/usr/lib64/libwayland-client.so",
+          "-lm",
+          "/usr/lib64/libxkbcommon.so",
+          "-Wl,--end-group",
+          "-Wl,--end-group"
+        ]
+      }
+    ],
+    "extra_files": [],
+    "subproject": null,
+    "dependencies": [
+      "cairo",
+      "pango",
+      "pangocairo",
+      "rt",
+      "wayland-client",
+      "wayland-protocols",
+      "xkbcommon"
+    ],
+    "depends": [],
+    "win_subsystem": "console",
+    "installed": true,
+    "install_filename": [
+      "/usr/local/bin/wmenu-run"
+    ]
+  }
+]

@@ -1,0 +1,214 @@
+[
+  {
+    "name": "cairo",
+    "type": "pkgconfig",
+    "version": "1.18.4",
+    "compile_args": [
+      "-I/usr/include/cairo",
+      "-I/usr/include/libpng16",
+      "-I/usr/include/freetype2",
+      "-I/usr/include/pixman-1"
+    ],
+    "link_args": [
+      "/usr/lib64/libcairo.so"
+    ],
+    "include_directories": [],
+    "sources": [],
+    "extra_files": [],
+    "dependencies": [],
+    "depends": [],
+    "meson_variables": [
+      "cairo"
+    ]
+  },
+  {
+    "name": "pango",
+    "type": "pkgconfig",
+    "version": "1.57.0",
+    "compile_args": [
+      "-I/usr/include/pango-1.0",
+      "-I/usr/include/harfbuzz",
+      "-I/usr/lib64/libffi/include",
+      "-pthread",
+      "-I/usr/include/glib-2.0",
+      "-I/usr/lib64/glib-2.0/include",
+      "-I/usr/include/libmount",
+      "-I/usr/include/blkid",
+      "-I/usr/include/fribidi",
+      "-I/usr/include/cairo",
+      "-I/usr/include/libpng16",
+      "-I/usr/include/freetype2",
+      "-I/usr/include/pixman-1"
+    ],
+    "link_args": [
+      "/usr/lib64/libpango-1.0.so",
+      "/usr/lib64/libharfbuzz.so",
+      "/usr/lib64/libgobject-2.0.so",
+      "/usr/lib64/libglib-2.0.so"
+    ],
+    "include_directories": [],
+    "sources": [],
+    "extra_files": [],
+    "dependencies": [],
+    "depends": [],
+    "meson_variables": [
+      "pango"
+    ]
+  },
+  {
+    "name": "pangocairo",
+    "type": "pkgconfig",
+    "version": "1.57.0",
+    "compile_args": [
+      "-I/usr/include/pango-1.0",
+      "-I/usr/include/cairo",
+      "-I/usr/include/libpng16",
+      "-I/usr/include/pixman-1",
+      "-pthread",
+      "-I/usr/include/libmount",
+      "-I/usr/include/blkid",
+      "-I/usr/include/fribidi",
+      "-I/usr/include/harfbuzz",
+      "-I/usr/include/freetype2",
+      "-I/usr/include/glib-2.0",
+      "-I/usr/lib64/glib-2.0/include",
+      "-I/usr/lib64/libffi/include"
+    ],
+    "link_args": [
+      "/usr/lib64/libpangocairo-1.0.so",
+      "/usr/lib64/libpango-1.0.so",
+      "/usr/lib64/libcairo.so",
+      "/usr/lib64/libharfbuzz.so",
+      "/usr/lib64/libgobject-2.0.so",
+      "/usr/lib64/libglib-2.0.so"
+    ],
+    "include_directories": [],
+    "sources": [],
+    "extra_files": [],
+    "dependencies": [],
+    "depends": [],
+    "meson_variables": [
+      "pangocairo"
+    ]
+  },
+  {
+    "name": "wayland-client",
+    "type": "pkgconfig",
+    "version": "1.24.0",
+    "compile_args": [
+      "-I/usr/lib64/libffi/include"
+    ],
+    "link_args": [
+      "/usr/lib64/libwayland-client.so",
+      "-lm"
+    ],
+    "include_directories": [],
+    "sources": [],
+    "extra_files": [],
+    "dependencies": [],
+    "depends": [],
+    "meson_variables": [
+      "wayland_client"
+    ]
+  },
+  {
+    "name": "wayland-protocols",
+    "type": "pkgconfig",
+    "version": "1.45",
+    "compile_args": [],
+    "link_args": [],
+    "include_directories": [],
+    "sources": [],
+    "extra_files": [],
+    "dependencies": [],
+    "depends": [],
+    "meson_variables": [
+      "wayland_protos"
+    ]
+  },
+  {
+    "name": "xkbcommon",
+    "type": "pkgconfig",
+    "version": "1.12.0",
+    "compile_args": [],
+    "link_args": [
+      "/usr/lib64/libxkbcommon.so"
+    ],
+    "include_directories": [],
+    "sources": [],
+    "extra_files": [],
+    "dependencies": [],
+    "depends": [],
+    "meson_variables": [
+      "xkbcommon"
+    ]
+  },
+  {
+    "name": "wayland-scanner",
+    "type": "pkgconfig",
+    "version": "1.24.0",
+    "compile_args": [],
+    "link_args": [],
+    "include_directories": [],
+    "sources": [],
+    "extra_files": [],
+    "dependencies": [],
+    "depends": [],
+    "meson_variables": [
+      "wayland_scanner_dep"
+    ]
+  },
+  {
+    "name": "scdoc",
+    "type": "pkgconfig",
+    "version": "1.11.3",
+    "compile_args": [],
+    "link_args": [],
+    "include_directories": [],
+    "sources": [],
+    "extra_files": [],
+    "dependencies": [],
+    "depends": [],
+    "meson_variables": [
+      "scdoc_dep"
+    ]
+  },
+  {
+    "name": "rt",
+    "type": "library",
+    "version": "unknown",
+    "compile_args": [],
+    "link_args": [
+      "-lrt"
+    ],
+    "include_directories": [],
+    "sources": [],
+    "extra_files": [],
+    "dependencies": [],
+    "depends": [],
+    "meson_variables": [
+      "rt"
+    ]
+  },
+  {
+    "name": "dep114536048843152379856256873478716620154",
+    "type": "internal",
+    "version": "0.2.0",
+    "compile_args": [],
+    "link_args": [],
+    "include_directories": [],
+    "sources": [
+      "xdg-shell-client-protocol.h",
+      "xdg-activation-v1-client-protocol.h",
+      "wlr-layer-shell-unstable-v1-client-protocol.h"
+    ],
+    "extra_files": [],
+    "dependencies": [],
+    "depends": [
+      "8998617@@client_protos@sta"
+    ],
+    "meson_variables": [
+      "client_protos"
+    ]
+  }
+]

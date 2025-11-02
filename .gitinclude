@@ -1,13 +1,10 @@
 .gitinclude
 .bashrc
-.xbindkeysrc
-.xinitrc
 .tools/
-.config/dwm/
-.config/slstatus
-.config/dmenu/
+.config/wmenu/
+.config/dwl/
 .config/alacritty/
 .config/wallpapers/
 .config/dunst
 .config/zed/
-.Xresources
+.config/openrc

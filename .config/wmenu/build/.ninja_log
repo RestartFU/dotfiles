@@ -1,0 +1,27 @@
+# ninja log v7
+2	3	1762077652429944850	protocols/wlr-layer-shell-unstable-v1-protocol.c	40186dadd9e756be
+2	3	1762077652429944850	protocols/wlr-layer-shell-unstable-v1-client-protocol.h	5d2e3523413720ed
+1	3	1762077652429944850	protocols/xdg-shell-protocol.c	f994189d50a37b48
+1	4	1762077652429944850	protocols/xdg-shell-client-protocol.h	25adc1156d6a5196
+1	4	1762077652429944850	protocols/xdg-activation-v1-protocol.c	251732b052f6cc18
+1	4	1762077652429944850	protocols/xdg-activation-v1-client-protocol.h	238216332b8a4271
+5	37	1762077652429944850	protocols/libclient_protos.a.p/meson-generated_.._xdg-activation-v1-protocol.c.o	7c6e9a0605e7285e
+5	37	1762077652429944850	protocols/libclient_protos.a.p/meson-generated_.._wlr-layer-shell-unstable-v1-protocol.c.o	165925b05271c61a
+4	42	1762077652429944850	protocols/libclient_protos.a.p/meson-generated_.._xdg-shell-protocol.c.o	cc53cd6b37880704
+42	47	1762077652466611518	protocols/libclient_protos.a	54a497fd514d0b35
+6	76	1762077652433278184	wmenu.p/wmenu.c.o	8d588fcfded98e32
+37	127	1762077652466611518	wmenu-run.p/wmenu-run.c.o	a680296a0e52e978
+2	132	1762077652529944849	docs/wmenu.1	9bcd17f45bd5cd23
+5	146	1762077652429944850	wmenu.p/pango.c.o	eb94f107fbeed6e
+6	156	1762077652433278184	wmenu-run.p/pango.c.o	5fba8876bb428285
+5	173	1762077652433278184	wmenu.p/pool-buffer.c.o	467776d51e5ddeec
+6	181	1762077652433278184	wmenu-run.p/pool-buffer.c.o	44eb71fee9eca830
+5	188	1762077652433278184	wmenu.p/render.c.o	f5b7a59717c7a59d
+10	200	1762077652436611517	wmenu-run.p/render.c.o	e5050bfe37ab809e
+5	206	1762077652433278184	wmenu.p/wayland.c.o	d32622a0a77f8ac1
+6	206	1762077652433278184	wmenu-run.p/menu.c.o	c5aab086fbb359db
+5	210	1762077652429944850	wmenu.p/menu.c.o	88af10816e97bfb
+37	221	1762077652463278183	wmenu-run.p/wayland.c.o	b656499999a5f112
+210	248	1762077652636611512	wmenu	9d4c1c0003fedcc6
+221	258	1762077652646611512	wmenu-run	be5a9ba74da6544a
+259	2169	1762077652686611510	meson-internal__install	8e90061cf5a17ba3

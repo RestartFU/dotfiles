@@ -25,8 +25,8 @@
 
   "agent": {
     "default_model": {
-      "model": "llama3:70b",
-      "provider": "ollama"
+      "model": "claude-sonnet-4-5",
+      "provider": "zed.dev"
     },
     "default_profile": "write",
     "always_allow_tool_actions": true

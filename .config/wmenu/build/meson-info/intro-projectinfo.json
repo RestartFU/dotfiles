@@ -1,0 +1,10 @@
+{
+  "version": "0.2.0",
+  "descriptive_name": "wmenu",
+  "license": [
+    "MIT"
+  ],
+  "license_files": [],
+  "subproject_dir": "subprojects",
+  "subprojects": []
+}
