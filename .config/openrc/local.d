@@ -1,1 +1,0 @@
-/home/restart/.local.d
