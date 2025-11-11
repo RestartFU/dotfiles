@@ -1,10 +1,6 @@
 .gitinclude
 .bashrc
 .tools/
-.config/wmenu/
-.config/dwl/
 .config/alacritty/
-.config/wallpapers/
-.config/dunst
 .config/zed/
-.config/openrc
+.config/hypr/
