@@ -1,0 +1,94 @@
+/* DWM Color Palette */
+@define-color col_gray1 #222222;
+@define-color col_gray2 #444444;
+@define-color col_gray3 #bbbbbb;
+@define-color col_gray4 #eeeeee;
+@define-color col_cyan  #005577;
+
+/* Global Reset */
+* {
+  font-family: "JetBrains Mono Nerd Font";
+  font-size: 14px;
+  color: @col_gray3;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Waybar Window */
+window#waybar {
+  background-color: @col_gray1;
+  color: @col_gray3;
+  border-bottom: 2px solid @col_cyan;
+  padding: 3px 0 1px 0;
+}
+
+/* Layout sections */
+.modules-left, .modules-center, .modules-right {
+  background-color: @col_gray1;
+}
+
+/* Workspaces */
+#workspaces {
+  background-color: @col_gray1;
+}
+
+#workspaces button {
+  color: @col_gray3;
+  background: transparent;
+  padding: 0 10px;
+  border: none;
+  border-radius: 0;
+}
+
+#workspaces button:hover {
+  background: @col_gray2;
+  color: @col_gray4;
+}
+
+#workspaces button.focused,
+#workspaces button.active {
+  background: @col_cyan;
+  color: @col_gray4;
+}
+
+#workspaces button.urgent {
+  background: #cc3333;
+  color: @col_gray4;
+}
+
+/* Clock, battery, etc. */
+#clock, #memory, #network, #battery, #tray {
+  background-color: @col_gray1;
+  color: @col_gray3;
+  padding: 0 10px;
+}
+
+/* Focused module highlight (optional blue bar under text) */
+#clock {
+  border-bottom: 2px solid @col_cyan;
+}
+
+/* Hover effects (subtle gray flash) */
+#clock:hover,
+#cpu:hover,
+#memory:hover,
+#network:hover,
+#pulseaudio:hover,
+#battery:hover {
+  background-color: @col_gray2;
+  color: @col_gray4;
+}
+
+/* System Tray */
+#tray {
+  padding-right: 6px;
+}
+
+/* Active window title or now playing module */
+#window, #custom-nowplaying {
+  background-color: @col_cyan;
+  color: @col_gray4;
+  padding: 0 10px;
+}
+
