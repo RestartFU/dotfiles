@@ -23,7 +23,7 @@
     "on-scroll-down": "hyprctl dispatch workspace e-1",
     "all-outputs": false,
     "active-only": false,
-    "show-special": false,
+    "show-special": true,
     "format-icons": {
       "11": "1",
       "12": "2",
@@ -40,7 +40,18 @@
       "33": "3"
     },
     "persistent-workspaces": {
-      "HDMI-A-1": [
+      "DP-2": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "eDP-1": [
         1,
         2,
         3,
@@ -78,12 +89,6 @@
     "exec": "~/src/nettrf/target/debug/nettrf",
     "on-click": "exec firefox https://fast.com"
   },
-  "custom/cpubars": {
-    "format": "{}",
-    "interval": 2,
-    "escape": true,
-    "exec": "~/.config/waybar/scripts/cpubars",
-  },
   "custom/showmode": {
     "format": "{}",
     "interval": 1,
@@ -103,14 +108,10 @@
     "interval": "once",
     "signal": 8
   },
-  "cpu": {
-    "interval": 2,
-    "format": "<span ><span color=\"#ea6962\"></span>CPU: {usage}%</span>",
-  },
   "clock": {
-    "format": "<span ><span color=\"#ea6962\"></span>{:%a %b %d %I:%M %p}</span>",
+    "format": "<span ><span color=\"#ea6962\"></span>{:%a %b %d | %I:%M %p}</span>",
     "timezones": [
-      "Asia/Kolkata",
+      "North-America/Montreal",
     ],
     "tooltip-format": "<tt><small>{calendar}</small></tt>",
     "calendar": {

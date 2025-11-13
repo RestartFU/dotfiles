@@ -19,7 +19,6 @@
 window#waybar {
   background-color: @col_gray1;
   color: @col_gray3;
-  border-bottom: 2px solid @col_cyan;
   padding: 3px 0 1px 0;
 }
 
@@ -62,11 +61,6 @@ window#waybar {
   background-color: @col_gray1;
   color: @col_gray3;
   padding: 0 10px;
-}
-
-/* Focused module highlight (optional blue bar under text) */
-#clock {
-  border-bottom: 2px solid @col_cyan;
 }
 
 /* Hover effects (subtle gray flash) */
