@@ -11,9 +11,6 @@
   ],
   "modules-center": [],
   "modules-right": [
-    "hyprland/submap",
-    "custom/archupdates",
-    "custom/nettrf",
     "clock"
   ],
   "hyprland/workspaces": {
@@ -40,28 +37,8 @@
       "33": "3"
     },
     "persistent-workspaces": {
-      "DP-2": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9
-      ],
-      "eDP-1": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9
-      ],
+      "DP-2": [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
+      "eDP-1": [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
     }
   },
 
@@ -70,11 +47,6 @@
     "max-length": 80,
     "separate-outputs": true
   },
-  "hyprland/submap": {
-    "format": " {}",
-    "max-length": 8,
-    "tooltip": false
-  },
   "custom/nowplaying": {
     "format": " {}",
     "interval": 1,
@@ -82,29 +54,9 @@
     "exec": "~/.config/waybar/scripts/nowPlaying.sh",
     "on-click": "~/.config/waybar/scripts/playtoggle.sh"
   },
-  "custom/nettrf": {
-    "format": "{}",
-    "interval": 2,
-    "escape": true,
-    "exec": "~/src/nettrf/target/debug/nettrf",
-    "on-click": "exec firefox https://fast.com"
-  },
-  "custom/showmode": {
-    "format": "{}",
-    "interval": 1,
-    "escape": true,
-    "exec": "~/.config/waybar/scripts/showMode.sh",
-  },
-  "custom/archupdates": {
-    "format": "</span>{}</span>",
-    "interval": 20,
-    "escape": true,
-    "exec": "~/.config/waybar/scripts/arch_updates",
-    "on-click": "~/.config/waybar/scripts/notify_arch_updates"
-  },
   "custom/icon": {
     "format": " <span ><span color=\"#d8a657\"></span>{}</span> ",
-    "exec": "~/.config/waybar/scripts/state",
+    "exec": "echo []=",
     "interval": "once",
     "signal": 8
   },
