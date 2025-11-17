@@ -4,4 +4,5 @@
 .config/alacritty/
 .config/zed/
 .config/hypr/
-.config/waybar
+.config/waybar/
+.config/fuzzel/
