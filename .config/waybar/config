@@ -7,10 +7,11 @@
   "modules-left": [
     "hyprland/workspaces",
     "custom/icon",
-    "custom/nowplaying"
+    "custom/nowplaying",
   ],
   "modules-center": [],
   "modules-right": [
+    "custom/battery",
     "clock"
   ],
   "hyprland/workspaces": {
@@ -55,13 +56,19 @@
     "on-click": "~/.config/waybar/scripts/playtoggle.sh"
   },
   "custom/icon": {
-    "format": " <span ><span color=\"#d8a657\"></span>{}</span> ",
+    "format": "<span ><span color=\"#d8a657\"></span>{}</span> ",
     "exec": "echo []=",
     "interval": "once",
     "signal": 8
   },
+  "custom/battery": {
+    "format": "<span ><span color=\"#d8a657\"></span>{}%</span> |",
+    "exec": "cat /sys/class/power_supply/BAT1/capacity",
+    "interval": "once",
+    "signal": 8
+  },
   "clock": {
-    "format": "<span ><span color=\"#ea6962\"></span>{:%a %b %d | %I:%M %p}</span>",
+    "format": "<span><span color=\"#ea6962\"></span>{:%a %b %d | %I:%M %p}</span>",
     "timezones": [
       "North-America/Montreal",
     ],

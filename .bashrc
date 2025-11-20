@@ -11,7 +11,7 @@ if [[ $term = "st" ]]; then
 fi
 
 export PATH=$HOME/.local/bin:$PATH
-export PATH="$HOME/.go/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
 
 alias cpy='xclip -selection clipboard'
 alias frequent_startx='MODE=monitor ENV=laptop startx'
