@@ -11,7 +11,7 @@
   ],
   "modules-center": [],
   "modules-right": [
-    "custom/battery",
+    "battery",
     "clock"
   ],
   "hyprland/workspaces": {
@@ -61,12 +61,22 @@
     "interval": "once",
     "signal": 8
   },
-  "custom/battery": {
-    "format": "<span ><span color=\"#d8a657\"></span>{}%</span> |",
-    "exec": "cat /sys/class/power_supply/BAT1/capacity",
-    "interval": "once",
-    "signal": 8
-  },
+  "battery": {
+	"bat": "BAT1",
+	"interval": 15,
+	"states": {
+		"warning": 30,
+		"critical": 15
+	},
+	"events": {
+		"on-discharging-warning": "notify-send -u normal 'Low Battery'",
+		"on-discharging-critical": "notify-send -u critical 'Very Low Battery'",
+		"on-charging-100": "notify-send -u normal 'Battery Full!'"
+	},
+	"format": "{capacity}% {icon}",
+	"format-icons": ["", "", "", "", ""],
+	"max-length": 25
+},
   "clock": {
     "format": "<span><span color=\"#ea6962\"></span>{:%a %b %d | %I:%M %p}</span>",
     "timezones": [
