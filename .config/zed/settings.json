@@ -9,7 +9,7 @@
           "max_tokens": 120000,
           "supports_tools": true,
           "supports_thinking": true,
-          "supports_images": true
+          "supports_images": true,
         },
         {
           "name": "llama3:70b",
@@ -17,19 +17,10 @@
           "max_tokens": 0,
           "supports_tools": true,
           "supports_thinking": false,
-          "supports_images": true
-        }
-      ]
-    }
-  },
-
-  "agent": {
-    "default_model": {
-      "model": "gpt-3.5-turbo",
-      "provider": "openai"
+          "supports_images": true,
+        },
+      ],
     },
-    "default_profile": "write",
-    "always_allow_tool_actions": true
   },
 
   "vim_mode": true,
@@ -39,17 +30,17 @@
   "theme": {
     "mode": "dark",
     "dark": "Gruvbox Dark",
-    "light": "Gruvbox Light"
+    "light": "Gruvbox Light",
   },
 
   "profiles": {
     "laptop": {
       "buffer_font_size": 12,
-      "ui_font_size": 10
+      "ui_font_size": 10,
     },
     "desktop": {
       "ui_font_size": 7,
-      "buffer_font_size": 6
-    }
-  }
+      "buffer_font_size": 6,
+    },
+  },
 }
