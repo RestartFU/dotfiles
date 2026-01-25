@@ -6,3 +6,4 @@
 .config/hypr/
 .config/waybar/
 .config/fuzzel/
+.config/nvim
