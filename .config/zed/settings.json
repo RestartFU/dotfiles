@@ -23,7 +23,6 @@
     },
   },
 
-  "vim_mode": true,
   "base_keymap": "JetBrains",
   "buffer_font_family": "JetBrains Mono",
   "ui_font_family": "JetBrains Mono",
@@ -33,14 +32,6 @@
     "light": "Gruvbox Light",
   },
 
-  "profiles": {
-    "laptop": {
-      "buffer_font_size": 12,
-      "ui_font_size": 10,
-    },
-    "desktop": {
-      "ui_font_size": 7,
-      "buffer_font_size": 6,
-    },
-  },
+  "buffer_font_size": 25,
+  "ui_font_size": 25,
 }

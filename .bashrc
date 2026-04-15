@@ -7,11 +7,11 @@
 
 term="$(cat /proc/$PPID/comm)"
 if [[ $term = "st" ]]; then
-    transset "0.8" --id "$WINDOWID"  > /dev/null
+  transset "0.8" --id "$WINDOWID" >/dev/null
 fi
 
 export PATH=$HOME/.local/bin:$PATH
-export PATH="$HOME/go/bin:$PATH"
+export PATH="$HOME/.go/bin:$PATH"
 
 alias cpy='xclip -selection clipboard'
 alias frequent_startx='MODE=monitor ENV=laptop startx'
