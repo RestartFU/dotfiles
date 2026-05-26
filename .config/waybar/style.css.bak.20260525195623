@@ -57,7 +57,7 @@ window#waybar {
 }
 
 /* Clock, battery, etc. */
-#clock, #pulseaudio, #memory, #network, #battery, #tray {
+#clock, #memory, #network, #battery, #tray {
   background-color: @col_gray1;
   color: @col_gray3;
   padding: 0 10px;
@@ -74,32 +74,9 @@ window#waybar {
   color: @col_gray4;
 }
 
-/* Status colors */
-#battery.warning:not(.charging) {
-  color: #f0c674;
-}
-
-#battery.critical:not(.charging) {
-  color: #cc3333;
-}
-
-#battery.charging,
-#battery.plugged {
-  color: #8ec07c;
-}
-
-#pulseaudio.muted,
-#network.disconnected {
-  color: #777777;
-}
-
 /* System Tray */
 #tray {
   padding-right: 6px;
-}
-#tray menu {
-  background-color: @col_gray1;
-  color: @col_gray3;
 }
 
 /* Active window title or now playing module */

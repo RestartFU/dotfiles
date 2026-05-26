@@ -11,10 +11,7 @@
   ],
   "modules-center": [],
   "modules-right": [
-    "pulseaudio",
-    "network",
     "battery",
-    "tray",
     "clock"
   ],
   "hyprland/workspaces": {
@@ -65,24 +62,6 @@
     "interval": "once",
     "signal": 8
   },
-  "pulseaudio": {
-    "format": "{volume}% {icon}",
-    "format-muted": "muted 󰝟",
-    "format-icons": {
-      "default": ["", "", ""]
-    },
-    "scroll-step": 5,
-    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    "tooltip-format": "{desc}"
-  },
-  "network": {
-    "format-wifi": "{signalStrength}% ",
-    "format-ethernet": "󰈀",
-    "format-disconnected": "󰤮",
-    "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
-    "tooltip-format-ethernet": "Ethernet\n{ipaddr}",
-    "tooltip-format-disconnected": "Disconnected"
-  },
   "battery": {
 	"bat": "BAT1",
 	"interval": 15,
@@ -96,21 +75,15 @@
 		"on-charging-100": "notify-send -u normal 'Battery Full!'"
 	},
 	"format": "{capacity}% {icon}",
-	"format-warning": "{capacity}% 󰂃",
-	"format-critical": "{capacity}% 󰁺",
-	"format-charging": "{capacity}% 󰂄",
-	"format-charging-warning": "{capacity}% 󰂄",
-	"format-charging-critical": "{capacity}% 󰂄",
-	"format-plugged": "{capacity}% 󰚥",
-	"format-full": "{capacity}% 󰁹",
-	"format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
-	"tooltip-format": "{capacity}%\n{time}",
+	"format-charging": "{capacity}% ",
+	"format-plugged": "{capacity}% ",
+	"format-icons": ["", "", "", "", ""],
 	"max-length": 25
 },
   "clock": {
     "format": "<span><span color=\"#ea6962\"></span>{:%a %b %d | %I:%M %p}</span>",
     "timezones": [
-      "America/Montreal",
+      "North-America/Montreal",
     ],
     "tooltip-format": "<tt><small>{calendar}</small></tt>",
     "calendar": {

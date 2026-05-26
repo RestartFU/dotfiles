@@ -49,7 +49,6 @@ $browser = firefox
 exec-once = waybar
 exec-once = waypaper --restore
 exec-once = hypridle
-exec-once = systemctl --user start laptop-refresh-on-power.service
 exec-once = awww-daemon
 
 #############################
