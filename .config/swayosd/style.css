@@ -1,0 +1,46 @@
+/* macOS-ish media OSD: small, dark, translucent, rounded. */
+window#osd {
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(22, 22, 26, 0.78);
+}
+
+window#osd #container {
+  margin: 14px 18px;
+}
+
+window#osd image,
+window#osd label {
+  color: rgba(255, 255, 255, 0.96);
+  font-weight: 600;
+}
+
+window#osd progressbar,
+window#osd segmentedprogress {
+  min-width: 160px;
+  min-height: 7px;
+  border-radius: 999px;
+  background: transparent;
+  border: none;
+}
+
+window#osd trough,
+window#osd segment {
+  min-height: inherit;
+  border-radius: inherit;
+  border: none;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+window#osd progress,
+window#osd segment.active {
+  min-height: inherit;
+  border-radius: inherit;
+  border: none;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+window#osd progressbar:disabled,
+window#osd image:disabled {
+  opacity: 0.48;
+}

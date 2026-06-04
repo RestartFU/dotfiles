@@ -22,9 +22,9 @@
 
 env = BROWSER,firefox
 # See https://wiki.hypr.land/Configuring/Monitors/
-monitor=DP-2,2560x1440@239.97,1920x0, 1
-monitor=DP-3,2560x1440@239.97,1920x0, 1
-monitor=eDP-1,2880x1920@120, 0x160, 1.5
+monitor=DP-2,2560x1440@239.97,160x0, 1
+monitor=DP-3,2560x1440@239.97,160x0, 1
+monitor=eDP-1,2880x1920@120, 0x1440, 1.5
 
 ###################
 ### MY PROGRAMS ###
@@ -42,7 +42,6 @@ $browser = firefox
 #################
 
 # Autostart necessary processes (like notifications daemons, status bars, etc.)
-exec-once = swayosd-server --config /home/restart/.config/swayosd/config.toml --style /home/restart/.config/swayosd/style.css
 # Or execute your favorite apps at launch like this:
 
 # exec-once = $terminal
@@ -183,7 +182,7 @@ animations {
 
 # See https://wiki.hypr.land/Configuring/Dwindle-Layout/ for more
 dwindle {
-    # pseudotile was removed as a dwindle config option in newer Hyprland; use the pseudo/window.pseudo dispatcher bind instead.
+    pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
     preserve_split = true # You probably want this
 }
 
@@ -282,12 +281,12 @@ bindm = $mainMod, mouse:272, movewindow
 bindm = $mainMod, mouse:273, resizewindow
 
 # Laptop multimedia keys for volume and LCD brightness
-bindel = ,XF86AudioRaiseVolume, exec, /home/restart/.config/swayosd/hypr-osd volume-up
-bindel = ,XF86AudioLowerVolume, exec, /home/restart/.config/swayosd/hypr-osd volume-down
-bindel = ,XF86AudioMute, exec, /home/restart/.config/swayosd/hypr-osd volume-mute
-bindel = ,XF86AudioMicMute, exec, /home/restart/.config/swayosd/hypr-osd mic-mute
-bindel = ,XF86MonBrightnessUp, exec, /home/restart/.config/swayosd/hypr-osd brightness-up
-bindel = ,XF86MonBrightnessDown, exec, /home/restart/.config/swayosd/hypr-osd brightness-down
+bindel = ,XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+
+bindel = ,XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindel = ,XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindel = ,XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+bindel = ,XF86MonBrightnessUp, exec, brightnessctl -e4 -n2 set 5%+
+bindel = ,XF86MonBrightnessDown, exec, brightnessctl -e4 -n2 set 5%-
 
 # Requires playerctl
 bindl = , XF86AudioNext, exec, playerctl next

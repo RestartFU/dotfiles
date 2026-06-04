@@ -9,8 +9,20 @@ POSITION="0x1440"
 SCALE="1.5"
 INTERVAL=5
 LOG="/tmp/laptop-refresh-on-power.log"
+STATE_FILE="/tmp/laptop-power-mode.state"
+
+# Hyprland-only power tweaks.
+# Battery = less GPU/compositor work. Plugged = restore normal desktop pretties.
+BATTERY_BLUR="false"
+PLUGGED_BLUR="true"
+BATTERY_VFR="true"
+PLUGGED_VFR="false"
+BATTERY_VRR="1"
+PLUGGED_VRR="0"
 
 log() { printf '%s %s\n' "$(date '+%F %T')" "$*" >> "$LOG"; }
+
+have() { command -v "$1" >/dev/null 2>&1; }
 
 ac_online() {
   local ps type online
@@ -56,13 +68,62 @@ current_line() {
   '
 }
 
-apply_target() {
+apply_monitor() {
   local state="$1" hz="$2" mode line
   mode="$RESOLUTION@$hz"
   line="$(current_line || true)"
   if [[ "$line" != *"$mode"* ]]; then
     log "switching $OUTPUT to $mode ($state); was: ${line:-unknown}; battery=$(battery_status)"
-    hyprctl keyword monitor "$OUTPUT,$mode,$POSITION,$SCALE" >> "$LOG" 2>&1 || log "hyprctl failed"
+    hyprctl keyword monitor "$OUTPUT,$mode,$POSITION,$SCALE" >> "$LOG" 2>&1 || log "hyprctl monitor failed"
+  fi
+}
+
+hypr_keyword() {
+  local key="$1" value="$2"
+  hyprctl keyword "$key" "$value" >> "$LOG" 2>&1 || log "hyprctl keyword $key=$value failed"
+}
+
+apply_hypr_power() {
+  local state="$1"
+
+  if [[ "$state" == "battery" ]]; then
+    # Kill blur and allow variable/VRR presentation when on battery.
+    hypr_keyword decoration:blur:enabled "$BATTERY_BLUR"
+    hypr_keyword misc:vfr "$BATTERY_VFR"
+    hypr_keyword misc:vrr "$BATTERY_VRR"
+  else
+    # Restore the config's normal AC behavior.
+    hypr_keyword decoration:blur:enabled "$PLUGGED_BLUR"
+    hypr_keyword misc:vfr "$PLUGGED_VFR"
+    hypr_keyword misc:vrr "$PLUGGED_VRR"
+  fi
+}
+
+apply_optional_system_power() {
+  local state="$1"
+
+  # If you install power-profiles-daemon later, this starts working automatically.
+  if have powerprofilesctl; then
+    if [[ "$state" == "battery" ]]; then
+      powerprofilesctl set power-saver >> "$LOG" 2>&1 || log "powerprofilesctl power-saver failed"
+    else
+      powerprofilesctl set balanced >> "$LOG" 2>&1 || log "powerprofilesctl balanced failed"
+    fi
+  fi
+}
+
+apply_target() {
+  local state="$1" hz="$2" old_state=""
+
+  [[ -e "$STATE_FILE" ]] && old_state=$(<"$STATE_FILE")
+
+  apply_monitor "$state" "$hz"
+
+  if [[ "$old_state" != "$state" ]]; then
+    log "power mode: ${old_state:-unknown} -> $state"
+    apply_hypr_power "$state"
+    apply_optional_system_power "$state"
+    printf '%s\n' "$state" > "$STATE_FILE"
   fi
 }
 
@@ -82,6 +143,10 @@ case "${1:-}" in
     printf 'battery_status=%s\n' "$(battery_status)"
     if is_plugged; then echo 'decision=plugged'; else echo 'decision=battery'; fi
     printf 'monitor=%s\n' "$(current_line || true)"
+    printf 'state_file=%s\n' "$(cat "$STATE_FILE" 2>/dev/null || echo none)"
+    hyprctl getoption decoration:blur:enabled
+    hyprctl getoption misc:vfr
+    hyprctl getoption misc:vrr
     ;;
   *)
     log "started pid=$$"

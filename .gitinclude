@@ -8,3 +8,5 @@
 .config/fuzzel/
 .config/nvim
 .config/waypaper/
+.config/swayosd/
+requiements/

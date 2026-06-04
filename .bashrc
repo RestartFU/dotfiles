@@ -30,3 +30,4 @@ PS1='\[\e[38;5;214m\]re\[\e[38;5;208m\]st\[\e[38;5;202m\]art\[\e[0m\] \[\e[38;5;
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH="$HOME/.cargo/bin:$PATH"
