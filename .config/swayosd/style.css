@@ -1,7 +1,8 @@
+@import "theme.css";
 /* macOS-ish media OSD: small, dark, translucent, rounded. */
 window#osd {
   border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid @osd_accent_soft;
   background: rgba(22, 22, 26, 0.78);
 }
 
@@ -37,7 +38,7 @@ window#osd segment.active {
   min-height: inherit;
   border-radius: inherit;
   border: none;
-  background: rgba(255, 255, 255, 0.95);
+  background: @osd_accent_bar;
 }
 
 window#osd progressbar:disabled,

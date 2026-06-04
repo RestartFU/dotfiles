@@ -34,6 +34,11 @@ packages=(
   # Bar, launcher, terminal, browser
   waybar
   fuzzel
+
+  # Native GTK hover-preview theme picker
+  gtk4
+  gcc
+  pkgconf
   alacritty
   firefox
 
@@ -119,6 +124,14 @@ sudo systemctl enable --now NetworkManager.service >/dev/null 2>&1 || true
 # permissions are available without waiting for reboot.
 sudo udevadm control --reload-rules >/dev/null 2>&1 || true
 sudo udevadm trigger >/dev/null 2>&1 || true
+
+# Build the native GTK theme picker used by SUPER+T.
+picker_src="$HOME/.config/hypr/scripts/theme-preview-picker.c"
+picker_bin="$HOME/.config/hypr/scripts/theme-preview-picker"
+if [[ -f "$picker_src" ]] && command -v cc >/dev/null 2>&1 && command -v pkg-config >/dev/null 2>&1; then
+  cc -O2 -Wall -Wextra -o "$picker_bin" "$picker_src" $(pkg-config --cflags --libs gtk4)
+  chmod +x "$picker_bin"
+fi
 
 cat <<'MSG'
 

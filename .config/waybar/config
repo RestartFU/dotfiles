@@ -1,13 +1,13 @@
 {
   // Set the bar to always be on top and at the top of the screen.
-  "layer": "bottom",
+  "layer": "top",
   "position": "top",
   "height": 27,
   "reload_style_on_change": true,
   "modules-left": [
     "hyprland/workspaces",
     "custom/icon",
-    "custom/nowplaying",
+    "hyprland/window",
   ],
   "modules-center": [],
   "modules-right": [
@@ -25,15 +25,18 @@
     "active-only": false,
     "show-special": true,
     "format-icons": {
+      "7": "X",
+      "8": "C",
+      "9": "V",
       "11": "1",
       "12": "2",
       "13": "3",
       "14": "4",
       "15": "5",
       "21": "6",
-      "22": "7",
-      "23": "8",
-      "24": "9",
+      "22": "X",
+      "23": "C",
+      "24": "V",
       "25": "10",
       "31": "1",
       "32": "2",
@@ -47,16 +50,12 @@
   },
 
   "hyprland/window": {
-    "format": "{title}",
-    "max-length": 80,
-    "separate-outputs": true
-  },
-  "custom/nowplaying": {
     "format": " {}",
-    "interval": 1,
-    "escape": true,
-    "exec": "~/.config/waybar/scripts/nowPlaying.sh",
-    "on-click": "~/.config/waybar/scripts/playtoggle.sh"
+    "max-length": 90,
+    "separate-outputs": true,
+    "rewrite": {
+      "^$": "~"
+    }
   },
   "custom/icon": {
     "format": "<span ><span color=\"#d8a657\"></span>{}</span> ",

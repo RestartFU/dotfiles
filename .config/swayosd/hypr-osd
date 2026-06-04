@@ -3,11 +3,27 @@ set -euo pipefail
 
 CONFIG='/home/restart/.config/swayosd/config.toml'
 STYLE='/home/restart/.config/swayosd/style.css'
+THEME='/home/restart/.config/swayosd/theme.css'
 
 ensure_swayosd() {
   command -v swayosd-server >/dev/null 2>&1 || return 1
   command -v swayosd-client >/dev/null 2>&1 || return 1
-  if ! pgrep -xu "$USER" swayosd-server >/dev/null 2>&1; then
+
+  local pid css_mtime theme_mtime proc_mtime newest_css
+  pid=$(pgrep -xu "$USER" swayosd-server | head -n1 || true)
+  css_mtime=$(stat -c %Y "$STYLE" 2>/dev/null || printf '0')
+  theme_mtime=$(stat -c %Y "$THEME" 2>/dev/null || printf '0')
+  newest_css=$(( css_mtime > theme_mtime ? css_mtime : theme_mtime ))
+
+  if [[ -n "$pid" ]]; then
+    proc_mtime=$(stat -c %Y "/proc/$pid" 2>/dev/null || printf '0')
+    if (( newest_css > proc_mtime )); then
+      pkill -x swayosd-server 2>/dev/null || true
+      pid=''
+    fi
+  fi
+
+  if [[ -z "$pid" ]]; then
     nohup swayosd-server --config "$CONFIG" --style "$STYLE" >/tmp/swayosd.log 2>&1 &
     sleep 0.15
   fi
