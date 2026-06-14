@@ -10,7 +10,6 @@
 .codex/skills
 .agents/
 .config/hypr/
-.config/hyprland/
 .config/waybar/
 .config/fuzzel/
 .config/nvim
