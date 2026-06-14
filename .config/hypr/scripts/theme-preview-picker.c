@@ -471,12 +471,12 @@ static void activate(GtkApplication *app, gpointer user_data) {
 int main(int argc, char **argv) {
     State st = {0};
     const char *home = g_get_home_dir();
-    st.themes_file = g_build_filename(home, ".config/hyprland/themes/themes.tsv", NULL);
-    st.hypr_theme_file = g_build_filename(home, ".config/hyprland/themes/hypr.conf", NULL);
-    st.waybar_theme_file = g_build_filename(home, ".config/hyprland/themes/waybar.css", NULL);
+    st.themes_file = g_build_filename(home, ".config/hypr/themes/themes.tsv", NULL);
+    st.hypr_theme_file = g_build_filename(home, ".config/hypr/themes/hypr.conf", NULL);
+    st.waybar_theme_file = g_build_filename(home, ".config/hypr/themes/waybar.css", NULL);
     st.waybar_style_file = g_build_filename(home, ".config/waybar/style.css", NULL);
     st.zed_theme_file = g_build_filename(home, ".config/zed/themes/dwm-hyprland.json", NULL);
-    st.swayosd_theme_file = g_build_filename(home, ".config/hyprland/themes/swayosd.css", NULL);
+    st.swayosd_theme_file = g_build_filename(home, ".config/hypr/themes/swayosd.css", NULL);
     st.script_path = g_build_filename(home, ".config/hypr/scripts/theme-picker", NULL);
     if (!lock_or_toggle(&st)) {
         g_free(st.script_path);

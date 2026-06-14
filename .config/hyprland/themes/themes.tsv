@@ -1,8 +1,0 @@
-# name	accent	description	background	foreground	static_wallpaper	plugged_wallpaper	bright_accent
-Blue	005577	classic blue	222222	eeeeee	/home/restart/.config/hyprland/themes/wallpapers/static/blue.png	/home/restart/.config/hyprland/themes/wallpapers/plugged/blue-plugged-clean.png	0088aa
-Green	005f5f	muted teal green	222222	eeeeee	/home/restart/.config/hyprland/themes/wallpapers/static/green.png	/home/restart/.config/hyprland/themes/wallpapers/plugged/green-plugged-clean.png	00a0a0
-Purple	5f5f87	soft terminal purple	222222	eeeeee	/home/restart/.config/hyprland/themes/wallpapers/static/purple.png	/home/restart/.config/hyprland/themes/wallpapers/plugged/purple-plugged-clean.png	8787af
-Red	875f5f	muted red	222222	eeeeee	/home/restart/.config/hyprland/themes/wallpapers/static/red.png	/home/restart/.config/hyprland/themes/wallpapers/plugged/red-plugged-clean.png	af8787
-Gold	af8700	warm gold	222222	eeeeee	/home/restart/.config/hyprland/themes/wallpapers/static/gold.png	/home/restart/.config/hyprland/themes/wallpapers/plugged/gold-plugged-clean.png	d7af00
-Gray	444444	neutral gray	222222	eeeeee	/home/restart/.config/hyprland/themes/wallpapers/static/gray.png	/home/restart/.config/hyprland/themes/wallpapers/plugged/gray-plugged-clean.png	777777
-Cyan	008787	brighter cyan	222222	eeeeee	/home/restart/.config/hyprland/themes/wallpapers/static/cyan.png	/home/restart/.config/hyprland/themes/wallpapers/plugged/cyan-plugged-clean.png	33bbcc

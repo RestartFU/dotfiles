@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-THEMES_FILE="$HOME/.config/hyprland/themes/themes.tsv"
-HYPR_THEME_FILE="$HOME/.config/hyprland/themes/hypr.conf"
+THEMES_FILE="$HOME/.config/hypr/themes/themes.tsv"
+HYPR_THEME_FILE="$HOME/.config/hypr/themes/hypr.conf"
 WAYPAPER_CONF="$HOME/.config/waypaper/config.ini"
 ANIMATOR="$HOME/.config/hypr/scripts/wallpaper-animator"
 

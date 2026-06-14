@@ -2,7 +2,7 @@
 set -euo pipefail
 PATH="$HOME/.cargo/bin:$PATH"
 
-THEMES_DIR="$HOME/.config/hyprland/themes"
+THEMES_DIR="$HOME/.config/hypr/themes"
 THEMES_FILE="$THEMES_DIR/themes.tsv"
 HYPR_THEME_FILE="$THEMES_DIR/hypr.conf"
 WAYBAR_THEME_FILE="$THEMES_DIR/waybar.css"
