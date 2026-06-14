@@ -72,6 +72,7 @@ trap 'rm -f "$diff_file" "$message_file" "$codex_log"' EXIT
   printf '%s\n' "</diff>"
 } | codex \
   --ask-for-approval never \
+  --model "gpt-5.3-codex-spark" \
   exec \
   --ignore-rules \
   --ephemeral \

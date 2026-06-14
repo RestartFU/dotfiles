@@ -75,7 +75,8 @@
   "agent_servers": {
     "codex-acp": {
       "default_config_options": {
-        "reasoning_effort": "medium"
+        "model": "gpt-5.3-codex-spark",
+        "reasoning_effort": "xhigh"
       },
       "favorite_config_option_values": {
         "mode": [
