@@ -43,6 +43,27 @@ run_swayosd() {
   return 1
 }
 
+battery_capacity() {
+  local bat
+  for bat in /sys/class/power_supply/BAT*/capacity; do
+    [[ -r "$bat" ]] && { cat "$bat"; return 0; }
+  done
+  printf '100
+'
+}
+
+play_sound() {
+  local sound='/home/restart/.config/swayosd/sounds/charging.wav'
+  [[ -r "$sound" ]] || return 0
+  if command -v pw-play >/dev/null 2>&1; then
+    pw-play "$sound" >/dev/null 2>&1 &
+  elif command -v paplay >/dev/null 2>&1; then
+    paplay "$sound" >/dev/null 2>&1 &
+  elif command -v canberra-gtk-play >/dev/null 2>&1; then
+    canberra-gtk-play -f "$sound" >/dev/null 2>&1 &
+  fi
+}
+
 case "${1:-}" in
   volume-up)
     run_swayosd --output-volume +5 --max-volume 100 || { wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+; fallback_hypr_notify 'Volume'; }
@@ -68,8 +89,40 @@ case "${1:-}" in
   show-brightness)
     run_swayosd --custom-message 'Brightness' --custom-icon display-brightness --custom-progress 0.7 --custom-progress-text 'mac-style OSD' || fallback_hypr_notify 'Brightness'
     ;;
+  battery-warning)
+    run_swayosd --custom-message 'Low Battery' --custom-icon battery-caution-symbolic --custom-progress 0.3 --custom-progress-text 'plug in soon' || fallback_hypr_notify 'Low Battery'
+    ;;
+  battery-critical)
+    run_swayosd --custom-message 'Very Low Battery' --custom-icon battery-empty-symbolic --custom-progress 0.12 --custom-progress-text 'plug in now' || fallback_hypr_notify 'Very Low Battery'
+    ;;
+  battery-full)
+    run_swayosd --custom-message 'Battery Full' --custom-icon battery-full-charged-symbolic --custom-progress 1.0 --custom-progress-text 'charged' || fallback_hypr_notify 'Battery Full'
+    ;;
+  plugged-in)
+    play_sound
+    cap=$(battery_capacity)
+    if (( cap >= 100 )); then progress=1.0; else progress="0.$(printf '%02d' "$cap")"; fi
+    run_swayosd --custom-message 'Plugged In' --custom-icon battery-good-charging-symbolic --custom-progress "$progress" --custom-progress-text "${cap}% charging" || fallback_hypr_notify 'Plugged In' "${cap}% charging"
+    ;;
+  plugged-in-waybar)
+    stamp="${XDG_RUNTIME_DIR:-/tmp}/rice-waybar-plugged.stamp"
+    now=$(date +%s)
+    last=$(cat "$stamp" 2>/dev/null || printf 0)
+    # Waybar may re-emit state events on reload; keep it from spamming.
+    if (( now - last < 3 )); then exit 0; fi
+    printf '%s
+' "$now" > "$stamp"
+    /home/restart/.config/hypr/scripts/theme-wallpaper plugged >/dev/null 2>&1 || true
+    "$0" plugged-in
+    ;;
+  unplugged-waybar)
+    /home/restart/.config/hypr/scripts/theme-wallpaper unplugged >/dev/null 2>&1 || true
+    ;;
+  screenshot)
+    run_swayosd --custom-message "${2:-Screenshot}" --custom-icon camera-photo-symbolic --custom-progress 1.0 --custom-progress-text "${3:-saved + copied}" || fallback_hypr_notify "${2:-Screenshot}" "${3:-saved + copied}"
+    ;;
   *)
-    printf 'usage: %s {volume-up|volume-down|volume-mute|mic-mute|brightness-up|brightness-down|show-volume|show-brightness}\n' "$0" >&2
+    printf 'usage: %s {volume-up|volume-down|volume-mute|mic-mute|brightness-up|brightness-down|show-volume|show-brightness|battery-warning|battery-critical|battery-full|plugged-in|plugged-in-waybar|unplugged-waybar|screenshot}\n' "$0" >&2
     exit 64
     ;;
 esac

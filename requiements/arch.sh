@@ -44,7 +44,10 @@ packages=(
 
   # Wallpaper stack
   waypaper
-  awww
+  hyprpaper
+  ffmpeg
+  mpv
+  mpvpaper
 
   # mac-like media/brightness OSD
   swayosd
@@ -64,6 +67,7 @@ packages=(
   slurp
   flameshot
   wl-clipboard
+  tesseract
 
   # Notifications used by Waybar battery events
   libnotify
@@ -78,6 +82,7 @@ packages=(
   gsettings-desktop-schemas
   dbus
   xdg-utils
+  jq
 
   # Fonts/icons for Waybar glyphs and general UI
   noto-fonts
@@ -86,6 +91,7 @@ packages=(
   ttf-nerd-fonts-symbols
 
   # Editors/dev tools tracked in this rice
+  git
   neovim
   zed
 )
@@ -140,10 +146,10 @@ Rice requirements installed.
 Recommended after first install:
   1. Log out/in, or reboot, so user services/groups/udev permissions refresh.
   2. Start Hyprland.
-  3. If battery notify-send events need visible popups, autostart mako or another notification daemon.
+  3. SUPER+T previews themes; media, battery, and screenshot feedback use the themed SwayOSD.
 
 Main runtime commands this rice expects:
-  hyprland waybar fuzzel alacritty firefox waypaper awww-daemon
-  swayosd-server swayosd-client brightnessctl wpctl pactl playerctl
-  grim slurp flameshot wl-copy notify-send
+  hyprland waybar fuzzel alacritty firefox waypaper hyprpaper mpvpaper mpv ffmpeg
+  swayosd-server swayosd-client brightnessctl pw-play wpctl pactl playerctl
+  grim slurp flameshot wl-copy tesseract notify-send
 MSG

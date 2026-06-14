@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PID_FILE="${XDG_RUNTIME_DIR:-/tmp}/rice-wallpaper-animator.pid"
+FRAME_DIR=${1:-}
+DELAY=${2:-0.35}
+
+stop_existing() {
+  if [[ -f "$PID_FILE" ]]; then
+    local old
+    old=$(cat "$PID_FILE" 2>/dev/null || true)
+    if [[ -n "$old" ]] && kill -0 "$old" 2>/dev/null; then
+      kill "$old" 2>/dev/null || true
+    fi
+    rm -f "$PID_FILE"
+  fi
+}
+
+case "${FRAME_DIR:-}" in
+  --stop)
+    stop_existing
+    exit 0
+    ;;
+esac
+
+[[ -n "$FRAME_DIR" && -d "$FRAME_DIR" ]] || exit 0
+shopt -s nullglob
+frames=("$FRAME_DIR"/*.png)
+((${#frames[@]})) || exit 0
+
+stop_existing
+(
+  trap 'exit 0' TERM INT HUP
+  while :; do
+    for frame in "${frames[@]}"; do
+      [[ -f "$frame" ]] || continue
+      hyprctl hyprpaper wallpaper ", $frame, cover" >/dev/null 2>&1 || true
+      sleep "$DELAY"
+    done
+  done
+) &
+echo $! > "$PID_FILE"

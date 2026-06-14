@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+kind=${1:-terminal}
+case "$kind" in
+  terminal)
+    class=rice-scratch-terminal
+    space=terminal
+    cmd=(alacritty --class "$class" --title scratch-terminal)
+    ;;
+  files)
+    class=rice-scratch-files
+    space=files
+    cmd=(alacritty --class "$class" --title scratch-files -e bash -lc 'cd "$HOME"; printf "files scratchpad: %s\n\n" "$PWD"; ls -lah --color=auto; exec bash -l')
+    ;;
+  music)
+    class=rice-scratch-music
+    space=music
+    cmd=(alacritty --class "$class" --title scratch-music -e bash -lc 'printf "music scratchpad\n\n"; playerctl metadata --format "{{artist}} - {{title}}" 2>/dev/null || true; printf "\nplayerctl: play-pause | next | previous\n"; exec bash -l')
+    ;;
+  *)
+    printf 'usage: %s {terminal|files|music}\n' "${0##*/}" >&2
+    exit 64
+    ;;
+esac
+
+if ! hyprctl clients -j 2>/dev/null | jq -e --arg class "$class" '.[] | select(.class == $class)' >/dev/null; then
+  "${cmd[@]}" >/tmp/rice-scratchpad.log 2>&1 &
+  sleep 0.22
+fi
+hyprctl dispatch togglespecialworkspace "$space" >/dev/null 2>&1 || true

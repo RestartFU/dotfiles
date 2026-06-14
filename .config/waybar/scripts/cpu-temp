@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+find_cpu_temp() {
+    local hwmon name label input
+
+    for hwmon in /sys/class/hwmon/hwmon*; do
+        [[ -f "$hwmon/name" ]] || continue
+        name="$(<"$hwmon/name")"
+
+        if [[ "$name" == "k10temp" ]]; then
+            for label in "$hwmon"/temp*_label; do
+                [[ -f "$label" ]] || continue
+                if [[ "$(<"$label")" == "Tctl" ]]; then
+                    input="${label%_label}_input"
+                    [[ -f "$input" ]] && cat "$input" && return 0
+                fi
+            done
+            [[ -f "$hwmon/temp1_input" ]] && cat "$hwmon/temp1_input" && return 0
+        fi
+    done
+
+    return 1
+}
+
+temp_millic="$(find_cpu_temp || true)"
+
+if [[ -z "${temp_millic:-}" ]]; then
+    printf '%s\n' '{"text":"--°C |","class":"unknown","tooltip":"CPU temperature sensor not found"}'
+    exit 0
+fi
+
+temp_c=$(( (temp_millic + 500) / 1000 ))
+class="normal"
+
+if (( temp_c >= 90 )); then
+    class="critical"
+elif (( temp_c >= 75 )); then
+    class="warning"
+fi
+
+printf '{"text":"%s°C |","class":"%s","tooltip":"CPU temperature\\nk10temp Tctl: %s°C"}\n' "$temp_c" "$class" "$temp_c"

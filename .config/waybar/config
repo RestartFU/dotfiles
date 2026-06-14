@@ -11,9 +11,13 @@
   ],
   "modules-center": [],
   "modules-right": [
+    "custom/screen-timeout",
+    "custom/low-power",
+    "custom/cpu-temp",
     "pulseaudio",
     "network",
     "battery",
+    "custom/status-separator",
     "clock"
   ],
   "hyprland/workspaces": {
@@ -50,12 +54,9 @@
   },
 
   "hyprland/window": {
-    "format": " {}",
-    "max-length": 90,
-    "separate-outputs": true,
-    "rewrite": {
-      "^$": "~"
-    }
+    "format": "{title}",
+    "max-length": 80,
+    "separate-outputs": true
   },
   "custom/icon": {
     "format": "<span ><span color=\"#d8a657\"></span>{}</span> ",
@@ -63,20 +64,43 @@
     "interval": "once",
     "signal": 8
   },
+  "custom/screen-timeout": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "/home/restart/.config/hypr/scripts/screen-timeout-toggle status",
+    "on-click": "/home/restart/.config/hypr/scripts/screen-timeout-toggle toggle",
+    "interval": 5,
+    "signal": 9
+  },
+  "custom/low-power": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "/home/restart/.config/hypr/scripts/low-power-toggle status",
+    "on-click": "/home/restart/.config/hypr/scripts/low-power-toggle toggle",
+    "interval": 5,
+    "signal": 10
+  },
+  "custom/cpu-temp": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "/home/restart/.config/waybar/scripts/cpu-temp",
+    "interval": 3
+  },
   "pulseaudio": {
-    "format": "{volume}% {icon}",
-    "format-muted": "muted 󰝟",
+    "format": "{volume}% {icon}  |",
+    "format-muted": "muted 󰝟  |",
     "format-icons": {
       "default": ["", "", ""]
     },
     "scroll-step": 5,
-    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    "tooltip-format": "{desc}"
+    "on-click": "sh -c '/home/restart/.config/waybar/scripts/audio-menu >/tmp/waybar-audio-menu.log 2>&1 &'",
+    "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "tooltip-format": "{desc}\nLeft click: open/close audio menu\nRight click: mute"
   },
   "network": {
-    "format-wifi": "{signalStrength}% ",
-    "format-ethernet": "󰈀",
-    "format-disconnected": "󰤮",
+    "format-wifi": "{signalStrength}%   |",
+    "format-ethernet": "󰈀  |",
+    "format-disconnected": "󰤮  |",
     "tooltip-format-wifi": "{essid} ({signalStrength}%)\n{ipaddr}",
     "tooltip-format-ethernet": "Ethernet\n{ipaddr}",
     "tooltip-format-disconnected": "Disconnected"
@@ -85,18 +109,23 @@
 	"bat": "BAT1",
 	"interval": 15,
 	"states": {
+		"ac": 100,
 		"warning": 30,
 		"critical": 15
 	},
 	"events": {
-		"on-discharging-warning": "notify-send -u normal 'Low Battery'",
-		"on-discharging-critical": "notify-send -u critical 'Very Low Battery'",
-		"on-charging-100": "notify-send -u normal 'Battery Full!'"
+		"on-charging-ac": "/home/restart/.config/swayosd/hypr-osd plugged-in-waybar",
+			"on-discharging-ac": "/home/restart/.config/swayosd/hypr-osd unplugged-waybar",
+		"on-discharging-warning": "/home/restart/.config/swayosd/hypr-osd battery-warning",
+		"on-discharging-critical": "/home/restart/.config/swayosd/hypr-osd battery-critical",
+		"on-charging-100": "/home/restart/.config/swayosd/hypr-osd battery-full"
 	},
 	"format": "{capacity}% {icon}",
+		"format-discharging-ac": "{capacity}% {icon}",
 	"format-warning": "{capacity}% 󰂃",
 	"format-critical": "{capacity}% 󰁺",
 	"format-charging": "{capacity}% 󰂄",
+	"format-charging-ac": "{capacity}% 󰂄",
 	"format-charging-warning": "{capacity}% 󰂄",
 	"format-charging-critical": "{capacity}% 󰂄",
 	"format-plugged": "{capacity}% 󰚥",
@@ -105,6 +134,11 @@
 	"tooltip-format": "{capacity}%\n{time}",
 	"max-length": 25
 },
+  "custom/status-separator": {
+    "format": "|",
+    "interval": "once",
+    "tooltip": false
+  },
   "clock": {
     "format": "<span><span color=\"#ea6962\"></span>{:%a %b %d | %I:%M %p}</span>",
     "timezones": [

@@ -1,4 +1,48 @@
 {
+  "ssh_connections": [
+    {
+      "host": "moyai.club",
+      "username": "restart",
+      "port": 23,
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/home/restart"
+          ]
+        },
+        {
+          "paths": [
+            "/home/restart/projects/practice"
+          ]
+        }
+      ]
+    },
+    {
+      "host": "ssh.restartfu.com",
+      "args": [],
+      "projects": []
+    },
+    {
+      "host": "192.168.1.130",
+      "username": "restart",
+      "args": [],
+      "projects": []
+    },
+    {
+      "host": "192.168.1.130",
+      "username": "restart",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/home/restart/projects/practice"
+          ]
+        }
+      ]
+    }
+  ],
+  "icon_theme": "Catppuccin Frappé",
   "cli_default_open_behavior": "existing_window",
   "pane_split_direction_vertical": "left",
   "project_panel": {
@@ -30,6 +74,9 @@
   },
   "agent_servers": {
     "codex-acp": {
+      "default_config_options": {
+        "reasoning_effort": "medium"
+      },
       "favorite_config_option_values": {
         "mode": [
           "full-access"

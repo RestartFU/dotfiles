@@ -1,0 +1,114 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+osd="$HOME/.config/swayosd/hypr-osd"
+log="${XDG_RUNTIME_DIR:-/tmp}/battery-plug-watch.log"
+lock="${XDG_RUNTIME_DIR:-/tmp}/battery-plug-watch.lock"
+
+log_msg() { printf '%s %s\n' "$(date +'%F %T')" "$*" >> "$log"; }
+
+snapshot() {
+  local supply name type scope online status
+  for supply in /sys/class/power_supply/*; do
+    [[ -r "$supply/type" ]] || continue
+    name=${supply##*/}
+    type=$(<"$supply/type")
+    scope=$([[ -r "$supply/scope" ]] && cat "$supply/scope" || true)
+    online=$([[ -r "$supply/online" ]] && cat "$supply/online" || true)
+    status=$([[ -r "$supply/status" ]] && cat "$supply/status" || true)
+    printf '%s|%s|%s|%s|%s\n' "$name" "$type" "$scope" "$online" "$status"
+  done | sort
+}
+
+status_line() {
+  local line name type scope online status cap supply parts=()
+  while IFS='|' read -r name type scope online status; do
+    [[ -n "$name" ]] || continue
+    supply="/sys/class/power_supply/$name"
+    cap=$([[ -r "$supply/capacity" ]] && cat "$supply/capacity" || true)
+    parts+=("$name:type=$type,scope=$scope,online=$online,status=$status,capacity=$cap")
+  done < <(snapshot)
+  printf '%s' "${parts[*]}"
+}
+
+is_positive_supply() {
+  local type=$1 scope=$2 online=$3 status=$4
+  case "$type" in
+    Mains)
+      [[ "$online" == 1 ]]
+      ;;
+    USB|USB_C|USB_PD|Wireless)
+      [[ "$scope" == System && ( "$online" == 1 || "$status" == Charging ) ]]
+      ;;
+    Battery)
+      [[ "$status" == Charging || "$status" == Full ]]
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+positive_edge_between() {
+  local before=$1 after=$2 line name type scope online status prev_line prev_online prev_status
+  while IFS='|' read -r name type scope online status; do
+    [[ -n "$name" ]] || continue
+    is_positive_supply "$type" "$scope" "$online" "$status" || continue
+    prev_line=$(printf '%s\n' "$before" | awk -F'|' -v n="$name" '$1 == n { print; exit }')
+    if [[ -z "$prev_line" ]]; then
+      log_msg "positive new supply $name: type=$type scope=$scope online=$online status=$status"
+      return 0
+    fi
+    IFS='|' read -r _ _ _ prev_online prev_status <<< "$prev_line"
+    if [[ "$online" == 1 && "$prev_online" != 1 ]]; then
+      log_msg "positive online edge $name: $prev_online->$online status=$prev_status->$status"
+      return 0
+    fi
+    if [[ ( "$status" == Charging || "$status" == Full ) && "$prev_status" != Charging && "$prev_status" != Full ]]; then
+      log_msg "positive status edge $name: online=$prev_online->$online status=$prev_status->$status"
+      return 0
+    fi
+  done <<< "$after"
+  return 1
+}
+
+trigger_plugged() {
+  log_msg "plugged transition detected: $(status_line)"
+  if [[ -x "$osd" ]]; then
+    "$osd" plugged-in >>"$log" 2>&1 || log_msg 'hypr-osd plugged-in failed'
+  else
+    log_msg "missing osd script: $osd"
+  fi
+}
+
+case "${1:-}" in
+  --test)
+    trigger_plugged
+    exit 0
+    ;;
+  --status)
+    printf '%s\n' "$(status_line)"
+    exit 0
+    ;;
+  --snapshot)
+    snapshot
+    exit 0
+    ;;
+esac
+
+exec 9>"$lock"
+flock -n 9 || exit 0
+
+last=$(snapshot)
+log_msg "started: $(status_line)"
+
+while sleep 0.5; do
+  now=$(snapshot)
+  if [[ "$now" != "$last" ]]; then
+    log_msg "snapshot changed: $(status_line)"
+    if positive_edge_between "$last" "$now"; then
+      trigger_plugged
+    fi
+  fi
+  last=$now
+done

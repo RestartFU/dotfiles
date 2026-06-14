@@ -1,0 +1,124 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+state_dir="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/screen-timeout-toggle"
+pid_file="$state_dir/inhibitor.pid"
+hypridle_marker="$state_dir/hypridle.was-running"
+hypridle_log="$state_dir/hypridle.log"
+waybar_signal="9"
+
+notify() {
+    if command -v notify-send >/dev/null 2>&1; then
+        notify-send -a "Screen timeout" "$1" "$2" >/dev/null 2>&1 || true
+    fi
+}
+
+read_pid() {
+    [[ -s "$pid_file" ]] || return 1
+    cat "$pid_file"
+}
+
+is_enabled() {
+    local pid
+    pid="$(read_pid)" || return 1
+    kill -0 "$pid" 2>/dev/null
+}
+
+cleanup_stale() {
+    if ! is_enabled; then
+        rm -f "$pid_file"
+
+        if [[ -e "$hypridle_marker" ]] && ! pgrep -x hypridle >/dev/null 2>&1; then
+            start_hypridle
+            rm -f "$hypridle_marker"
+        fi
+    fi
+}
+
+refresh_waybar() {
+    pkill -RTMIN+"$waybar_signal" waybar 2>/dev/null || true
+}
+
+enable() {
+    mkdir -p "$state_dir"
+    if is_enabled; then
+        return 0
+    fi
+
+    if pgrep -x hypridle >/dev/null 2>&1; then
+        touch "$hypridle_marker"
+        pkill -x hypridle 2>/dev/null || true
+    fi
+
+    setsid systemd-inhibit \
+        --what=idle:sleep \
+        --who=screen-timeout-toggle \
+        --why="Temporary screen timeout and sleep disabled" \
+        --mode=block \
+        sleep infinity >/dev/null 2>&1 &
+
+    printf '%s\n' "$!" > "$pid_file"
+    hyprctl dispatch dpms on >/dev/null 2>&1 || true
+    sleep 0.1
+}
+
+start_hypridle() {
+    mkdir -p "$state_dir"
+    setsid hypridle >"$hypridle_log" 2>&1 &
+}
+
+disable() {
+    local pid
+    pid="$(read_pid)" || true
+
+    if [[ -n "${pid:-}" ]]; then
+        kill -- "-$pid" 2>/dev/null || kill "$pid" 2>/dev/null || true
+    fi
+    rm -f "$pid_file"
+
+    if [[ -e "$hypridle_marker" ]] && ! pgrep -x hypridle >/dev/null 2>&1; then
+        start_hypridle
+    fi
+    rm -f "$hypridle_marker"
+}
+
+status_json() {
+    cleanup_stale
+
+    if is_enabled; then
+        printf '%s\n' '{"text":"STAY AWAKE","class":"enabled","tooltip":"Screen timeout and sleep disabled\nSuper+Shift+S toggles it"}'
+    else
+        printf '%s\n' '{"text":"AUTO SLEEP","class":"disabled","tooltip":"Screen timeout and sleep active\nSuper+Shift+S toggles it"}'
+    fi
+}
+
+case "${1:-toggle}" in
+    enable|on)
+        enable
+        refresh_waybar
+        notify "Screen timeout disabled" "Hypridle is paused until you toggle it back on."
+        ;;
+    disable|off)
+        disable
+        refresh_waybar
+        notify "Screen timeout active" "Hypridle is running again."
+        ;;
+    toggle)
+        if is_enabled; then
+            disable
+            refresh_waybar
+            notify "Screen timeout active" "Hypridle is running again."
+        else
+            enable
+            refresh_waybar
+            notify "Screen timeout disabled" "Hypridle is paused until you toggle it back on."
+        fi
+        ;;
+    status|waybar)
+        status_json
+        ;;
+    *)
+        printf 'usage: %s [toggle|enable|disable|status]\n' "$0" >&2
+        exit 2
+        ;;
+esac

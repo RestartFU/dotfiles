@@ -252,6 +252,8 @@ static void show_osd_preview(State *st, const char *name) {
     gtk_widget_set_visible(st->osd_box, TRUE);
 }
 
+static void run_theme(State *st, const char *mode, const char *name);
+
 static void live_preview_theme(State *st, const char *name) {
     const char *hex = hex_for_theme(st, name);
     if (!hex || !*hex) return;
@@ -259,6 +261,7 @@ static void live_preview_theme(State *st, const char *name) {
     write_preview_theme_files(st, name);
     update_css(st, hex);
     show_osd_preview(st, name);
+    run_theme(st, "--preview", name);
 
     char *batch = g_strdup_printf(
         "keyword general:col.active_border rgba(%sff); keyword decoration:shadow:color rgb(%s)",
@@ -393,7 +396,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
     gtk_window_set_title(GTK_WINDOW(win), "theme");
     gtk_window_set_decorated(GTK_WINDOW(win), FALSE);
     gtk_window_set_resizable(GTK_WINDOW(win), FALSE);
-    gtk_window_set_default_size(GTK_WINDOW(win), 520, 320);
+    gtk_window_set_default_size(GTK_WINDOW(win), 580, 420);
     g_signal_connect(win, "close-request", G_CALLBACK(on_close_request), st);
 
     GtkEventController *keys = gtk_event_controller_key_new();
@@ -405,7 +408,7 @@ static void activate(GtkApplication *app, gpointer user_data) {
     gtk_widget_set_name(root, "root");
     gtk_window_set_child(GTK_WINDOW(win), root);
 
-    GtkWidget *prompt = gtk_label_new("theme> hover previews, enter/click commits, esc cancels");
+    GtkWidget *prompt = gtk_label_new("theme> hover previews · enter/click applies · esc cancels");
     gtk_widget_set_name(prompt, "prompt");
     gtk_label_set_xalign(GTK_LABEL(prompt), 0.0f);
     gtk_box_append(GTK_BOX(root), prompt);
@@ -434,11 +437,19 @@ static void activate(GtkApplication *app, gpointer user_data) {
     for (int i = 0; i < st->theme_count; i++) {
         Theme *th = &st->themes[i];
         GtkWidget *row = gtk_list_box_row_new();
-        char *text = g_strdup_printf("%-11s #%s  %s", th->name, th->hex, th->desc);
+        GtkWidget *row_box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 8);
+        GtkWidget *swatch = gtk_label_new(NULL);
+        char *swatch_markup = g_strdup_printf("<span foreground=\"#%s\">■</span>", th->hex);
+        gtk_label_set_markup(GTK_LABEL(swatch), swatch_markup);
+        g_free(swatch_markup);
+        const char *marker = g_strcmp0(th->name, st->original) == 0 ? "● " : "  ";
+        char *text = g_strdup_printf("%s%-8s #%s  %s", marker, th->name, th->hex, th->desc);
         GtkWidget *label = gtk_label_new(text);
         g_free(text);
         gtk_label_set_xalign(GTK_LABEL(label), 0.0f);
-        gtk_list_box_row_set_child(GTK_LIST_BOX_ROW(row), label);
+        gtk_box_append(GTK_BOX(row_box), swatch);
+        gtk_box_append(GTK_BOX(row_box), label);
+        gtk_list_box_row_set_child(GTK_LIST_BOX_ROW(row), row_box);
 
         g_object_set_data(G_OBJECT(row), "state", st);
         g_object_set_data_full(G_OBJECT(row), "theme-name", g_strdup(th->name), g_free);

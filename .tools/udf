@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$HOME"
+
+include_file="$HOME/.gitinclude"
+gitinclude_script="$HOME/.tools/gitinclude"
+
+if [[ ! -f "$include_file" ]]; then
+  echo "Missing $include_file" >&2
+  exit 1
+fi
+
+if [[ ! -x "$gitinclude_script" ]]; then
+  echo "Missing executable $gitinclude_script" >&2
+  exit 1
+fi
+
+if ! command -v codex >/dev/null 2>&1; then
+  echo "Missing codex CLI" >&2
+  exit 1
+fi
+
+"$gitinclude_script"
+
+mapfile -t include_paths < <(
+  sed -e 's/[[:space:]]*$//' "$include_file" |
+    awk 'NF && $1 !~ /^#/ { print }'
+)
+
+if [[ ${#include_paths[@]} -eq 0 ]]; then
+  echo "No paths in $include_file" >&2
+  exit 1
+fi
+
+if git diff --cached --quiet -- "${include_paths[@]}"; then
+  echo "No staged changes in $include_file paths" >&2
+  exit 1
+fi
+
+diff_file="$(mktemp)"
+message_file="$(mktemp)"
+codex_log="$(mktemp)"
+trap 'rm -f "$diff_file" "$message_file" "$codex_log"' EXIT
+
+{
+  echo "Included paths from ~/.gitinclude:"
+  printf '%s\n' "${include_paths[@]}"
+  echo
+  echo "Staged diff for included paths only:"
+  git diff --cached --stat -- "${include_paths[@]}"
+  echo
+  git diff --cached --no-ext-diff -- "${include_paths[@]}"
+} >"$diff_file"
+
+{
+  printf '%s\n' \
+    "Generate exactly one git commit subject line for the diff in stdin." \
+    "" \
+    "Rules:" \
+    "- Base the subject only on this diff." \
+    "- This diff was generated only from files listed in ~/.gitinclude; ignore all other working-tree state." \
+    "- Output only the commit subject, no quotes, no Markdown." \
+    "- Use concise imperative mood." \
+    "- Max 72 characters." \
+    "" \
+    "<diff>"
+  sed -n '1,12000p' "$diff_file"
+  printf '%s\n' "</diff>"
+} | codex \
+  --ask-for-approval never \
+  exec \
+  --ignore-rules \
+  --ephemeral \
+  --sandbox read-only \
+  --color never \
+  --output-last-message "$message_file" \
+  - >"$codex_log" 2>&1 || {
+    sed -n '1,120p' "$codex_log" >&2
+    exit 1
+  }
+
+commit_message="$(
+  tr -d '\r' <"$message_file" |
+    sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's/^["`]*//' -e 's/["`]*$//' |
+    awk 'NF { print; exit }'
+)"
+
+if [[ -z "$commit_message" ]]; then
+  echo "Codex returned empty commit message" >&2
+  exit 1
+fi
+
+echo "Commit: $commit_message"
+git commit -m "$commit_message"
+git push

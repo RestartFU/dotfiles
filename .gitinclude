@@ -3,6 +3,12 @@
 .tools/
 .config/alacritty/
 .config/zed/
+.config/gtk-3.0/
+.config/gtk-4.0/
+.codex/hooks/
+.codex/agents/
+.codex/skills
+.agents/
 .config/hypr/
 .config/hyprland/
 .config/waybar/

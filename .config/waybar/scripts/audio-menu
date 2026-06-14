@@ -1,0 +1,432 @@
+#!/usr/bin/env python3
+"""Compact Waybar audio menu for PipeWire/PulseAudio.
+
+Left-clicking the Waybar sound module toggles this small top-right layer-shell
+panel. It lets you pick the default output device and adjust output volume.
+"""
+from __future__ import annotations
+
+import fcntl
+import json
+import os
+import signal
+import subprocess
+import sys
+import threading
+import time
+from pathlib import Path
+
+import gi
+
+gi.require_version("Gtk", "3.0")
+gi.require_version("Gdk", "3.0")
+gi.require_version("GtkLayerShell", "0.1")
+from gi.repository import Gdk, GLib, Gtk, GtkLayerShell  # noqa: E402
+
+PID_FILE = Path(os.environ.get("XDG_RUNTIME_DIR", f"/tmp")) / "waybar-audio-menu.pid"
+LOCK_FILE = Path(os.environ.get("XDG_RUNTIME_DIR", f"/tmp")) / "waybar-audio-menu.lock"
+MAX_VOLUME = 150
+PANEL_WIDTH = 360
+# Distance from the right screen edge. Increase to move left; decrease to move right.
+# This roughly centers the panel under Waybar's sound module, which has network,
+# battery, and clock modules to its right.
+PANEL_RIGHT_MARGIN = 145
+
+
+def run_pactl(*args: str) -> str:
+    return subprocess.check_output(["pactl", *args], text=True).strip()
+
+
+def get_json(*args: str):
+    return json.loads(run_pactl("-f", "json", *args))
+
+
+def pactl_ok(*args: str) -> bool:
+    try:
+        subprocess.run(["pactl", *args], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+
+def default_sink_name() -> str:
+    try:
+        return run_pactl("get-default-sink")
+    except Exception:
+        return get_json("info").get("default_sink_name", "")
+
+
+def sinks() -> list[dict]:
+    return get_json("list", "sinks")
+
+
+def sink_volume_percent(sink: dict) -> int:
+    volume = sink.get("volume") or {}
+    values: list[int] = []
+    for channel in volume.values():
+        pct = str(channel.get("value_percent", "0%")).rstrip("%")
+        try:
+            values.append(int(round(float(pct))))
+        except ValueError:
+            pass
+    return int(round(sum(values) / len(values))) if values else 0
+
+
+def find_sink(name: str) -> dict | None:
+    for sink in sinks():
+        if sink.get("name") == name:
+            return sink
+    return None
+
+
+def move_active_streams(sink_name: str) -> None:
+    try:
+        inputs = get_json("list", "sink-inputs")
+    except Exception:
+        return
+    for stream in inputs:
+        idx = stream.get("index")
+        if idx is not None:
+            pactl_ok("move-sink-input", str(idx), sink_name)
+
+
+def toggle_existing() -> bool:
+    if not PID_FILE.exists():
+        return False
+    try:
+        pid = int(PID_FILE.read_text().strip())
+    except ValueError:
+        PID_FILE.unlink(missing_ok=True)
+        return False
+    if pid == os.getpid():
+        return False
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        PID_FILE.unlink(missing_ok=True)
+        return False
+    os.kill(pid, signal.SIGTERM)
+    return True
+
+
+class AudioMenu(Gtk.Window):
+    def __init__(self) -> None:
+        super().__init__(title="Audio")
+        self.set_name("audio-menu-panel")
+        self.set_decorated(False)
+        self.set_resizable(False)
+        self.set_keep_above(True)
+        self.pending_volume_source: int | None = None
+        self.pending_refresh_source: int | None = None
+        self.refreshing = False
+        self.dragging_volume = False
+        self.volume_hold_until = 0.0
+        self.subscribe_proc: subprocess.Popen[str] | None = None
+        self._build_layer_shell()
+        self._build_css()
+        self._build_ui()
+        self._start_subscriber()
+        self.connect("key-press-event", self._on_key)
+        self.connect("destroy", self._cleanup)
+
+    def _build_layer_shell(self) -> None:
+        # Small layer-shell panel: compositor-positioned under Waybar without
+        # the fullscreen transparent overlay that broke GtkScale rendering.
+        GtkLayerShell.init_for_window(self)
+        GtkLayerShell.set_layer(self, GtkLayerShell.Layer.OVERLAY)
+        GtkLayerShell.set_keyboard_mode(self, GtkLayerShell.KeyboardMode.NONE)
+        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.TOP, True)
+        GtkLayerShell.set_anchor(self, GtkLayerShell.Edge.RIGHT, True)
+        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.TOP, 34)
+        GtkLayerShell.set_margin(self, GtkLayerShell.Edge.RIGHT, PANEL_RIGHT_MARGIN)
+        self.set_default_size(PANEL_WIDTH, -1)
+
+    def _build_css(self) -> None:
+        css = b"""
+        #audio-menu-panel {
+          background: #222222;
+          border: 1px solid #5f5f87;
+          border-radius: 12px;
+          color: #eeeeee;
+        }
+        #audio-menu-panel * {
+          font-family: "JetBrains Mono Nerd Font", monospace;
+          font-size: 13px;
+          color: #eeeeee;
+        }
+        .title { font-size: 15px; font-weight: 700; }
+        .subtitle { color: #bbbbbb; }
+        radio, check { margin: 4px; }
+        scale trough { min-height: 8px; border-radius: 999px; background: #444444; }
+        scale highlight { min-height: 8px; border-radius: 999px; background: #5f5f87; }
+        scale slider { min-width: 16px; min-height: 16px; border-radius: 999px; background: #eeeeee; }
+        button { background: #444444; border: 0; border-radius: 8px; padding: 7px 10px; }
+        button:hover { background: #5f5f87; }
+        """
+        provider = Gtk.CssProvider()
+        provider.load_from_data(css)
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
+
+    def _build_ui(self) -> None:
+        root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        root.set_margin_top(14)
+        root.set_margin_bottom(14)
+        root.set_margin_start(16)
+        root.set_margin_end(16)
+        self.add(root)
+        # Close with ✕ or by clicking the Waybar volume button again.
+
+        header = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        title_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=1)
+        title = Gtk.Label(label="Sound")
+        title.get_style_context().add_class("title")
+        title.set_xalign(0)
+        subtitle = Gtk.Label(label="Output device and volume")
+        subtitle.get_style_context().add_class("subtitle")
+        subtitle.set_xalign(0)
+        title_box.pack_start(title, False, False, 0)
+        title_box.pack_start(subtitle, False, False, 0)
+        header.pack_start(title_box, True, True, 0)
+        close_btn = Gtk.Button(label="✕")
+        close_btn.connect("clicked", lambda *_: Gtk.main_quit())
+        header.pack_end(close_btn, False, False, 0)
+        root.pack_start(header, False, False, 0)
+
+        self.sink_cache = sinks()
+        current = default_sink_name()
+        current_sink = next((s for s in self.sink_cache if s.get("name") == current), None)
+        volume = sink_volume_percent(current_sink) if current_sink else 0
+        muted = bool(current_sink.get("mute")) if current_sink else False
+
+        volume_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        self.mute_btn = Gtk.Button()
+        self.mute_btn.set_always_show_image(True)
+        self.mute_btn.set_tooltip_text("Toggle mute")
+        self._set_mute_icon(muted)
+        self.mute_btn.connect("clicked", self._toggle_mute)
+        volume_row.pack_start(self.mute_btn, False, False, 0)
+        self.volume_label = Gtk.Label(label=f"{volume}%")
+        self.volume_label.set_width_chars(5)
+        self.volume_label.set_xalign(1)
+        self.scale = Gtk.Scale.new_with_range(Gtk.Orientation.HORIZONTAL, 0, MAX_VOLUME, 1)
+        self.scale.set_draw_value(False)
+        self.scale.set_hexpand(True)
+        self.scale.set_value(volume)
+        self.scale.connect("value-changed", self._volume_changed)
+        self.scale.connect("button-press-event", self._volume_drag_start)
+        self.scale.connect("button-release-event", self._volume_drag_end)
+        volume_row.pack_start(self.scale, True, True, 0)
+        volume_row.pack_start(self.volume_label, False, False, 0)
+        root.pack_start(volume_row, False, False, 0)
+
+        devices_label = Gtk.Label(label="Choose active output")
+        devices_label.get_style_context().add_class("subtitle")
+        devices_label.set_xalign(0)
+        root.pack_start(devices_label, False, False, 0)
+
+        self.device_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+        self._populate_devices(current)
+        root.pack_start(self.device_box, False, False, 0)
+
+    def _start_subscriber(self) -> None:
+        try:
+            self.subscribe_proc = subprocess.Popen(
+                ["pactl", "subscribe"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                text=True,
+                bufsize=1,
+            )
+        except Exception:
+            return
+
+        def reader() -> None:
+            assert self.subscribe_proc is not None
+            assert self.subscribe_proc.stdout is not None
+            for line in self.subscribe_proc.stdout:
+                # Sink events cover volume/mute and output add/remove. Server/card
+                # events cover default-device and profile changes. Debounce because
+                # PipeWire often emits clusters for one physical action.
+                if any(word in line for word in ("sink", "server", "card")):
+                    GLib.idle_add(self._schedule_refresh)
+
+        threading.Thread(target=reader, daemon=True).start()
+
+    def _cleanup(self, *_args) -> None:
+        if self.pending_refresh_source is not None:
+            GLib.source_remove(self.pending_refresh_source)
+            self.pending_refresh_source = None
+        if self.pending_volume_source is not None:
+            GLib.source_remove(self.pending_volume_source)
+            self.pending_volume_source = None
+        if self.subscribe_proc and self.subscribe_proc.poll() is None:
+            self.subscribe_proc.terminate()
+
+    def _schedule_refresh(self) -> bool:
+        if self.pending_refresh_source is not None:
+            GLib.source_remove(self.pending_refresh_source)
+        self.pending_refresh_source = GLib.timeout_add(120, self._refresh_state)
+        return False
+
+    def _populate_devices(self, current: str) -> None:
+        for child in self.device_box.get_children():
+            self.device_box.remove(child)
+        group = None
+        for sink in self.sink_cache:
+            name = sink.get("name", "")
+            desc = sink.get("description") or name
+            radio = Gtk.RadioButton.new_with_label_from_widget(group, desc)
+            group = radio if group is None else group
+            radio.set_tooltip_text(name)
+            radio.set_active(name == current)
+            radio.connect("toggled", self._sink_selected, name)
+            self.device_box.pack_start(radio, False, False, 0)
+        if not self.sink_cache:
+            empty = Gtk.Label(label="No output devices found")
+            empty.get_style_context().add_class("subtitle")
+            empty.set_xalign(0)
+            self.device_box.pack_start(empty, False, False, 0)
+        self.device_box.show_all()
+
+    def _refresh_state(self) -> bool:
+        self.pending_refresh_source = None
+        try:
+            new_sinks = sinks()
+            current = default_sink_name()
+        except Exception:
+            return False
+
+        current_sink = next((s for s in new_sinks if s.get("name") == current), None)
+        old_devices = [(s.get("name"), s.get("description")) for s in self.sink_cache]
+        new_devices = [(s.get("name"), s.get("description")) for s in new_sinks]
+        self.sink_cache = new_sinks
+
+        self.refreshing = True
+        try:
+            if current_sink:
+                volume = sink_volume_percent(current_sink)
+                if not self.dragging_volume and time.monotonic() >= self.volume_hold_until:
+                    self.scale.handler_block_by_func(self._volume_changed)
+                    self.scale.set_value(volume)
+                    self.scale.handler_unblock_by_func(self._volume_changed)
+                    self.volume_label.set_text(f"{volume}%")
+                self._set_mute_icon(bool(current_sink.get("mute")))
+            if old_devices != new_devices:
+                self._populate_devices(current)
+            else:
+                for radio in self.device_box.get_children():
+                    if isinstance(radio, Gtk.RadioButton):
+                        radio.set_active(radio.get_tooltip_text() == current)
+        finally:
+            self.refreshing = False
+        return False
+
+    def _on_key(self, _window, event) -> bool:
+        if Gdk.keyval_name(event.keyval) == "Escape":
+            Gtk.main_quit()
+            return True
+        return False
+
+    def _set_mute_icon(self, muted: bool) -> None:
+        icon_name = "audio-volume-muted-symbolic" if muted else "audio-volume-high-symbolic"
+        image = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.BUTTON)
+        self.mute_btn.set_image(image)
+        self.mute_btn.set_label("")
+        self.mute_btn.set_tooltip_text("Unmute" if muted else "Mute")
+        self.mute_btn.show_all()
+
+    def _sink_selected(self, button: Gtk.RadioButton, sink_name: str) -> None:
+        if self.refreshing or not button.get_active():
+            return
+        if pactl_ok("set-default-sink", sink_name):
+            move_active_streams(sink_name)
+            self.sink_cache = sinks()
+            sink = next((s for s in self.sink_cache if s.get("name") == sink_name), None)
+            if sink:
+                volume = sink_volume_percent(sink)
+                self.scale.handler_block_by_func(self._volume_changed)
+                self.scale.set_value(volume)
+                self.scale.handler_unblock_by_func(self._volume_changed)
+                self.volume_label.set_text(f"{volume}%")
+                self._set_mute_icon(bool(sink.get("mute")))
+                self._schedule_refresh()
+
+    def _volume_drag_start(self, *_args) -> bool:
+        self.dragging_volume = True
+        return False
+
+    def _volume_drag_end(self, *_args) -> bool:
+        self.dragging_volume = False
+        self._apply_volume(int(round(self.scale.get_value())))
+        self._schedule_refresh()
+        return False
+
+    def _volume_changed(self, scale: Gtk.Scale) -> None:
+        if self.refreshing:
+            return
+        # Pulse/PipeWire emits volume events while the user is dragging. Hold
+        # the user's current GTK value briefly so refreshes cannot snap the
+        # handle/highlight back to the old backend value before pactl catches up.
+        self.volume_hold_until = time.monotonic() + 2.0
+        value = int(round(scale.get_value()))
+        self.volume_label.set_text(f"{value}%")
+        if self.pending_volume_source is not None:
+            GLib.source_remove(self.pending_volume_source)
+        self.pending_volume_source = GLib.timeout_add(40, self._apply_volume, value)
+
+    def _apply_volume(self, value: int) -> bool:
+        self.pending_volume_source = None
+        pactl_ok("set-sink-volume", "@DEFAULT_SINK@", f"{value}%")
+        # Do not immediately force a refresh here; pactl subscribe will resync
+        # external/backend state after the visual hold, and immediate refreshes
+        # can make the slider appear stuck while dragging.
+        return False
+
+    def _toggle_mute(self, _button: Gtk.Button) -> None:
+        pactl_ok("set-sink-mute", "@DEFAULT_SINK@", "toggle")
+        self.sink_cache = sinks()
+        current = default_sink_name()
+        sink = next((s for s in self.sink_cache if s.get("name") == current), None)
+        self._set_mute_icon(bool(sink and sink.get("mute")))
+        self._schedule_refresh()
+
+
+def print_state() -> None:
+    current = default_sink_name()
+    sink = find_sink(current)
+    payload = {
+        "default_sink": current,
+        "volume": sink_volume_percent(sink) if sink else None,
+        "sinks": [s.get("description") or s.get("name") for s in sinks()],
+    }
+    print(json.dumps(payload, indent=2))
+
+
+def main() -> int:
+    if "--print-state" in sys.argv:
+        print_state()
+        return 0
+    if toggle_existing():
+        return 0
+    lock_handle = LOCK_FILE.open("w")
+    try:
+        fcntl.flock(lock_handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        return 0
+
+    PID_FILE.write_text(str(os.getpid()))
+    try:
+        win = AudioMenu()
+        win.show_all()
+        Gtk.main()
+    finally:
+        PID_FILE.unlink(missing_ok=True)
+        fcntl.flock(lock_handle, fcntl.LOCK_UN)
+        lock_handle.close()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

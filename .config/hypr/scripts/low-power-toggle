@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+state_dir="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+force_file="$state_dir/laptop-low-power-force"
+power_script="/home/restart/.config/hypr/scripts/laptop-refresh-on-power.sh"
+waybar_signal="10"
+
+notify() {
+    if command -v notify-send >/dev/null 2>&1; then
+        notify-send -a "Low power" "$1" "$2" >/dev/null 2>&1 || true
+    fi
+}
+
+refresh_waybar() {
+    pkill -RTMIN+"$waybar_signal" waybar 2>/dev/null || true
+}
+
+apply_now() {
+    "$power_script" --once
+}
+
+is_enabled() {
+    [[ -e "$force_file" ]]
+}
+
+enable() {
+    mkdir -p "$state_dir"
+    printf '%s\n' "forced" > "$force_file"
+    apply_now
+}
+
+disable() {
+    rm -f "$force_file"
+    apply_now
+}
+
+status_json() {
+    if is_enabled; then
+        printf '%s\n' '{"text":"POWER SAVE","class":"enabled","tooltip":"Forced low-power mode\nUses unplugged behavior while plugged in\nSuper+Shift+P toggles it"}'
+    else
+        printf '%s\n' '{"text":"AUTO POWER","class":"disabled","tooltip":"Automatic AC/battery power mode\nSuper+Shift+P toggles forced low power"}'
+    fi
+}
+
+case "${1:-toggle}" in
+    enable|on)
+        enable
+        refresh_waybar
+        notify "Low power enabled" "Using the same profile as unplugged mode."
+        ;;
+    disable|off)
+        disable
+        refresh_waybar
+        notify "Low power disabled" "Automatic AC/battery switching restored."
+        ;;
+    toggle)
+        if is_enabled; then
+            disable
+            refresh_waybar
+            notify "Low power disabled" "Automatic AC/battery switching restored."
+        else
+            enable
+            refresh_waybar
+            notify "Low power enabled" "Using the same profile as unplugged mode."
+        fi
+        ;;
+    status|waybar)
+        status_json
+        ;;
+    *)
+        printf 'usage: %s [toggle|enable|disable|status]\n' "$0" >&2
+        exit 2
+        ;;
+esac

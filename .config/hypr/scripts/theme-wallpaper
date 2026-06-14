@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+THEMES_FILE="$HOME/.config/hyprland/themes/themes.tsv"
+HYPR_THEME_FILE="$HOME/.config/hyprland/themes/hypr.conf"
+WAYPAPER_CONF="$HOME/.config/waypaper/config.ini"
+ANIMATOR="$HOME/.config/hypr/scripts/wallpaper-animator"
+
+active_theme() {
+  awk -F '=' '/^\$theme_name/ { gsub(/^[[:space:]]+|[[:space:]]+$/, "", $2); print $2; exit }' "$HYPR_THEME_FILE"
+}
+
+is_powered() {
+  local supply type scope online status
+  for supply in /sys/class/power_supply/*; do
+    [[ -r "$supply/type" ]] || continue
+    type=$(<"$supply/type")
+    scope=$([[ -r "$supply/scope" ]] && cat "$supply/scope" || true)
+    online=$([[ -r "$supply/online" ]] && cat "$supply/online" || true)
+    status=$([[ -r "$supply/status" ]] && cat "$supply/status" || true)
+    case "$type" in
+      Mains) [[ "$online" == 1 ]] && { printf '1\n'; return 0; } ;;
+      USB|USB_C|USB_PD|Wireless) [[ "$scope" == System && ( "$online" == 1 || "$status" == Charging ) ]] && { printf '1\n'; return 0; } ;;
+      Battery) [[ "$status" == Charging || "$status" == Full ]] && { printf '1\n'; return 0; } ;;
+    esac
+  done
+  printf '0\n'
+}
+
+wallpaper_for() {
+  local theme=$1 mode=$2 line name accent desc bg fg static plugged bright
+  line=$(awk -F '\t' -v name="$theme" '($0 !~ /^#/ && $1 == name) { print; found=1; exit } END { exit found ? 0 : 1 }' "$THEMES_FILE") || return 1
+  IFS=$'\t' read -r name accent desc bg fg static plugged bright _ <<< "$line"
+  case "$mode" in
+    plugged) printf '%s\n' "$plugged" ;;
+    unplugged) printf '%s\n' "$static" ;;
+    auto) [[ "$(is_powered)" == 1 ]] && printf '%s\n' "$plugged" || printf '%s\n' "$static" ;;
+    *) return 2 ;;
+  esac
+}
+
+set_waypaper_conf() {
+  local wp=$1 tmp
+  [[ -f "$WAYPAPER_CONF" ]] || return 0
+  tmp=$(mktemp)
+  awk -v wp="$wp" '/^wallpaper = / { print "wallpaper = " wp; done=1; next } { print } END { if (!done) print "wallpaper = " wp }' "$WAYPAPER_CONF" > "$tmp"
+  cat "$tmp" > "$WAYPAPER_CONF"
+  rm -f "$tmp"
+}
+
+ensure_hyprpaper() {
+  if ! pgrep -xu "$USER" hyprpaper >/dev/null 2>&1; then
+    nohup hyprpaper >/tmp/hyprpaper.log 2>&1 &
+    sleep 0.6
+  fi
+}
+
+frame_dir_for() {
+  local wp=$1 gif stem dir
+  case "$wp" in
+    *.png) gif="${wp%.png}.gif" ;;
+    *.gif) gif="$wp" ;;
+    *) return 1 ;;
+  esac
+  stem="${gif%.gif}"
+  dir="${stem}-frames"
+  [[ -d "$dir" ]] && printf '%s\n' "$dir"
+}
+
+video_for() {
+  local wp=$1 mp4
+  case "$wp" in
+    *.png) mp4="${wp%.png}.mp4" ;;
+    *.gif) mp4="${wp%.gif}.mp4" ;;
+    *) return 1 ;;
+  esac
+  [[ -f "$mp4" ]] && printf '%s\n' "$mp4"
+}
+
+stop_video_wallpaper() {
+  pkill -xu "$USER" mpvpaper >/dev/null 2>&1 || true
+}
+
+primary_output() {
+  hyprctl monitors | awk '/^Monitor / { print $2; exit }'
+}
+
+start_video_wallpaper() {
+  local video=$1 output pid
+  command -v mpvpaper >/dev/null 2>&1 || return 1
+  output=$(primary_output)
+  [[ -n "$output" ]] || return 1
+  stop_video_wallpaper
+  pkill -xu "$USER" swww-daemon >/dev/null 2>&1 || true
+  pkill -xu "$USER" awww-daemon >/dev/null 2>&1 || true
+  # Do not use --fork here: on this setup it exits shortly after apply.
+  # Do not use hwdec=auto: it produced GPU decode artifacts.
+  nohup mpvpaper -o "no-audio loop hwdec=no interpolation=no" "$output" "$video" >/tmp/mpvpaper.log 2>&1 &
+  pid=$!
+  sleep 0.8
+  kill -0 "$pid" 2>/dev/null || return 1
+}
+
+fallback_png_for() {
+  local wp=$1
+  case "$wp" in
+    *.gif) printf '%s\n' "${wp%.gif}.png" ;;
+    *) printf '%s\n' "$wp" ;;
+  esac
+}
+
+apply_wallpaper() {
+  local wp=$1 png video
+  [[ -n "$wp" ]] || exit 0
+  png=$(fallback_png_for "$wp")
+  [[ -f "$png" ]] || exit 0
+  set_waypaper_conf "$png"
+  "$ANIMATOR" --stop >/dev/null 2>&1 || true
+  pkill -xu "$USER" swww-daemon >/dev/null 2>&1 || true
+  pkill -xu "$USER" awww-daemon >/dev/null 2>&1 || true
+
+  # Plugged mode: mpvpaper is the only backend that works reliably here for
+  # animation. Run it alone; hyprpaper covers it when both are active.
+  if [[ "$mode" != "unplugged" ]] && video=$(video_for "$wp"); then
+    stop_video_wallpaper
+    pkill -xu "$USER" hyprpaper >/dev/null 2>&1 || true
+    if start_video_wallpaper "$video"; then
+      return 0
+    fi
+  fi
+
+  # Static/unplugged/fallback: use hyprpaper with a real PNG.
+  stop_video_wallpaper
+  ensure_hyprpaper
+  hyprctl hyprpaper wallpaper ", $png, cover" >/dev/null 2>&1 || true
+}
+
+mode=${1:-auto}
+theme=${2:-$(active_theme)}
+wp=$(wallpaper_for "$theme" "$mode") || exit 0
+apply_wallpaper "$wp"
+printf '%s\n' "$(fallback_png_for "$wp")"

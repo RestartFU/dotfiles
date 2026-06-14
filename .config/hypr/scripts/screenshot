@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mode=${1:-area}
+dir="$HOME/Pictures/Screenshots"
+mkdir -p "$dir"
+file="$dir/$(date +'%Y-%m-%d_%H-%M-%S').png"
+osd="$HOME/.config/swayosd/hypr-osd"
+
+notify_osd() {
+  if [[ -x "$osd" ]]; then
+    "$osd" screenshot "${1:-Screenshot}" "${2:-Saved + copied}" || true
+  fi
+}
+
+case "$mode" in
+  area)
+    geom=$(slurp 2>/dev/null || true)
+    [[ -n "$geom" ]] || exit 0
+    grim -g "$geom" "$file"
+    ;;
+  screen)
+    grim "$file"
+    ;;
+  edit)
+    geom=$(slurp 2>/dev/null || true)
+    [[ -n "$geom" ]] || exit 0
+    tmp=$(mktemp --suffix=.png)
+    grim -g "$geom" "$tmp"
+    if command -v flameshot >/dev/null 2>&1; then
+      flameshot draw --raw < "$tmp" > "$file" || cp "$tmp" "$file"
+    else
+      cp "$tmp" "$file"
+    fi
+    rm -f "$tmp"
+    ;;
+  ocr)
+    if ! command -v tesseract >/dev/null 2>&1; then
+      notify_osd 'OCR unavailable' 'install tesseract'
+      exit 0
+    fi
+    geom=$(slurp 2>/dev/null || true)
+    [[ -n "$geom" ]] || exit 0
+    grim -g "$geom" "$file"
+    text=$(tesseract "$file" stdout 2>/dev/null || true)
+    printf '%s' "$text" | wl-copy
+    notify_osd 'OCR copied' 'text in clipboard'
+    exit 0
+    ;;
+  *)
+    printf 'usage: %s {area|screen|edit|ocr}\n' "${0##*/}" >&2
+    exit 64
+    ;;
+esac
+
+wl-copy < "$file"
+notify_osd 'Screenshot' 'saved + copied'
+printf '%s\n' "$file"

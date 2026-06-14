@@ -5,11 +5,12 @@ OUTPUT="eDP-1"
 PLUGGED_HZ="120.00"
 BATTERY_HZ="60.00"
 RESOLUTION="2880x1920"
-POSITION="0x1440"
+POSITION="0x160"
 SCALE="1.5"
 INTERVAL=5
 LOG="/tmp/laptop-refresh-on-power.log"
 STATE_FILE="/tmp/laptop-power-mode.state"
+FORCE_LOW_POWER_FILE="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/laptop-low-power-force"
 
 # Hyprland-only power tweaks.
 # Battery = less GPU/compositor work. Plugged = restore normal desktop pretties.
@@ -89,12 +90,12 @@ apply_hypr_power() {
   if [[ "$state" == "battery" ]]; then
     # Kill blur and allow variable/VRR presentation when on battery.
     hypr_keyword decoration:blur:enabled "$BATTERY_BLUR"
-    hypr_keyword misc:vfr "$BATTERY_VFR"
+    hypr_keyword debug:vfr "$BATTERY_VFR"
     hypr_keyword misc:vrr "$BATTERY_VRR"
   else
     # Restore the config's normal AC behavior.
     hypr_keyword decoration:blur:enabled "$PLUGGED_BLUR"
-    hypr_keyword misc:vfr "$PLUGGED_VFR"
+    hypr_keyword debug:vfr "$PLUGGED_VFR"
     hypr_keyword misc:vrr "$PLUGGED_VRR"
   fi
 }
@@ -128,7 +129,9 @@ apply_target() {
 }
 
 step() {
-  if is_plugged; then
+  if [[ -e "$FORCE_LOW_POWER_FILE" ]]; then
+    apply_target "battery" "$BATTERY_HZ"
+  elif is_plugged; then
     apply_target "plugged" "$PLUGGED_HZ"
   else
     apply_target "battery" "$BATTERY_HZ"
@@ -141,11 +144,12 @@ case "${1:-}" in
     ;;
   --debug)
     printf 'battery_status=%s\n' "$(battery_status)"
-    if is_plugged; then echo 'decision=plugged'; else echo 'decision=battery'; fi
+    printf 'force_low_power=%s\n' "$([[ -e "$FORCE_LOW_POWER_FILE" ]] && echo yes || echo no)"
+    if [[ -e "$FORCE_LOW_POWER_FILE" ]]; then echo 'decision=battery-forced'; elif is_plugged; then echo 'decision=plugged'; else echo 'decision=battery'; fi
     printf 'monitor=%s\n' "$(current_line || true)"
     printf 'state_file=%s\n' "$(cat "$STATE_FILE" 2>/dev/null || echo none)"
     hyprctl getoption decoration:blur:enabled
-    hyprctl getoption misc:vfr
+    hyprctl getoption debug:vfr
     hyprctl getoption misc:vrr
     ;;
   *)
