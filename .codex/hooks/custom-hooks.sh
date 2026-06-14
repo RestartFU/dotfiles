@@ -10,5 +10,6 @@ If the caveman skill instructions are not already loaded, read:
 
 Use default full intensity.
 
-Also use the git-commit skill if asked to commit or push, but do not load it yet.
+When asked to commit, create a git commit, push committed changes, or handle /commit, load and use:
+  ~/.agents/skills/git-commit/SKILL.md
 EOF

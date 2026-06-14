@@ -55,6 +55,9 @@ trap 'rm -f "$diff_file" "$message_file" "$codex_log"' EXIT
 
 {
   printf '%s\n' \
+    "Use the git-commit skill instructions for commit message generation only." \
+    "Read ~/.agents/skills/git-commit/SKILL.md if needed." \
+    "Do not run git commands." \
     "Generate exactly one git commit subject line for the diff in stdin." \
     "" \
     "Rules:" \
