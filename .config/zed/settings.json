@@ -13,7 +13,7 @@
         },
         {
           "paths": [
-            "/home/restart/projects/practice"
+            "/home/restart/projects/zeno/practice"
           ]
         }
       ]
@@ -36,7 +36,7 @@
       "projects": [
         {
           "paths": [
-            "/home/restart/projects/practice"
+            "/home/restart/projects/zeno/practice"
           ]
         }
       ]
@@ -75,8 +75,8 @@
   "agent_servers": {
     "codex-acp": {
       "default_config_options": {
-        "model": "gpt-5.3-codex-spark",
-        "reasoning_effort": "xhigh"
+        "model": "gpt-5.5",
+        "reasoning_effort": "medium"
       },
       "favorite_config_option_values": {
         "mode": [

@@ -5,9 +5,9 @@
   "height": 27,
   "reload_style_on_change": true,
   "modules-left": [
-    "hyprland/workspaces",
+    "custom/workspaces",
     "custom/icon",
-    "hyprland/window",
+    "custom/window",
   ],
   "modules-center": [],
   "modules-right": [
@@ -20,43 +20,23 @@
     "custom/status-separator",
     "clock"
   ],
-  "hyprland/workspaces": {
-    "format": "{icon}",
-    "on-click": "activate",
+  "custom/workspaces": {
+    "format": "{text}",
+    "return-type": "json",
+    "exec": "/home/restart/.config/waybar/scripts/hypr-waybar-stream workspaces",
+    "restart-interval": 1,
     "on-scroll-up": "hyprctl dispatch workspace e+1",
     "on-scroll-down": "hyprctl dispatch workspace e-1",
-    "all-outputs": false,
-    "active-only": false,
-    "show-special": true,
-    "format-icons": {
-      "7": "X",
-      "8": "C",
-      "9": "V",
-      "11": "1",
-      "12": "2",
-      "13": "3",
-      "14": "4",
-      "15": "5",
-      "21": "6",
-      "22": "X",
-      "23": "C",
-      "24": "V",
-      "25": "10",
-      "31": "1",
-      "32": "2",
-      "33": "3"
-    },
-    "persistent-workspaces": {
-      "DP-2": [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
-      "DP-3": [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
-      "eDP-1": [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ],
-    }
+    "tooltip": true
   },
 
-  "hyprland/window": {
-    "format": "{title}",
+  "custom/window": {
+    "format": "{text}",
+    "return-type": "json",
+    "exec": "/home/restart/.config/waybar/scripts/hypr-waybar-stream window",
+    "restart-interval": 1,
     "max-length": 80,
-    "separate-outputs": true
+    "tooltip": true
   },
   "custom/icon": {
     "format": "<span ><span color=\"#d8a657\"></span>{}</span> ",

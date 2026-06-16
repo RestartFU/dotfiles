@@ -1,0 +1,202 @@
+#!/usr/bin/env python3
+import html
+import json
+import os
+import socket
+import subprocess
+import sys
+import time
+
+
+MODE = sys.argv[1] if len(sys.argv) > 1 else "window"
+EVENTS = {
+    "window": {
+        "activewindow",
+        "activewindowv2",
+        "closewindow",
+        "openwindow",
+        "windowtitle",
+        "windowtitlev2",
+        "workspace",
+        "focusedmon",
+    },
+    "workspaces": {
+        "workspace",
+        "workspacev2",
+        "focusedmon",
+        "createworkspace",
+        "createworkspacev2",
+        "destroyworkspace",
+        "destroyworkspacev2",
+        "moveworkspace",
+        "moveworkspacev2",
+        "openwindow",
+        "closewindow",
+        "movewindow",
+    },
+}
+
+ICONS = {
+    7: "X",
+    8: "C",
+    9: "V",
+    11: "1",
+    12: "2",
+    13: "3",
+    14: "4",
+    15: "5",
+    21: "6",
+    22: "X",
+    23: "C",
+    24: "V",
+    25: "10",
+    31: "1",
+    32: "2",
+    33: "3",
+}
+
+
+def emit(payload):
+    print(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), flush=True)
+
+
+def hypr_json(*args):
+    try:
+        out = subprocess.check_output(
+            ["hyprctl", "-j", *args],
+            timeout=0.8,
+            stderr=subprocess.DEVNULL,
+            text=True,
+        )
+        return json.loads(out)
+    except Exception:
+        return None
+
+
+def clean(value):
+    return " ".join(str(value or "").split())
+
+
+def render_window():
+    window = hypr_json("activewindow") or {}
+    title = clean(window.get("title"))
+    app = clean(window.get("class"))
+    emit(
+        {
+            "text": title,
+            "class": "active" if title else "empty",
+            "tooltip": "\n".join(part for part in (app, title) if part),
+        }
+    )
+
+
+def span(text, fg="#bbbbbb", bg=None):
+    attrs = [f'foreground="{fg}"']
+    if bg:
+        attrs.append(f'background="{bg}"')
+    return f"<span {' '.join(attrs)}> {html.escape(text)} </span>"
+
+
+def workspace_label(text, marker=None, fg="#bbbbbb", bg=None):
+    attrs = [f'foreground="{fg}"']
+    if bg:
+        attrs.append(f'background="{bg}"')
+
+    marker_markup = ""
+    if marker:
+        marker_markup = (
+            f' <span foreground="{fg}" size="6200" rise="4500">'
+            f"{html.escape(marker)}</span>"
+        )
+
+    return f"<span {' '.join(attrs)}> {html.escape(text)}{marker_markup} </span>"
+
+
+def render_workspaces():
+    active = hypr_json("activeworkspace") or {}
+    workspaces = hypr_json("workspaces") or []
+    active_id = active.get("id")
+    occupied = {ws.get("id") for ws in workspaces if ws.get("windows", 0) > 0}
+    urgent = set()
+
+    ids = list(range(1, 10))
+    for ws in workspaces:
+        ws_id = ws.get("id")
+        if isinstance(ws_id, int) and ws_id > 0 and ws_id not in ids:
+            ids.append(ws_id)
+
+    parts = []
+    for ws_id in sorted(ids):
+        label = ICONS.get(ws_id, str(ws_id))
+        if ws_id == active_id:
+            marker = "■" if ws_id in occupied else None
+            parts.append(workspace_label(label, marker, "#eeeeee", "#5f5f87"))
+        elif ws_id in urgent:
+            parts.append(span(label, "#eeeeee", "#cc3333"))
+        elif ws_id in occupied:
+            parts.append(workspace_label(label, "□", "#eeeeee"))
+        else:
+            parts.append(workspace_label(label, None, "#666666"))
+
+    tooltip = "\n".join(
+        f"{ws.get('id')}: {clean(ws.get('lastwindowtitle'))}"
+        for ws in sorted(workspaces, key=lambda item: item.get("id", 0))
+        if ws.get("windows", 0) > 0
+    )
+    emit({"text": "".join(parts), "tooltip": tooltip, "class": "active"})
+
+
+def render():
+    if MODE == "workspaces":
+        render_workspaces()
+    else:
+        render_window()
+
+
+def event_socket_path():
+    runtime = os.environ.get("XDG_RUNTIME_DIR", f"/run/user/{os.getuid()}")
+    signature = os.environ.get("HYPRLAND_INSTANCE_SIGNATURE")
+    if not signature:
+        return None
+    return os.path.join(runtime, "hypr", signature, ".socket2.sock")
+
+
+def listen():
+    watched = EVENTS.get(MODE, EVENTS["window"])
+    path = event_socket_path()
+    if not path:
+        while True:
+            render()
+            time.sleep(1)
+
+    last_poll = 0.0
+    while True:
+        render()
+        try:
+            with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
+                sock.settimeout(2.0)
+                sock.connect(path)
+                buf = ""
+                while True:
+                    try:
+                        chunk = sock.recv(4096)
+                    except socket.timeout:
+                        now = time.monotonic()
+                        if now - last_poll >= 1:
+                            render()
+                            last_poll = now
+                        continue
+                    if not chunk:
+                        break
+                    buf += chunk.decode("utf-8", "replace")
+                    while "\n" in buf:
+                        line, buf = buf.split("\n", 1)
+                        name = line.split(">>", 1)[0]
+                        if name in watched:
+                            render()
+        except Exception:
+            time.sleep(0.5)
+
+
+if __name__ == "__main__":
+    listen()

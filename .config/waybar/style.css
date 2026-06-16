@@ -28,53 +28,14 @@ window#waybar {
 }
 
 /* Workspaces */
-#workspaces {
+#custom-workspaces {
   background-color: @col_gray1;
-}
-
-#workspaces button {
   color: @col_gray3;
-  background: transparent;
-  padding: 0 10px;
-  border: none;
-  border-radius: 0;
+  padding: 0 4px;
 }
 
-/* DWM-like occupied workspace marker.
- * dwm draws a tiny square on tags with clients; Waybar marks empty
- * persistent workspaces with .empty, so non-empty buttons get a small
- * top-right square without changing the workspace label.
- */
-#workspaces button:not(.empty) {
-  background-image: image(@col_gray4);
-  background-repeat: no-repeat;
-  background-size: 5px 5px;
-  background-position: 86% 18%;
-}
-
-#workspaces button.empty {
-  background-image: none;
-  color: #666666;
-}
-
-#workspaces button.active:not(.empty),
-#workspaces button.focused:not(.empty) {
-  background-image: image(@col_gray1);
-}
-
-#workspaces button:hover {
+#custom-workspaces:hover {
   background-color: @col_gray2;
-  color: @col_gray4;
-}
-
-#workspaces button.focused,
-#workspaces button.active {
-  background-color: @col_cyan;
-  color: @col_gray4;
-}
-
-#workspaces button.urgent {
-  background-color: #cc3333;
   color: @col_gray4;
 }
 
@@ -159,7 +120,7 @@ window#waybar {
 }
 
 /* Active window title */
-#window {
+#custom-window {
   background-color: @col_cyan;
   color: @col_gray4;
   padding: 0 10px;
