@@ -28,13 +28,29 @@ window#waybar {
 }
 
 /* Workspaces */
-#custom-workspaces {
+#custom-ws-1,
+#custom-ws-2,
+#custom-ws-3,
+#custom-ws-4,
+#custom-ws-5,
+#custom-ws-6,
+#custom-ws-7,
+#custom-ws-8,
+#custom-ws-9 {
   background-color: @col_gray1;
   color: @col_gray3;
-  padding: 0 4px;
+  padding: 0 2px;
 }
 
-#custom-workspaces:hover {
+#custom-ws-1:hover,
+#custom-ws-2:hover,
+#custom-ws-3:hover,
+#custom-ws-4:hover,
+#custom-ws-5:hover,
+#custom-ws-6:hover,
+#custom-ws-7:hover,
+#custom-ws-8:hover,
+#custom-ws-9:hover {
   background-color: @col_gray2;
   color: @col_gray4;
 }

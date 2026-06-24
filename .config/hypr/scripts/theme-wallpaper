@@ -10,31 +10,12 @@ active_theme() {
   awk -F '=' '/^\$theme_name/ { gsub(/^[[:space:]]+|[[:space:]]+$/, "", $2); print $2; exit }' "$HYPR_THEME_FILE"
 }
 
-is_powered() {
-  local supply type scope online status
-  for supply in /sys/class/power_supply/*; do
-    [[ -r "$supply/type" ]] || continue
-    type=$(<"$supply/type")
-    scope=$([[ -r "$supply/scope" ]] && cat "$supply/scope" || true)
-    online=$([[ -r "$supply/online" ]] && cat "$supply/online" || true)
-    status=$([[ -r "$supply/status" ]] && cat "$supply/status" || true)
-    case "$type" in
-      Mains) [[ "$online" == 1 ]] && { printf '1\n'; return 0; } ;;
-      USB|USB_C|USB_PD|Wireless) [[ "$scope" == System && ( "$online" == 1 || "$status" == Charging ) ]] && { printf '1\n'; return 0; } ;;
-      Battery) [[ "$status" == Charging || "$status" == Full ]] && { printf '1\n'; return 0; } ;;
-    esac
-  done
-  printf '0\n'
-}
-
 wallpaper_for() {
-  local theme=$1 mode=$2 line name accent desc bg fg static plugged bright
+  local theme=$1 mode=$2 line name accent desc bg fg static bright _
   line=$(awk -F '\t' -v name="$theme" '($0 !~ /^#/ && $1 == name) { print; found=1; exit } END { exit found ? 0 : 1 }' "$THEMES_FILE") || return 1
-  IFS=$'\t' read -r name accent desc bg fg static plugged bright _ <<< "$line"
+  IFS=$'\t' read -r name accent desc bg fg static bright _ <<< "$line"
   case "$mode" in
-    plugged) printf '%s\n' "$plugged" ;;
-    unplugged) printf '%s\n' "$static" ;;
-    auto) [[ "$(is_powered)" == 1 ]] && printf '%s\n' "$plugged" || printf '%s\n' "$static" ;;
+    static|plugged|unplugged|auto|"") printf '%s\n' "$static" ;;
     *) return 2 ;;
   esac
 }
@@ -119,9 +100,8 @@ apply_wallpaper() {
   pkill -xu "$USER" swww-daemon >/dev/null 2>&1 || true
   pkill -xu "$USER" awww-daemon >/dev/null 2>&1 || true
 
-  # Plugged mode: mpvpaper is the only backend that works reliably here for
-  # animation. Run it alone; hyprpaper covers it when both are active.
-  if [[ "$mode" != "unplugged" ]] && video=$(video_for "$wp"); then
+  # If wallpaper has a video companion, use mpvpaper; static fallback stays via hyprpaper.
+  if video=$(video_for "$wp"); then
     stop_video_wallpaper
     pkill -xu "$USER" hyprpaper >/dev/null 2>&1 || true
     if start_video_wallpaper "$video"; then

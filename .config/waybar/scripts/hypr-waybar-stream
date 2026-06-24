@@ -9,6 +9,7 @@ import time
 
 
 MODE = sys.argv[1] if len(sys.argv) > 1 else "window"
+WORKSPACE_ID = int(sys.argv[2]) if MODE == "workspace" and len(sys.argv) > 2 else None
 EVENTS = {
     "window": {
         "activewindow",
@@ -35,6 +36,7 @@ EVENTS = {
         "movewindow",
     },
 }
+EVENTS["workspace"] = EVENTS["workspaces"]
 
 ICONS = {
     7: "X",
@@ -146,8 +148,33 @@ def render_workspaces():
     emit({"text": "".join(parts), "tooltip": tooltip, "class": "active"})
 
 
+def render_workspace():
+    active = hypr_json("activeworkspace") or {}
+    workspaces = hypr_json("workspaces") or []
+    active_id = active.get("id")
+    ws = next((item for item in workspaces if item.get("id") == WORKSPACE_ID), {})
+    occupied = ws.get("windows", 0) > 0
+    label = ICONS.get(WORKSPACE_ID, str(WORKSPACE_ID))
+
+    if WORKSPACE_ID == active_id:
+        text = workspace_label(label, "■" if occupied else None, "#eeeeee", "#5f5f87")
+        css_class = ["active", "occupied" if occupied else "empty"]
+    elif occupied:
+        text = workspace_label(label, "□", "#eeeeee")
+        css_class = ["occupied"]
+    else:
+        text = workspace_label(label, None, "#666666")
+        css_class = ["empty"]
+
+    title = clean(ws.get("lastwindowtitle"))
+    tooltip = f"{WORKSPACE_ID}: {title}" if title else f"{WORKSPACE_ID}"
+    emit({"text": text, "tooltip": tooltip, "class": css_class})
+
+
 def render():
-    if MODE == "workspaces":
+    if MODE == "workspace":
+        render_workspace()
+    elif MODE == "workspaces":
         render_workspaces()
     else:
         render_window()

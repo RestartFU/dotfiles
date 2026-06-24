@@ -242,23 +242,6 @@ THEME
 }
 
 
-is_powered() {
-  local supply type scope online status
-  for supply in /sys/class/power_supply/*; do
-    [[ -r "$supply/type" ]] || continue
-    type=$(<"$supply/type")
-    scope=$([[ -r "$supply/scope" ]] && cat "$supply/scope" || true)
-    online=$([[ -r "$supply/online" ]] && cat "$supply/online" || true)
-    status=$([[ -r "$supply/status" ]] && cat "$supply/status" || true)
-    case "$type" in
-      Mains) [[ "$online" == 1 ]] && { printf '1\n'; return 0; } ;;
-      USB|USB_C|USB_PD|Wireless) [[ "$scope" == System && ( "$online" == 1 || "$status" == Charging ) ]] && { printf '1\n'; return 0; } ;;
-      Battery) [[ "$status" == Charging || "$status" == Full ]] && { printf '1\n'; return 0; } ;;
-    esac
-  done
-  printf '0\n'
-}
-
 sync_wallpaper() {
   local wallpaper=$1 accent=$2 name=${3:-}
   if [[ -x "$HOME/.config/hypr/scripts/theme-wallpaper" && -n "$name" ]]; then
@@ -290,17 +273,16 @@ live_hypr_theme() {
 }
 
 apply_theme() {
-  local mode=${2:-commit} line name accent desc bg fg static_wallpaper plugged_wallpaper bright wallpaper r g b
+  local mode=${2:-commit} line name accent desc bg fg static_wallpaper bright wallpaper r g b
   line=$(theme_line "$1") || {
     printf 'unknown theme: %s\n' "$1" >&2
     exit 1
   }
-  IFS=$'\t' read -r name accent desc bg fg static_wallpaper plugged_wallpaper bright _ <<< "$line"
+  IFS=$'\t' read -r name accent desc bg fg static_wallpaper bright _ <<< "$line"
   bg=${bg:-222222}
   fg=${fg:-eeeeee}
   static_wallpaper=${static_wallpaper:-}
-  plugged_wallpaper=${plugged_wallpaper:-$static_wallpaper}
-  wallpaper=$([[ "$(is_powered)" == 1 ]] && printf %s "$plugged_wallpaper" || printf %s "$static_wallpaper")
+  wallpaper=$static_wallpaper
   bright=${bright:-$accent}
   read -r r g b < <(hex_to_rgb "$accent")
 
@@ -319,7 +301,6 @@ apply_theme() {
 \$theme_fg_hex = $fg
 \$theme_wallpaper = $wallpaper
 \$theme_static_wallpaper = $static_wallpaper
-\$theme_plugged_wallpaper = $plugged_wallpaper
 THEME
   fi
 

@@ -112,11 +112,10 @@ case "${1:-}" in
     if (( now - last < 3 )); then exit 0; fi
     printf '%s
 ' "$now" > "$stamp"
-    /home/restart/.config/hypr/scripts/theme-wallpaper plugged >/dev/null 2>&1 || true
     "$0" plugged-in
     ;;
   unplugged-waybar)
-    /home/restart/.config/hypr/scripts/theme-wallpaper unplugged >/dev/null 2>&1 || true
+    :
     ;;
   screenshot)
     run_swayosd --custom-message "${2:-Screenshot}" --custom-icon camera-photo-symbolic --custom-progress 1.0 --custom-progress-text "${3:-saved + copied}" || fallback_hypr_notify "${2:-Screenshot}" "${3:-saved + copied}"
