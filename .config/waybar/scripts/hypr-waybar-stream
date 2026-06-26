@@ -37,6 +37,8 @@ EVENTS = {
     },
 }
 EVENTS["workspace"] = EVENTS["workspaces"]
+STYLE_FILE = os.path.expanduser("~/.config/waybar/style.css")
+DEFAULT_ACCENT = "#5f5f87"
 
 ICONS = {
     7: "X",
@@ -59,6 +61,16 @@ ICONS = {
 
 
 def emit(payload):
+    payload = dict(payload)
+    css_class = payload.get("class")
+    if isinstance(css_class, (list, tuple)):
+        payload["class"] = " ".join(
+            str(item).strip()
+            for item in css_class
+            if str(item).strip()
+        ).strip()
+    elif css_class is None:
+        payload["class"] = "inactive"
     print(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), flush=True)
 
 
@@ -77,6 +89,21 @@ def hypr_json(*args):
 
 def clean(value):
     return " ".join(str(value or "").split())
+
+
+def theme_accent():
+    try:
+        with open(STYLE_FILE, "r", encoding="utf-8") as fp:
+            for line in fp:
+                stripped = line.strip()
+                if stripped.startswith("@define-color col_cyan"):
+                    _, value = stripped.split("#", 1)
+                    accent = value.split(";", 1)[0].strip()
+                    if accent:
+                        return f"#{accent.lower()}"
+    except Exception:
+        pass
+    return DEFAULT_ACCENT
 
 
 def render_window():
@@ -132,7 +159,7 @@ def render_workspaces():
         label = ICONS.get(ws_id, str(ws_id))
         if ws_id == active_id:
             marker = "■" if ws_id in occupied else None
-            parts.append(workspace_label(label, marker, "#eeeeee", "#5f5f87"))
+            parts.append(workspace_label(label, marker, "#eeeeee", theme_accent()))
         elif ws_id in urgent:
             parts.append(span(label, "#eeeeee", "#cc3333"))
         elif ws_id in occupied:
@@ -157,7 +184,7 @@ def render_workspace():
     label = ICONS.get(WORKSPACE_ID, str(WORKSPACE_ID))
 
     if WORKSPACE_ID == active_id:
-        text = workspace_label(label, "■" if occupied else None, "#eeeeee", "#5f5f87")
+        text = workspace_label(label, "■" if occupied else None, "#eeeeee", theme_accent())
         css_class = ["active", "occupied" if occupied else "empty"]
     elif occupied:
         text = workspace_label(label, "□", "#eeeeee")
@@ -172,12 +199,21 @@ def render_workspace():
 
 
 def render():
-    if MODE == "workspace":
-        render_workspace()
-    elif MODE == "workspaces":
-        render_workspaces()
-    else:
-        render_window()
+    try:
+        if MODE == "workspace":
+            render_workspace()
+        elif MODE == "workspaces":
+            render_workspaces()
+        else:
+            render_window()
+    except Exception:
+        emit(
+            {
+                "text": "ERR",
+                "tooltip": "custom module render failed",
+                "class": "error",
+            }
+        )
 
 
 def event_socket_path():
