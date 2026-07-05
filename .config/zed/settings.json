@@ -42,7 +42,7 @@
       ]
     }
   ],
-  "icon_theme": "Catppuccin Frappé",
+  "icon_theme": "Material Icon Theme",
   "cli_default_open_behavior": "existing_window",
   "pane_split_direction_vertical": "left",
   "project_panel": {
