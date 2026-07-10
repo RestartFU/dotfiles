@@ -1,8 +1,11 @@
 [
   {
-    "context": "VimControl && !VimWaiting && !menu",
+    "context": "Terminal",
     "bindings": {
-      "space s": "workspace::Save"
+      "shift-enter": [
+        "terminal::SendText",
+        "\u001b\r"
+      ]
     }
   }
 ]

@@ -1,35 +1,9 @@
-#
-# ~/.bashrc
-#
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
-
-term="$(cat /proc/$PPID/comm)"
-if [[ $term = "st" ]]; then
-  transset "0.8" --id "$WINDOWID" >/dev/null
-fi
-
-export PATH=$HOME/.local/bin:$PATH
-export PATH="$HOME/.go/bin:$PATH"
-
+export PATH="/home/danick/.local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$PATH"
 alias claude='claude --dangerously-skip-permissions'
-alias cpy='xclip -selection clipboard'
-alias frequent_startx='MODE=monitor ENV=laptop startx'
-alias headset='bluetoothctl connect F8:73:DF:1F:4B:63'
-alias ls='ls --color=auto'
-alias dyn='sudo dyn'
-alias grep='grep --color=auto'
+alias codex='codex --dangerously-bypass-approvals-and-sandbox'
+alias config='sudo nano /etc/nixos/configuration.nix'
+alias rebuild='sudo nixos-rebuild switch'
 alias gi='~/.tools/gitinclude'
 alias udf='~/.tools/udf'
-alias pacman='sudo pacman'
-alias cargo='CARGO_NET_GIT_FETCH_WITH_CLI=true cargo'
-alias reboot='sudo reboot'
-
-PS1='\[\e[38;5;214m\]re\[\e[38;5;208m\]st\[\e[38;5;202m\]art\[\e[0m\] \[\e[38;5;39m\]\w\[\e[0m\] \[\e[38;5;220m\]➜\[\e[0m\] '
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/.local/share/gem/ruby/3.4.0/bin:$PATH"

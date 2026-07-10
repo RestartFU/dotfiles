@@ -1,8 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-while read p; do
+while IFS= read -r p; do
+  [[ -z "$p" || "$p" == \#* ]] && continue
+
+  if [[ ! -e "$p" && ! -L "$p" ]]; then
+    echo "gitinclude: skip missing $p"
+    continue
+  fi
+
   echo "gitinclude: $p"
-  rm -rf $p/.git >/dev/null 2>&1
-  git rm -f -r --cached $p >/dev/null 2>&1
-  git add -f $p 
-done < $(realpath ./.gitinclude)
+  rm -rf -- "$p/.git" >/dev/null 2>&1
+  git rm -f -r --cached --ignore-unmatch -- "$p" >/dev/null 2>&1
+  git add -f -- "$p"
+done < "$(realpath -- ./.gitinclude)"
