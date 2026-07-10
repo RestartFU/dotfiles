@@ -1,13 +1,13 @@
-[url "ssh://git@github.com/"]
-	insteadOf = https://github.com/
-[credential]
-	helper = store
 [credential "https://github.com"]
 	helper = 
-	helper = !/usr/bin/gh auth git-credential
+	helper = !/nix/store/vf6m180x1k2ln1ydhr7bkl8z2wxkrql6-gh-2.93.0/bin/.gh-wrapped auth git-credential
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !/usr/bin/gh auth git-credential
+	helper = !/nix/store/vf6m180x1k2ln1ydhr7bkl8z2wxkrql6-gh-2.93.0/bin/.gh-wrapped auth git-credential
 [user]
-	email = me@restartfu.com
+	email = github@restartfu.com
 	name = RestartFU
+[push]
+	autoSetupRemote = true
+[safe]
+	directory = /home/danick/Projects/Personnal/zeno/practice
