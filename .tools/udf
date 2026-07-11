@@ -40,6 +40,15 @@ mapfile -t include_paths < <(
     '
 )
 
+mapfile -t external_paths < <(
+  sed -e 's/[[:space:]]*$//' "$include_file" |
+    awk -v root="$HOME/" '
+      NF && $1 !~ /^#/ && substr($0, 1, 1) == "/" && index($0, root) != 1 {
+        print substr($0, 2)
+      }
+    '
+)
+
 if [[ ${#include_paths[@]} -eq 0 ]]; then
   echo "No paths in $include_file" >&2
   exit 1
@@ -110,3 +119,11 @@ fi
 echo "Commit: $commit_message"
 git commit -m "$commit_message"
 git push
+
+for path in "${external_paths[@]}"; do
+  mapfile -d '' -t tracked_files < <(git ls-files -z -- "$path")
+  if [[ ${#tracked_files[@]} -gt 0 ]]; then
+    git update-index --skip-worktree -- "${tracked_files[@]}"
+  fi
+  rm -rf -- "$HOME/$path"
+done

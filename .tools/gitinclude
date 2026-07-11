@@ -30,6 +30,11 @@ while IFS= read -r p; do
     cp -a -- "$source_path" "$destination"
   fi
 
+  mapfile -d '' -t tracked_files < <(git ls-files -z -- "$target_path")
+  if [[ ${#tracked_files[@]} -gt 0 ]]; then
+    git update-index --no-skip-worktree -- "${tracked_files[@]}"
+  fi
+
   echo "gitinclude: $target_path"
   rm -rf -- "$repo_root/$target_path/.git" >/dev/null 2>&1
   git rm -f -r --cached --ignore-unmatch -- "$target_path" >/dev/null 2>&1
