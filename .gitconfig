@@ -1,9 +1,9 @@
 [credential "https://github.com"]
 	helper = 
-	helper = !/nix/store/vf6m180x1k2ln1ydhr7bkl8z2wxkrql6-gh-2.93.0/bin/.gh-wrapped auth git-credential
+	helper = !/nix/store/zmby710xkfnzpq1wq3zxgp044724zwwb-gh-2.96.0/bin/.gh-wrapped auth git-credential
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !/nix/store/vf6m180x1k2ln1ydhr7bkl8z2wxkrql6-gh-2.93.0/bin/.gh-wrapped auth git-credential
+	helper = !/nix/store/zmby710xkfnzpq1wq3zxgp044724zwwb-gh-2.96.0/bin/.gh-wrapped auth git-credential
 [user]
 	email = github@restartfu.com
 	name = RestartFU

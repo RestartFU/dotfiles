@@ -25,7 +25,19 @@ fi
 
 mapfile -t include_paths < <(
   sed -e 's/[[:space:]]*$//' "$include_file" |
-    awk 'NF && $1 !~ /^#/ { print }'
+    awk -v root="$HOME/" '
+      NF && $1 !~ /^#/ {
+        if (substr($0, 1, 1) == "/") {
+          if (index($0, root) == 1) {
+            print substr($0, length(root) + 1)
+          } else {
+            print substr($0, 2)
+          }
+        } else {
+          print
+        }
+      }
+    '
 )
 
 if [[ ${#include_paths[@]} -eq 0 ]]; then

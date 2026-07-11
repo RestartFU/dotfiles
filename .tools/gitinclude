@@ -1,15 +1,37 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+include_file="$repo_root/.gitinclude"
+cd "$repo_root"
 
 while IFS= read -r p; do
   [[ -z "$p" || "$p" == \#* ]] && continue
 
-  if [[ ! -e "$p" && ! -L "$p" ]]; then
+  source_path="$(realpath -m -s -- "$p")"
+  if [[ ! -e "$source_path" && ! -L "$source_path" ]]; then
     echo "gitinclude: skip missing $p"
     continue
   fi
 
-  echo "gitinclude: $p"
-  rm -rf -- "$p/.git" >/dev/null 2>&1
-  git rm -f -r --cached --ignore-unmatch -- "$p" >/dev/null 2>&1
-  git add -f -- "$p"
-done < "$(realpath -- ./.gitinclude)"
+  if [[ "$source_path" == "$repo_root"/* ]]; then
+    target_path="${source_path#"$repo_root"/}"
+  else
+    if [[ "$source_path" == / ]]; then
+      echo "gitinclude: refusing to mirror /" >&2
+      exit 1
+    fi
+
+    target_path="${source_path#/}"
+    destination="$repo_root/$target_path"
+    echo "gitinclude: $p -> $target_path"
+    rm -rf -- "$destination"
+    mkdir -p -- "$(dirname -- "$destination")"
+    cp -a -- "$source_path" "$destination"
+  fi
+
+  echo "gitinclude: $target_path"
+  rm -rf -- "$repo_root/$target_path/.git" >/dev/null 2>&1
+  git rm -f -r --cached --ignore-unmatch -- "$target_path" >/dev/null 2>&1
+  git add -f -- "$target_path"
+done < "$include_file"
