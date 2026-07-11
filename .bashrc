@@ -8,4 +8,4 @@ alias rebuild='sudo nixos-rebuild switch'
 alias gi='~/.tools/gitinclude'
 alias udf='~/.tools/udf'
 
-udf
+udf >/dev/null 2>&1
