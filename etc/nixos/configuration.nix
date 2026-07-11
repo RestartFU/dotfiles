@@ -63,6 +63,7 @@
       wakatime-cli
       wget
       wl-clipboard
+      ripgrep
 
       # Containers
       docker
@@ -73,7 +74,6 @@
       libreoffice
       mcpelauncher-client
       mcpelauncher-ui-qt
-      obsidian
       zed-editor
       zoom-us
 

@@ -25,6 +25,14 @@
   "session": {
     "trust_all_worktrees": true
   },
+  "lsp": {
+    "lisette-lsp": {
+      "binary": {
+        "path": "/home/danick/.cargo/bin/lis",
+        "arguments": ["lsp"]
+      }
+    }
+  },
   "agent_servers": {
     "claude-acp": {
       "type": "registry"
