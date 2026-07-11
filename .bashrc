@@ -7,3 +7,5 @@ alias config='sudo nano /etc/nixos/configuration.nix'
 alias rebuild='sudo nixos-rebuild switch'
 alias gi='~/.tools/gitinclude'
 alias udf='~/.tools/udf'
+
+udf
