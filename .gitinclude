@@ -10,7 +10,8 @@
 .codex/hooks/
 .claude/hooks/
 .codex/agents/
-.codex/skills
+.codex/skills/
+.claude/skills/
 .agents/
 .config/hypr/
 .config/waybar/
