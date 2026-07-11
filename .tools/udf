@@ -126,4 +126,10 @@ for path in "${external_paths[@]}"; do
     git update-index --skip-worktree -- "${tracked_files[@]}"
   fi
   rm -rf -- "$HOME/$path"
+
+  parent="$(dirname -- "$HOME/$path")"
+  while [[ "$parent" != "$HOME" && "$parent" == "$HOME/"* ]]; do
+    rmdir -- "$parent" 2>/dev/null || break
+    parent="$(dirname -- "$parent")"
+  done
 done
