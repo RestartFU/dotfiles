@@ -11,3 +11,5 @@
 	autoSetupRemote = true
 [safe]
 	directory = /home/danick/Projects/Personnal/zeno/practice
+[url "git@github.com:"]
+	insteadOf = https://github.com/
