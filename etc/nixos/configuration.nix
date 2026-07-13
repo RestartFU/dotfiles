@@ -43,6 +43,7 @@
       clang
       gcc
       git
+      android-tools
       github-cli
       gnumake
       go
