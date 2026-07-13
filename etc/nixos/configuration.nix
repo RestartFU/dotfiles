@@ -15,7 +15,7 @@
   networking = {
     hostName = "nixos";
     networkmanager.enable = true;
-    firewall.allowedUDPPorts = [ 19132 ];
+    firewall.allowedUDPPorts = [ 5353 19132 ];
   };
 
   time.timeZone = "America/New_York";
