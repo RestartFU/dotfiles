@@ -1,45 +1,59 @@
 // Zed settings
-//
-// For information on how to configure Zed, see the Zed
-// documentation: https://zed.dev/docs/configuring-zed
-//
-// To see all of Zed's default settings without changing your
-// custom settings, run `zed: open default settings` from the
-// command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "ssh_connections": [
+    {
+      "host": "zenomc.org",
+      "username": "restart",
+      "args": [],
+      "projects": [
+        {
+          "paths": ["/home/restart"],
+        },
+        {
+          "paths": ["/home/restart/projects/goplus"],
+        },
+        {
+          "paths": ["/home/restart/projects/practice"],
+        },
+      ],
+    },
+  ],
+  "git_panel": {
+    "dock": "right",
+  },
   "icon_theme": {
     "mode": "system",
     "light": "Colored Zed Icons Theme Light",
-    "dark": "Colored Zed Icons Theme Dark"
+    "dark": "Colored Zed Icons Theme Dark",
   },
   "agent": {
     "dock": "right",
     "sidebar_side": "right",
     "favorite_models": [],
-    "model_parameters": []
+    "model_parameters": [],
   },
   "project_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "cli_default_open_behavior": "existing_window",
   "session": {
-    "trust_all_worktrees": true
+    "trust_all_worktrees": true,
   },
   "lsp": {
     "lisette-lsp": {
       "binary": {
         "path": "/home/danick/.cargo/bin/lis",
-        "arguments": ["lsp"]
-      }
-    }
+        "arguments": ["lsp"],
+      },
+    },
   },
   "agent_servers": {
     "claude-acp": {
-      "type": "registry"
+      "type": "registry",
     },
     "codex-acp": {
-      "type": "registry"
-    }
+      "type": "registry",
+    },
   },
   "base_keymap": "VSCode",
   "ui_font_size": 16,

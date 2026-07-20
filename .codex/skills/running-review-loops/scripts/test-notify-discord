@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+NOTIFIER="$SCRIPT_DIR/notify-discord"
+
+fail() {
+  printf 'FAIL: %s\n' "$1" >&2
+  exit 1
+}
+
+output=$(
+  "$NOTIFIER" \
+    --dry-run \
+    --status approved \
+    --where 'owner/repo#42 @ abc1234' \
+    --why 'CodeRabbit and Codex approved final revision' \
+    --context $'Fixed quote "bug"\nand newline'
+)
+
+python - "$output" <<'PY'
+import json
+import sys
+
+payload = json.loads(sys.argv[1])
+assert payload["content"] == "<@1423317728646926437>"
+embed = payload["embeds"][0]
+assert embed["title"] == "Review Approved"
+assert embed["color"] == 0x57F287
+fields = {field["name"]: field["value"] for field in embed["fields"]}
+assert fields["Status"] == "Approved"
+assert fields["Where"] == "owner/repo#42 @ abc1234"
+assert fields["Why stopping"] == "CodeRabbit and Codex approved final revision"
+assert fields["Context"] == 'Fixed quote "bug"\nand newline'
+assert "1423317728646926437" not in json.dumps(embed)
+assert payload["allowed_mentions"] == {"users": ["1423317728646926437"]}
+PY
+
+if "$NOTIFIER" --dry-run --status blocked --where x --context y 2>/dev/null; then
+  fail 'missing --why unexpectedly succeeded'
+fi
+
+long_context=$(python - <<'PY'
+print("summary " + "x" * 3000 + " NEXT-ACTION: inspect failed check 42")
+PY
+)
+long_output=$(
+  "$NOTIFIER" \
+    --dry-run \
+    --status blocked \
+    --where 'tests' \
+    --why 'context truncation check' \
+    --context "$long_context"
+)
+python - "$long_output" <<'PY'
+import json
+import sys
+
+embed = json.loads(sys.argv[1])["embeds"][0]
+fields = {field["name"]: field["value"] for field in embed["fields"]}
+assert fields["Why stopping"] == "context truncation check"
+assert fields["Context"].startswith("summary ")
+assert fields["Context"].endswith("NEXT-ACTION: inspect failed check 42")
+assert len(fields["Context"]) <= 1024
+PY
+
+printf 'PASS: notify-discord contract\n'

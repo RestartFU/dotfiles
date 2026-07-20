@@ -35,11 +35,21 @@
     };
   };
 
+  services.syncthing = {
+    enable = true;
+    user = "danick";
+    dataDir = "/home/danick";
+    configDir = "/home/danick/.config/syncthing";
+
+    openDefaultPorts = true;
+  };
+
   environment = {
     sessionVariables.GTK_THEME = "Adwaita:dark";
 
     systemPackages = with pkgs; [
       # Development toolchains and libraries
+      rustup
       clang
       gcc
       git
@@ -47,6 +57,7 @@
       github-cli
       gnumake
       go
+      dotnet-sdk_10
       nodejs_22
       openssl
       pkg-config
@@ -64,6 +75,7 @@
       wget
       wl-clipboard
       ripgrep
+      unzip
 
       # Containers
       docker
@@ -72,6 +84,7 @@
 
       # Desktop applications
       libreoffice
+      jetbrains.rider
       mcpelauncher-client
       mcpelauncher-ui-qt
       zed-editor
@@ -80,6 +93,7 @@
       # Communication
       discord
       geary
+      obs-studio
 
       # AI development tools
       claude-code
@@ -120,6 +134,7 @@
     description = "Danick Lachapelle";
     extraGroups = [
       "docker"
+      "input"
       "networkmanager"
       "wheel"
     ];

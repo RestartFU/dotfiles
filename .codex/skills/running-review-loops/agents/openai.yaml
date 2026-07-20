@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Until Approved"
+  short_description: "Run review loops and notify on terminal stops"
+  default_prompt: "Use $running-review-loops to iterate until CodeRabbit and Codex approve, then notify me."

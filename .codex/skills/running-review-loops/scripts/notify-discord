@@ -1,0 +1,212 @@
+#!/usr/bin/env python3
+"""Send one bounded Discord stop notification without exposing webhook credentials."""
+
+from __future__ import annotations
+
+import argparse
+from datetime import datetime, timezone
+import json
+import math
+import os
+from pathlib import Path
+import sys
+import time
+from urllib.error import HTTPError, URLError
+from urllib.parse import parse_qsl, urlencode, urlparse, urlsplit, urlunsplit
+from urllib.request import Request, urlopen
+
+
+USER_ID = "1423317728646926437"
+MAX_RATE_LIMIT_WAIT = 30.0
+MIN_RATE_LIMIT_WAIT = 0.25
+STATUS_STYLES = {
+    "approved": ("Review Approved", 0x57F287),
+    "completed": ("Task Completed", 0x57F287),
+    "blocked": ("Work Blocked", 0xFEE75C),
+    "failed": ("Task Failed", 0xED4245),
+    "cancelled": ("Task Cancelled", 0x95A5A6),
+    "test": ("Notification Test", 0x5865F2),
+}
+
+
+def config_root() -> Path:
+    configured = os.environ.get("XDG_CONFIG_HOME")
+    if configured:
+        path = Path(configured)
+        if path.is_absolute():
+            return path
+    return Path.home() / ".config"
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--status", required=True)
+    parser.add_argument("--where", required=True)
+    parser.add_argument("--why", required=True)
+    parser.add_argument("--context", required=True)
+    parser.add_argument(
+        "--webhook-file",
+        type=Path,
+        default=config_root() / "codex" / "review-loop-webhook-url",
+        help="file containing only the Discord webhook URL",
+    )
+    parser.add_argument("--dry-run", action="store_true")
+    return parser.parse_args()
+
+
+def clip_middle(value: str, limit: int) -> str:
+    if len(value) <= limit:
+        return value
+    marker = " ... "
+    remaining = limit - len(marker)
+    head = remaining // 2
+    tail = remaining - head
+    return value[:head] + marker + value[-tail:]
+
+
+def field_value(value: str, limit: int = 1024) -> str:
+    return clip_middle(value.strip() or "Not provided", limit)
+
+
+def make_payload(args: argparse.Namespace) -> dict[str, object]:
+    status_key = args.status.strip().lower().replace(" ", "_")
+    title, color = STATUS_STYLES.get(status_key, ("Task Update", 0x5865F2))
+    return {
+        "content": f"<@{USER_ID}>",
+        "allowed_mentions": {"users": [USER_ID]},
+        "embeds": [
+            {
+                "title": title,
+                "color": color,
+                "fields": [
+                    {
+                        "name": "Status",
+                        "value": field_value(args.status).replace("_", " ").title(),
+                        "inline": True,
+                    },
+                    {"name": "Where", "value": field_value(args.where), "inline": False},
+                    {
+                        "name": "Why stopping",
+                        "value": field_value(args.why),
+                        "inline": False,
+                    },
+                    {
+                        "name": "Context",
+                        "value": field_value(args.context),
+                        "inline": False,
+                    },
+                ],
+                "footer": {"text": "Codex Review Loop"},
+                "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            }
+        ],
+    }
+
+
+def load_webhook(path: Path) -> str:
+    try:
+        webhook = path.read_text(encoding="utf-8").strip()
+    except OSError as exc:
+        raise RuntimeError(f"cannot read webhook credential file {path}: {exc.strerror}") from exc
+
+    parsed = urlparse(webhook)
+    if (
+        parsed.scheme != "https"
+        or parsed.hostname not in {"discord.com", "canary.discord.com", "ptb.discord.com"}
+        or not parsed.path.startswith("/api/webhooks/")
+    ):
+        raise RuntimeError(f"invalid Discord webhook credential in {path}")
+    return webhook
+
+
+def retry_delay(exc: HTTPError, attempt: int) -> float:
+    header = exc.headers.get("Retry-After") if exc.headers else None
+    if header is not None:
+        try:
+            return float(header)
+        except ValueError:
+            pass
+    if exc.code == 429:
+        try:
+            body = json.loads(exc.read().decode("utf-8"))
+            return float(body.get("retry_after", attempt + 1))
+        except (OSError, UnicodeDecodeError, ValueError, TypeError, json.JSONDecodeError):
+            return float(attempt + 1)
+    return float(attempt + 1)
+
+
+def confirmed_webhook_url(webhook: str) -> str:
+    parts = urlsplit(webhook)
+    query = dict(parse_qsl(parts.query, keep_blank_values=True))
+    query["wait"] = "true"
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
+
+
+def send(webhook: str, payload: dict[str, object]) -> None:
+    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+    request = Request(
+        confirmed_webhook_url(webhook),
+        data=body,
+        headers={"Content-Type": "application/json", "User-Agent": "CodexReviewLoop/1.0"},
+        method="POST",
+    )
+
+    for attempt in range(3):
+        try:
+            with urlopen(request, timeout=15) as response:
+                if not 200 <= response.status < 300:
+                    raise RuntimeError(f"Discord webhook returned HTTP {response.status}")
+                try:
+                    message = json.loads(response.read().decode("utf-8"))
+                except (UnicodeDecodeError, ValueError, json.JSONDecodeError) as exc:
+                    raise RuntimeError(
+                        "Discord response invalid; delivery outcome unknown and was not retried"
+                    ) from exc
+                if not isinstance(message, dict) or not message.get("id"):
+                    raise RuntimeError(
+                        "Discord response lacked message id; delivery outcome unknown and was not retried"
+                    )
+                return
+        except HTTPError as exc:
+            if exc.code != 429:
+                if 500 <= exc.code < 600:
+                    raise RuntimeError(
+                        f"Discord returned HTTP {exc.code}; delivery outcome unknown and was not retried"
+                    ) from exc
+                raise RuntimeError(f"Discord rejected webhook with HTTP {exc.code}") from exc
+            delay = retry_delay(exc, attempt)
+            if not math.isfinite(delay):
+                raise RuntimeError("Discord returned an invalid retry interval") from exc
+            delay = max(delay, MIN_RATE_LIMIT_WAIT)
+            if delay > MAX_RATE_LIMIT_WAIT:
+                raise RuntimeError(
+                    f"Discord requested retry after {delay} seconds; notification was not retried"
+                ) from exc
+            if attempt == 2:
+                raise RuntimeError("Discord rate limit persisted after 3 attempts") from exc
+            time.sleep(delay)
+        except URLError as exc:
+            raise RuntimeError(
+                f"Discord connection failed ({exc.reason}); delivery outcome unknown and was not retried"
+            ) from exc
+
+
+def main() -> int:
+    args = parse_args()
+    payload = make_payload(args)
+    if args.dry_run:
+        print(json.dumps(payload, ensure_ascii=False))
+        return 0
+
+    try:
+        send(load_webhook(args.webhook_file), payload)
+    except RuntimeError as exc:
+        print(f"notify-discord: {exc}", file=sys.stderr)
+        return 1
+
+    print("Discord notification sent.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

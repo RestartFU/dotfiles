@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SKILL_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+SKILL="$SKILL_DIR/SKILL.md"
+
+require() {
+  local pattern=$1
+  rg -qi -- "$pattern" "$SKILL" || {
+    printf 'FAIL: SKILL.md missing contract pattern: %s\n' "$pattern" >&2
+    exit 1
+  }
+}
+
+require 'review loop|until (clean|approved)|reviewing and fixing'
+require 'notify me|ping me|alert me'
+require 'CodeRabbit'
+require 'request_changes_workflow'
+require 'default.*false|false.*default'
+require 'configuration blocker|blocked.*config'
+require 'analysis.*complet|complet.*analysis'
+require 'approval alone|approval.*not.*evidence|not merely approval'
+require 'Codex'
+require '@codex review'
+require 'already (running|in progress)|in-flight|duplicate.*review'
+require 'thumbs up|\+1'
+require 'thumbs down|-1'
+require 'reply'
+require 'resolve.*thread|thread.*resolve'
+require 'exact.*(SHA|revision)|same.*(SHA|revision)'
+require 'any (code )?change.*invalidates|invalidate.*approval'
+require 'Why stopping'
+require 'blocked|failed|cancelled'
+require 'notify-discord'
+require 'standing.*opt-in|opt-in.*standing'
+require 'no code|never.*code'
+require 'secret'
+
+if rg -q 'autoreview' "$SKILL"; then
+  printf 'FAIL: local autoreview used as Codex GitHub gate\n' >&2
+  exit 1
+fi
+
+if rg -q 'discord\.com/api/webhooks/' "$SKILL" "$SKILL_DIR/scripts/notify-discord"; then
+  printf 'FAIL: webhook credential embedded inside skill\n' >&2
+  exit 1
+fi
+
+printf 'PASS: skill contract\n'

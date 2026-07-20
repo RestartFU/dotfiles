@@ -9,7 +9,13 @@ alias gi='~/.tools/gitinclude'
 alias udf='~/.tools/udf'
 
 killport() {
-	if [[ $# -ne 1 || ! $1 =~ ^[0-9]+$ || $1 -lt 1 || $1 -gt 65535 ]]; then
+	if [[ $# -ne 1 || ! $1 =~ ^[0-9]{1,5}$ ]]; then
+		echo "Usage: killport <port (1-65535)>" >&2
+		return 2
+	fi
+
+	local port=$((10#$1))
+	if ((port < 1 || port > 65535)); then
 		echo "Usage: killport <port (1-65535)>" >&2
 		return 2
 	fi
@@ -17,16 +23,17 @@ killport() {
 	local -a pids
 	mapfile -t pids < <(
 		{
-			lsof -nP -t -iTCP:"$1" -sTCP:LISTEN 2>/dev/null
-			lsof -nP -t -iUDP:"$1" 2>/dev/null
+			lsof -nP -t -iTCP:"$port" -sTCP:LISTEN 2>/dev/null || true
+			lsof -nP -t -iUDP:"$port" 2>/dev/null || true
 		} | sort -u
 	)
 	if ((${#pids[@]} == 0)); then
-		echo "No process found using port $1" >&2
+		echo "No process found using port $port" >&2
 		return 1
 	fi
 
 	kill -TERM -- "${pids[@]}"
 }
 
-udf >/dev/null 2>&1 &
+# Track interactive terminal activity in WakaTime.
+source "$HOME/.local/share/bash-wakatime/bash-wakatime.sh"
