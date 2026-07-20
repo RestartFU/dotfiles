@@ -5,6 +5,10 @@
     ./hardware-configuration.nix
   ];
 
+  nixpkgs.overlays = [
+    (import ./mcpelauncher-overlay.nix)
+  ];
+
   boot = {
     loader = {
       systemd-boot.enable = true;

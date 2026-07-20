@@ -1,0 +1,5 @@
+# This directory is a Syncthing folder marker.
+# Do not delete.
+
+folderID: agent-configs-sync
+created: 2026-07-20T14:53:47-04:00

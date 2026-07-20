@@ -1,4 +1,6 @@
 /etc/nixos/configuration.nix
+/etc/nixos/mcpelauncher-overlay.nix
+/etc/nixos/mcpelauncher-client-1.7.6-glfw.patch
 .gitinclude
 .gitconfig
 .bashrc
@@ -7,10 +9,6 @@
 .config/zed/
 .config/gtk-3.0/
 .config/gtk-4.0/
-.config/dconf/
-.config/monitors.xml
-.config/mimeapps.list
-.local/share/gnome-shell/extensions/
 .codex/hooks/
 .claude/hooks/
 .codex/agents/
