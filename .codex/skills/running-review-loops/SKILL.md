@@ -11,13 +11,13 @@ Review and fix the scoped PR until CodeRabbit and Codex on GitHub clear the same
 
 Interpret “notify me,” “ping me,” and “alert me” as a Discord webhook request. Notification must say where work stopped, why it is stopping, and enough context to act.
 
-**REQUIRED SUB-SKILL:** Use `github:gh-address-comments` for GitHub review-thread reads, replies, and individual resolution.
+Use `github:gh-address-comments` for GitHub review-thread reads, replies, and individual resolution when installed. Otherwise use authenticated `gh`: REST for reactions/replies and GraphQL `resolveReviewThread` for individual resolution.
 
 ## Loop
 
 1. Freeze original scope, repository, PR, base, current head SHA, changed files, and acceptance checks.
 2. Require an existing pushed GitHub PR. Review-loop authority permits in-scope fixes, normal commits/pushes to its branch, reviewer reactions/replies/thread resolution, and review-trigger comments. It does not permit PR creation/merge, force-push, base changes, or scope expansion.
-3. Verify CodeRabbit's effective `reviews.request_changes_workflow` is `true`, including inherited/central settings. Its default is `false`, and CodeRabbit does not emit `APPROVED` without it. Use the existing configuration response or request `@coderabbitai configuration`. If approval workflow is disabled or cannot be proven, stop with a configuration blocker. Do not change repository/organization settings without separate authority.
+3. Inspect CodeRabbit's effective `reviews.request_changes_workflow`, including inherited/central settings. Its default is `false`, so the final gate depends on the effective value. Use an existing configuration response or request `@coderabbitai configuration`. Do not change repository/organization settings without separate authority.
 4. Run focused tests and relevant broader checks. Commit and push candidate revision.
 5. For each reviewer, classify final-SHA state as `completed`, `in-flight`, or `absent` using PR reviews, review threads, timeline/comments/reactions, and checks:
    - Accept a completed automatic review only with evidence its analysis completed after the final push; never trigger a duplicate.
@@ -40,11 +40,17 @@ gh api -X POST "repos/$repo/pulls/comments/$comment_id/reactions" -f content='-1
 
 Reply to the exact inline comment, not only the PR conversation. Use thread node IDs and GraphQL `resolveReviewThread` for individual resolution.
 
+```bash
+gh api graphql \
+  -f query='mutation($id:ID!){resolveReviewThread(input:{threadId:$id}){thread{isResolved}}}' \
+  -F id="$thread_id"
+```
+
 ## Final gates
 
 Both gates must refer to unchanged final head SHA and have no unresolved actionable threads:
 
-- **CodeRabbit:** analysis completed for the final SHA after the last push, and a final-SHA CodeRabbit review is `APPROVED`, with no later changes/findings. Approval alone is not analysis evidence: resolving threads can produce an approval before CodeRabbit reviews the pushed fix. If analysis completion is missing, wait for or request a review even when an approval exists.
+- **CodeRabbit:** analysis completed for the final SHA after the last push, with no unresolved actionable findings or later changes. When effective `reviews.request_changes_workflow` is `true`, also require a final-SHA `APPROVED` review. When it is `false`, report CodeRabbit as clean rather than approved. Approval alone is not analysis evidence: resolving threads can produce an approval before CodeRabbit reviews the pushed fix.
 - **Codex on GitHub:** a fresh final-SHA Codex review completed. Pass on GitHub `APPROVED`; also pass on a completed `COMMENTED` review with no active P0/P1 findings, because OpenAI documents Codex GitHub review as a standard review that flags P0/P1 issues but does not promise an `APPROVED` state. Report this accurately as “Codex clean,” not a GitHub approval.
 
 Do not trust walkthroughs, summary comments, “review completed,” no new comments, reactions alone, or reviews on older SHAs.
@@ -85,7 +91,7 @@ Notifier requests Discord server confirmation. It retries only an explicit short
 
 | State | Action |
 |---|---|
-| `request_changes_workflow` not proven true | Stop with configuration blocker |
+| `request_changes_workflow: false` | Require completed clean final-SHA analysis; do not require `APPROVED` |
 | Automatic review running | Wait; do not trigger another |
 | Final code changed | Invalidate both gates; rerun both |
 | Valid reviewer finding | `+1`, fix, prove, reply, resolve |

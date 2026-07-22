@@ -40,6 +40,11 @@
     "trust_all_worktrees": true,
   },
   "lsp": {
+    "gopls-plus": {
+      "binary": {
+        "path": "/home/danick/.local/bin/gopls+",
+      },
+    },
     "lisette-lsp": {
       "binary": {
         "path": "/home/danick/.cargo/bin/lis",

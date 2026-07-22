@@ -5,10 +5,6 @@
     ./hardware-configuration.nix
   ];
 
-  nixpkgs.overlays = [
-    (import ./mcpelauncher-overlay.nix)
-  ];
-
   boot = {
     loader = {
       systemd-boot.enable = true;
@@ -98,6 +94,7 @@
       discord
       geary
       obs-studio
+      spotify
 
       # AI development tools
       claude-code
