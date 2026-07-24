@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+ODIN_TAG=dev-2026-07a
+ODIN_SHA256=32a7678abc66f1af7353abb5b0b5da47d94b7e663f6d250df29bc9117e864c10
+ODIN_URL=https://github.com/odin-lang/Odin/releases/download/dev-2026-07a/odin-linux-amd64-dev-2026-07a.tar.gz
+ODIN_DIR="$ROOT_DIR/.tools/odin-$ODIN_TAG"
+ODIN_BIN="$ODIN_DIR/odin"
+COLLECTION="-collection:mcpe=$ROOT_DIR/packages"
+
+bootstrap() {
+    if [[ -x "$ODIN_BIN" ]]; then
+        return
+    fi
+    mkdir -p "$ODIN_DIR"
+    archive=$(mktemp "/tmp/odin-${ODIN_TAG}.XXXXXX.tar.gz")
+    trap 'rm -f "$archive"' EXIT
+    curl --fail --location "$ODIN_URL" --output "$archive"
+    printf '%s  %s\n' "$ODIN_SHA256" "$archive" | sha256sum --check -
+    tar -xzf "$archive" -C "$ODIN_DIR" --strip-components=1
+}
+
+bootstrap
+
+command=${1:-help}
+if [[ $# -gt 0 ]]; then
+    shift
+fi
+
+case "$command" in
+    build)
+        target=${1:?usage: odinw build <dragonfly|gophertunnel-proxy>}
+        shift
+        "$ODIN_BIN" build "$ROOT_DIR/cmd/$target" "$COLLECTION" "$@"
+        ;;
+    run)
+        target=${1:?usage: odinw run <dragonfly|gophertunnel-proxy>}
+        shift
+        "$ODIN_BIN" run "$ROOT_DIR/cmd/$target" "$COLLECTION" "$@"
+        ;;
+    test)
+        "$ODIN_BIN" test "$ROOT_DIR/tests" -all-packages "$COLLECTION" "$@"
+        ;;
+    check)
+        "$ODIN_BIN" check "$ROOT_DIR/tests" "$COLLECTION" "$@"
+        ;;
+    benchmark)
+        "$ODIN_BIN" test "$ROOT_DIR/tests/benchmarks" -all-packages "$COLLECTION" "$@"
+        ;;
+    version)
+        "$ODIN_BIN" version
+        ;;
+    odin)
+        "$ODIN_BIN" "$@" "$COLLECTION"
+        ;;
+    help|*)
+        printf '%s\n' \
+            'usage: ./tools/odinw <command>' \
+            '  build <target>   build cmd/<target>' \
+            '  run <target>     run cmd/<target>' \
+            '  test             run all package tests' \
+            '  check            type-check all package tests' \
+            '  benchmark        run benchmark package' \
+            '  version          print pinned Odin version' \
+            '  odin <args...>   invoke pinned compiler'
+        ;;
+esac

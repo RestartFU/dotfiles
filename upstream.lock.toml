@@ -1,0 +1,19 @@
+format = 1
+updated_at = "2026-07-24T00:00:00Z"
+
+[minecraft]
+version = "1.26.30"
+protocol = 1001
+
+[go_raknet]
+repository = "https://github.com/Sandertv/go-raknet.git"
+commit = "0d1fd09e2cf6d50dbc7c0764731109196ed9e248"
+
+[gophertunnel]
+repository = "https://github.com/Sandertv/gophertunnel.git"
+commit = "0a2ecd5633ea1466ff97f6d4718df66ec14d054f"
+
+[dragonfly]
+repository = "https://github.com/df-mc/dragonfly.git"
+commit = "11e6c74c87f1e775ae28856117f075302c4fa814"
+

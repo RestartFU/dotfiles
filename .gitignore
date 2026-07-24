@@ -1,0 +1,9 @@
+.tools/odin-*/
+bin/
+build/
+.cache/
+tests/.oracle/
+tests/.tmp/
+*.prof
+*.trace
+

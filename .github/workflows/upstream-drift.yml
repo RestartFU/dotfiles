@@ -1,0 +1,18 @@
+name: Upstream drift
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 0 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare locked commits
+        run: ./tools/upstream-sync/check.sh
+

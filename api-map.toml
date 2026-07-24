@@ -1,0 +1,41 @@
+format = 1
+
+[summary]
+go_raknet = "partial"
+gophertunnel = "missing"
+dragonfly = "missing"
+
+[[symbol]]
+upstream = "github.com/sandertv/go-raknet.Ping"
+odin = "mcpe:raknet.ping"
+status = "complete"
+
+[[symbol]]
+upstream = "github.com/sandertv/go-raknet.Dial"
+odin = "mcpe:raknet.dial"
+status = "missing"
+
+[[symbol]]
+upstream = "github.com/sandertv/go-raknet.Dialer"
+odin = "mcpe:raknet.Dialer"
+status = "missing"
+
+[[symbol]]
+upstream = "github.com/sandertv/go-raknet.Conn"
+odin = "mcpe:raknet.Conn"
+status = "missing"
+
+[[symbol]]
+upstream = "github.com/sandertv/go-raknet.Listen"
+odin = "mcpe:raknet.listen"
+status = "missing"
+
+[[symbol]]
+upstream = "github.com/sandertv/go-raknet.ListenConfig"
+odin = "mcpe:raknet.Listen_Config"
+status = "missing"
+
+[[symbol]]
+upstream = "github.com/sandertv/go-raknet.Listener"
+odin = "mcpe:raknet.Listener"
+status = "missing"
